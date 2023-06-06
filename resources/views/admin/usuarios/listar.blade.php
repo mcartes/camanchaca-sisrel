@@ -71,9 +71,9 @@
                                         @if ($usuario->rous_codigo == 1)
                                             <div class="badge badge-warning badge-shadow">Administrador</div>
                                         @elseif ($usuario->rous_codigo == 2)
-                                            <div class="badge badge-info badge-shadow">Digitador</div>
+                                            <div class="badge badge-info badge-shadow">Embajador</div>
                                         @elseif ($usuario->rous_codigo == 3)
-                                            <div class="badge badge-primary badge-shadow">Observador</div>
+                                            <div class="badge badge-primary badge-shadow">Dirigente</div>
                                         @endif
                                     </td>
                                     <td>

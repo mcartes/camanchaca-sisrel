@@ -15,6 +15,7 @@ use App\Http\Controllers\TipoInfraestructuraController;
 use App\Http\Controllers\UnidadesController;
 use App\Http\Controllers\EntornosController;
 use App\Http\Controllers\DonacionesController;
+use App\Http\Controllers\Home_DigiController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\HomeObservadorController;
 
@@ -281,6 +282,29 @@ Route::middleware('verificar.admin')->group(function () {
 });
 
 Route::middleware('verificar.digitador')->group(function () {
+
+    Route::get('digitador/dashboard/general', [Home_DigiController::class, 'GeneralIndex'])->name('digitador.dbgeneral.index');
+    Route::get('digitador/dashboard/general/iniciativas', [Home_DigiController::class, 'iniciativasGeneral']);
+    Route::get('digitador/dashboard/general/organizaciones', [Home_DigiController::class, 'organizacionesGeneral']);
+    Route::get('digitador/dashboard/general/inversion', [Home_DigiController::class, 'inversionGeneral']);
+    Route::get('digitador/dashboard/iniciativas', [Home_DigiController::class, 'IniciativasIndex'])->name('digitador.index.iniciativas');
+    Route::get('digitador/dashboard/iniciativas/inic-unid', [Home_DigiController::class, 'iniciativasUnidades']);
+    Route::get('digitador/dashboard/iniciativas/part-ento', [Home_DigiController::class, 'participantesEntornos']);
+    Route::get('digitador/dashboard/iniciativas/inve-pila', [Home_DigiController::class, 'inversionPilares']);
+    Route::get('digitador/dashboard/iniciativas/inic-ods', [Home_DigiController::class, 'iniciativasOds']);
+    Route::get('digitador/dashboard/iniciativas/invi', [Home_DigiController::class, 'indiceVinculacion']);
+    Route::post('digitador-iniciativas/obtener/comunas',[Home_DigiController::class,'ObtenerComunas']);
+    Route::post('digitador-iniciativas/obtener/unidades',[Home_DigiController::class,'ObtenerUnidades']);
+    Route::get('digitador-actividades', [Home_DigiController::class,'ActividadesIndex'])->name('digitador.index.actividades');
+    Route::get('digitador-donaciones',[Home_DigiController::class,'DonacionesIndex'])->name('digitador.index.donaciones');
+    Route::post('digitador/dashboard/obtener/datos',[Home_DigiController::class,'DonacionesData']);
+    Route::post('digitador/dashboard/obtener/comunas',[Home_DigiController::class,'ObtenerComunas']);
+    Route::post('digitador/dashboard/obtener/organizaciones',[Home_DigiController::class,'ObtenerOrganizaciones']);
+    Route::post('digitador/dashboard/obtener/datos-actividades',[Home_DigiController::class,'ActividadesData']);
+
+
+
+
     // inicio rutas perfil de usuario
     Route::get('digitador/perfil/{usua_rut}/{rous_codigo}', [DigitadorController::class, 'verPerfil'])->name('digitador.perfil.show');
     Route::put('digitador/perfil/{usua_rut}/{rous_codigo}/actualizar', [DigitadorController::class, 'actualizarPerfil'])->name('digitador.perfil.update');
