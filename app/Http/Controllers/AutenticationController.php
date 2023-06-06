@@ -42,7 +42,7 @@ class AutenticationController extends Controller {
 
         $validarClave = Hash::check($request->clave, $usuario->usua_clave);
         if (!$validarClave) return redirect()->back()->with('errorClave', 'La contraseña es incorrecta.')->withInput();
-        
+
         if ($usuario->rous_codigo == 1) {
             $request->session()->put('admin', $usuario);
             return redirect()->route('admin.index.iniciativas');
@@ -60,8 +60,8 @@ class AutenticationController extends Controller {
 
     public function registrar() {
         $roles = DB::table('roles_usuarios')->select('rous_codigo','rous_nombre')->limit(3)->orderBy('rous_codigo')->get();
-        $unidades = Unidades::all();
-        return view('auth.registrar',compact('roles','unidades'));
+        // $unidades = Unidades::all();
+        return view('auth.registrar',compact('roles'));
     }
 
     public function guardarRegistro(Request $request)
@@ -71,15 +71,15 @@ class AutenticationController extends Controller {
                 'run' => 'required',
                 'nombre' => 'required|max:100',
                 'apellido' => 'required|max:100',
-                'email' => 'required|max:100',
+                'email' => 'max:100',
                 'email_alt' => 'max:100',
                 'clave' => 'required',
-                'cargo' => 'required|max:100',
+                'cargo' => 'max:100',
                 'profesion' => 'max:100',
                 'rol' => 'required',
                 'clave' => 'required|min:8|max:25',
                 'confirmarclave' => 'required|same:clave',
-                'unidad' => 'required'
+                // 'unidad' => 'required'
             ],
             [
                 'run.required' => 'Es necesario ingresar un RUT.',
@@ -87,11 +87,11 @@ class AutenticationController extends Controller {
                 'nombre.max' => 'El nombre ingresado excede el máximo de caracteres permitidos (100).',
                 'apellido.required' => 'El apellido del usuario es requerido.',
                 'apellido.max' => 'El apellido ingresado excede el máximo de caracteres permitidos (100).',
-                'email.required' => 'El email del usuario es requerido.',
+                // 'email.required' => 'El email del usuario es requerido.',
                 'email.max' => 'El email ingresado excede el máximo de caracteres permitidos (100).',
                 'email_alt.max' => 'El email alternativo ingresado excede el máximo de caracteres permitidos (100).',
                 'clave.required' => 'La contraseña es requerida.',
-                'cargo.required' => 'Es cargo del usuario es requerido.',
+                // 'cargo.required' => 'Es cargo del usuario es requerido.',
                 'cargo.max' => 'El cargo excede el máximo de caracteres permitidos (100).',
                 'profesion.max' => 'La profesión excede el máximo de caracteres permitidos (100).',
                 'rol.required' => 'Es rol del usuario es requerido.',
@@ -99,7 +99,7 @@ class AutenticationController extends Controller {
                 'clave.max' => 'La contraseña debe tener 25 caracteres como máximo.',
                 'confirmarclave.required' => 'La confirmación de contraseña es requerida.',
                 'confirmarclave.same' => 'Las contraseñas ingresadas no coinciden, intente nuevamente.',
-                'unidad.required' => 'La unidad del usuario es requerida.'
+                // 'unidad.required' => 'La unidad del usuario es requerida.'
             ]
         );
 

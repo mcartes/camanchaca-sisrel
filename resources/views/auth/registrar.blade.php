@@ -27,7 +27,7 @@
                         <div class="card-body">
                             <form action="{{ route('admin.guardar.usuario') }}" method="POST">
                                 @csrf
-                                
+
                                 <div class="row">
                                     <div class="col-4">
                                         <div class="form-group">
@@ -175,26 +175,18 @@
                                             </div>
                                         @endif
                                     </div>
-                                    <div class="form-group col-4">
-                                        <label for="unidad">Unidad</label>
-                                        <div class="input-group">
-                                            <select name="unidad" id="unidad" class="form-control select2">
-                                                <option value="" disabled selected>Seleccione...</option>
-                                                @foreach ($unidades as $unidad)
-                                                    <option value="{{ $unidad->unid_codigo }}" {{old('unidad') == $unidad->unid_codigo ? 'selected':''}}>
-                                                        {{ $unidad->unid_nombre }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                        @if ($errors->has('unidad'))
-                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
-                                                <div class="alert-body">
-                                                    <button class="close"
-                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                    <strong>{{ $errors->first('unidad') }}</strong>
+
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label for="unidad">Unidad</label>
+                                            <div class="input-group">
+                                                <div class="input-group-prepend">
+                                                    <div class="input-group-text"><i class="fas fa-users"></i></div>
                                                 </div>
+                                                <input type="text" class="form-control" id="unidad" name="unidad"
+                                                    value="{{ old('unidad') }}" autocomplete="off">
                                             </div>
-                                        @endif
+                                        </div>
                                     </div>
                                 </div>
 
