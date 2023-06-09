@@ -191,7 +191,7 @@ class AdminController extends Controller
                 'unidad.required' => 'La unidad de trabajo es requerida.'
             ]
         );
-        
+
         $usuario = Usuarios::where(['usua_rut' => $usua_rut, 'rous_codigo' => $rous_codigo])->update([
             'unid_codigo' => $request->unidad,
             'usua_email' => $request->email,
@@ -216,7 +216,7 @@ class AdminController extends Controller
             'usuario' => $usuario
         ]);
     }
-    
+
     public function actualizarClavePerfil(Request $request, $usua_rut, $rous_codigo) {
         $request->validate(
             [
@@ -447,18 +447,19 @@ class AdminController extends Controller
                 'nombre' => 'required|max:100',
                 'tiporg' => 'required',
                 'comuna' => 'required',
-                'lat' => 'required',
-                'lng' => 'required',
-                'descripcion' => 'max:350'
+                // 'lat' => 'required',
+                // 'lng' => 'required',
+                // 'descripcion' => 'max:350'
             ],
             [
                 'nombre.required' => 'El nombre es un parámetro requerido.',
                 'nombre.max' => 'El nombre supera el máximo de carácteres permitidos.',
                 'tiporg.required' => 'El tipo de organización es un parámetro requerido.',
                 'comuna.required' => 'Es necesario escoger una comuna.',
-                'lat.required' => 'La latitud es un parámetro rquerido.',
-                'lng.required' => 'La longitud es un parámetro requerido',
-                'descripcion.max' => 'La descripción supera el máximo de carácteres permitidos.'
+                //TODO:Descomentar latitud y longitud cuando se implemente nueva funcionalidad del mapa, pasarlo en el front como campos ocultos
+                // 'lat.required' => 'La latitud es un parámetro rquerido.',
+                // 'lng.required' => 'La longitud es un parámetro requerido',
+                // 'descripcion.max' => 'La descripción supera el máximo de carácteres permitidos.'
             ]
         );
 
@@ -473,8 +474,8 @@ class AdminController extends Controller
             'orga_nombre' => $request->nombre,
             'orga_cantidad_socios' => $request->socios,
             'orga_domicilio' => $request->domicilio,
-            'orga_fecha_vinculo' => $request->fecha,
-            'orga_descripcion' => $request->descripcion,
+            // 'orga_fecha_vinculo' => $request->fecha,
+            // 'orga_descripcion' => $request->descripcion,
             'orga_geoubicacion' => Json::encode(['lat' => $request->lat, 'lng' => $request->lng]),
             'orga_creado' => Carbon::now()->format('Y-m-d H:i:s'),
             'orga_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -507,9 +508,9 @@ class AdminController extends Controller
                 'nombre' => 'required|max:100',
                 'tiporg' => 'required',
                 'comuna' => 'required',
-                'lat' => 'required',
-                'lng' => 'required',
-                'descripcion' => 'max:250',
+                // 'lat' => 'required',
+                // 'lng' => 'required',
+                // 'descripcion' => 'max:250',
                 'vigencia' => 'required'
             ],
             [
@@ -517,9 +518,9 @@ class AdminController extends Controller
                 'nombre.max' => 'El nombre supera el máximo de carácteres permitidos.',
                 'tiporg.required' => 'El tipo de entorno es un parámetro requerido.',
                 'comuna.required' => 'Es necesario escoger una comuna.',
-                'lat.required' => 'La latitud es un parámetro requerido.',
-                'lng.required' => 'La longitud es un parámetro requerido.',
-                'descripcion.max' => 'La descripción supera el máximo de carácteres permitidos.',
+                // 'lat.required' => 'La latitud es un parámetro requerido.',
+                // 'lng.required' => 'La longitud es un parámetro requerido.',
+                // 'descripcion.max' => 'La descripción supera el máximo de carácteres permitidos.',
                 'vigencia.required' => 'Es necesario escoger el estado de la organización.'
             ]
         );
@@ -535,7 +536,7 @@ class AdminController extends Controller
             'orga_nombre' => $request->nombre,
             'orga_cantidad_socios' => $request->socios,
             'orga_domicilio' => $request->domicilio,
-            'orga_fecha_vinculo' => $request->fecha,
+            // 'orga_fecha_vinculo' => $request->fecha,
             'orga_descripcion' => $request->descripcion,
             'orga_geoubicacion' => Json::encode(['lat' => $request->lat, 'lng' => $request->lng]),
             'orga_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -572,7 +573,7 @@ class AdminController extends Controller
 
         return response()->json(["comuna" => $comuna]);
     }
-    
+
     public function obtenerEncuestaPr()
     {
         return view('admin.encuestapr.listar', [
@@ -778,7 +779,7 @@ class AdminController extends Controller
                 'conv_archivo.mimes' => 'El archivo del convenio debe estar en formato PDF.'
             ]
         );
-        
+
         $convGuardar = Convenios::insertGetId([
             'conv_nombre' => $request->conv_nombre,
             'conv_descripcion' => $request->conv_descripcion,
@@ -793,7 +794,7 @@ class AdminController extends Controller
         $archivo = $request->file('conv_archivo');
         $rutaConvenio = 'files/convenios/'.$convGuardar.'.pdf';
         if (File::exists(public_path($rutaConvenio))) File::delete(public_path($rutaConvenio));
-        $moverArchivo = $archivo->move(public_path('files/convenios'), $convGuardar.'.pdf');    
+        $moverArchivo = $archivo->move(public_path('files/convenios'), $convGuardar.'.pdf');
         if (!$moverArchivo) {
             Convenios::where('conv_codigo', $convGuardar)->delete();
             return redirect()->back()->with('errorConvenio', 'Ocurrió un error durante el registro del convenio, intente más tarde.');
@@ -807,7 +808,7 @@ class AdminController extends Controller
             'conv_rut_mod' => Session::get('admin')->usua_rut
         ]);
         if (!$convActualizar) return redirect()->back()->with('errorConvenio', 'Ocurrió un error durante el registro del convenio, intente más tarde.');
-        return redirect()->route('admin.convenios.listar')->with('exitoConvenio', 'El convenio fue registrado correctamente.');        
+        return redirect()->route('admin.convenios.listar')->with('exitoConvenio', 'El convenio fue registrado correctamente.');
     }
 
     public function Editarconvenio($convenios)
@@ -847,13 +848,13 @@ class AdminController extends Controller
 
         ]);
         if (!$convActualizar) return redirect()->back()->with('errorConvenio', 'Ocurrió un error al actualizar el convenio, intente más tarde.');
-        return redirect()->route('admin.convenios.listar')->with('exitoConvenio', 'El convenio fue actualizado correctamente.');        
+        return redirect()->route('admin.convenios.listar')->with('exitoConvenio', 'El convenio fue actualizado correctamente.');
     }
 
     public function cambiarConvenio(Request $request, $conv_codigo) {
         $convVerificar = Convenios::where('conv_codigo', $conv_codigo)->first();
         if (!$convVerificar) redirect()->route('admin.convenios.listar')->with('errorConvenio', 'El convenio no se encuentra registrado en el sistema.');
-        
+
         $validacion = Validator::make($request->all(),
             [
                 'conv_archivo' => 'required|mimes:pdf'
@@ -868,7 +869,7 @@ class AdminController extends Controller
         $archivo = $request->file('conv_archivo');
         $rutaConvenio = 'files/convenios/'.$conv_codigo.'.pdf';
         if (File::exists(public_path($rutaConvenio))) File::delete(public_path($rutaConvenio));
-        $moverArchivo = $archivo->move(public_path('files/convenios'), $conv_codigo.'.pdf');    
+        $moverArchivo = $archivo->move(public_path('files/convenios'), $conv_codigo.'.pdf');
         if (!$moverArchivo) return redirect()->back()->with('errorConvenio', 'Ocurrió un error al actualizar el archivo del convenio, intente más tarde.');
 
         $convActualizar = Convenios::where('conv_codigo', $conv_codigo)->update([
@@ -889,7 +890,7 @@ class AdminController extends Controller
 
         $inicConvenios = Iniciativas::where('conv_codigo', $codigo)->get();
         if (sizeof($inicConvenios) > 0) return redirect()->route('admin.convenios.listar')->with('errorConvenio', 'El convenio no se puede eliminar porque posee iniciativas asociadas.');
-        
+
         if (File::exists(public_path('files/convenios/'.$convenio->conv_codigo.'.pdf'))) File::delete(public_path('files/convenios/'.$convenio->conv_codigo.'.pdf'));
         $convEliminar = Convenios::where('conv_codigo', $codigo)->delete();
         if (!$convEliminar) return redirect()->route('admin.convenios.listar')->with('errorConvenio', 'Ocurrió un error al eliminar el convenio, intente más tarde.');
@@ -925,10 +926,10 @@ class AdminController extends Controller
                 'puntaje.required' => 'El puntaje es requerido.',
             ]
         );
-        
+
         $verificarEncuesta = EncuestaClima::where(['comu_codigo' => $request->comuna, 'cacl_codigo' => $request->catecl, 'encl_anho' => $request->anho])->first();
         if ($verificarEncuesta) return redirect()->route('admin.encuestacl.listar')->with('errorEncuestacl', 'Ya existe una encuesta de clima para la comuna, categoría y año ingresado.');
-        
+
         $encuesta = EncuestaClima::create([
             'comu_codigo' => $request->comuna,
             'cacl_codigo' => $request->catecl,
@@ -959,7 +960,7 @@ class AdminController extends Controller
 
         $enclVerificar = EncuestaClima::where('encl_codigo', $encl)->first();
         if (!$enclVerificar) return redirect()->back()->with('errorEncuestacl', 'La encuesta de clima no se encuentra registrada en el sistema.');
-        
+
         $encuestacl = EncuestaClima::where(['encl_codigo' => $encl])->update([
             'encl_puntaje' => $request->puntaje,
             'encl_vigente' => $request->encl_vigente,
@@ -1075,7 +1076,7 @@ class AdminController extends Controller
             return redirect()->back()->with('errorPilar', 'Ocurrió un error al eliminar el pilar.');
         return redirect()->route('admin.pilares.listar')->with('exitoPilar', 'El pilar fue eliminado correctamente.');
     }
-    
+
     public function ListarImpactos()
     {
         return view('admin.impactos.listar', [

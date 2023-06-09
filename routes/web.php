@@ -17,7 +17,7 @@ use App\Http\Controllers\EntornosController;
 use App\Http\Controllers\DonacionesController;
 use App\Http\Controllers\Home_DigiController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\HomeObservadorController;
+use App\Http\Controllers\HomeobservadorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -435,24 +435,24 @@ Route::middleware('verificar.digitador')->group(function () {
 
 Route::middleware('verificar.observador')->group(function () {
     // inicio rutas para dashboard
-    Route::get('observador/dashboard/general', [HomeObservadorController::class, 'GeneralIndex'])->name('observador.dbgeneral.index');
-    Route::get('observador/dashboard/general/iniciativas', [HomeObservadorController::class, 'iniciativasGeneral']);
-    Route::get('observador/dashboard/general/organizaciones', [HomeObservadorController::class, 'organizacionesGeneral']);
-    Route::get('observador/dashboard/general/inversion', [HomeObservadorController::class, 'inversionGeneral']);
-    Route::get('observador/dashboard/iniciativas', [HomeObservadorController::class, 'IniciativasIndex'])->name('observador.index.iniciativas');
-    Route::get('observador/dashboard/iniciativas/inic-unid', [HomeObservadorController::class, 'iniciativasUnidades']);
-    Route::get('observador/dashboard/iniciativas/part-ento', [HomeObservadorController::class, 'participantesEntornos']);
-    Route::get('observador/dashboard/iniciativas/inve-pila', [HomeObservadorController::class, 'inversionPilares']);
-    Route::get('observador/dashboard/iniciativas/inic-ods', [HomeObservadorController::class, 'iniciativasOds']);
-    Route::get('observador/dashboard/iniciativas/invi', [HomeObservadorController::class, 'indiceVinculacion']);
-    Route::post('observador-iniciativas/obtener/comunas',[HomeObservadorController::class,'ObtenerComunas']);
-    Route::post('observador-iniciativas/obtener/unidades',[HomeObservadorController::class,'ObtenerUnidades']);
-    Route::get('observador-actividades', [HomeObservadorController::class,'ActividadesIndex'])->name('observador.index.actividades');
-    Route::get('observador-donaciones',[HomeObservadorController::class,'DonacionesIndex'])->name('observador.index.donaciones');
-    Route::post('observador/dashboard/obtener/datos',[HomeObservadorController::class,'DonacionesData']);
-    Route::post('observador/dashboard/obtener/comunas',[HomeObservadorController::class,'ObtenerComunas']);
-    Route::post('observador/dashboard/obtener/organizaciones',[HomeObservadorController::class,'ObtenerOrganizaciones']);
-    Route::post('observador/dashboard/obtener/datos-actividades',[HomeObservadorController::class,'ActividadesData']);
+    Route::get('observador/dashboard/general', [HomeobservadorController::class, 'GeneralIndex'])->name('observador.dbgeneral.index');
+    Route::get('observador/dashboard/general/iniciativas', [HomeobservadorController::class, 'iniciativasGeneral']);
+    Route::get('observador/dashboard/general/organizaciones', [HomeobservadorController::class, 'organizacionesGeneral']);
+    Route::get('observador/dashboard/general/inversion', [HomeobservadorController::class, 'inversionGeneral']);
+    Route::get('observador/dashboard/iniciativas', [HomeobservadorController::class, 'IniciativasIndex'])->name('observador.index.iniciativas');
+    Route::get('observador/dashboard/iniciativas/inic-unid', [HomeobservadorController::class, 'iniciativasUnidades']);
+    Route::get('observador/dashboard/iniciativas/part-ento', [HomeobservadorController::class, 'participantesEntornos']);
+    Route::get('observador/dashboard/iniciativas/inve-pila', [HomeobservadorController::class, 'inversionPilares']);
+    Route::get('observador/dashboard/iniciativas/inic-ods', [HomeobservadorController::class, 'iniciativasOds']);
+    Route::get('observador/dashboard/iniciativas/invi', [HomeobservadorController::class, 'indiceVinculacion']);
+    Route::post('observador-iniciativas/obtener/comunas',[HomeobservadorController::class,'ObtenerComunas']);
+    Route::post('observador-iniciativas/obtener/unidades',[HomeobservadorController::class,'ObtenerUnidades']);
+    Route::get('observador-actividades', [HomeobservadorController::class,'ActividadesIndex'])->name('observador.index.actividades');
+    Route::get('observador-donaciones',[HomeobservadorController::class,'DonacionesIndex'])->name('observador.index.donaciones');
+    Route::post('observador/dashboard/obtener/datos',[HomeobservadorController::class,'DonacionesData']);
+    Route::post('observador/dashboard/obtener/comunas',[HomeobservadorController::class,'ObtenerComunas']);
+    Route::post('observador/dashboard/obtener/organizaciones',[HomeobservadorController::class,'ObtenerOrganizaciones']);
+    Route::post('observador/dashboard/obtener/datos-actividades',[HomeobservadorController::class,'ActividadesData']);
     // fin rutas para dashboard
 
     // inicio rutas para gestionar mapas

@@ -60,8 +60,8 @@ class AutenticationController extends Controller {
 
     public function registrar() {
         $roles = DB::table('roles_usuarios')->select('rous_codigo','rous_nombre')->limit(3)->orderBy('rous_codigo')->get();
-        // $unidades = Unidades::all();
-        return view('auth.registrar',compact('roles'));
+        $unidades = Unidades::all();
+        return view('auth.registrar',compact('roles','unidades'));
     }
 
     public function guardarRegistro(Request $request)

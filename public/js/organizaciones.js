@@ -44,3 +44,5 @@ function cargarUbicaicon(e){
 }
 
 map.on('click',cargarUbicaicon);
+
+

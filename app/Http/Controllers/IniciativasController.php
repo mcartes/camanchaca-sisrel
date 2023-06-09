@@ -915,7 +915,7 @@ class IniciativasController extends Controller {
                 'fechainicio' => 'required|date',
                 'unidad' => 'required',
                 'pilar' => 'required',
-                'implementacion' => 'required',
+                // 'implementacion' => 'required',
                 'nombreresponsable' => 'max:100',
                 'submecanismo' => 'required',
                 'frecuencia' => 'required'
@@ -929,7 +929,7 @@ class IniciativasController extends Controller {
                 'fechainicio.date' => 'La fecha de inicio debe estar en un formato válido.',
                 'unidad.required' => 'La unidad es requerida.',
                 'pilar.required' => 'El pilar es requerido.',
-                'implementacion.required' => 'El formato de implementación es requerido.',
+                // 'implementacion.required' => 'El formato de implementación es requerido.',
                 'nombreresponsable.max' => 'El nombre del encargado responsable excede el máximo de caracteres permitidos (100).',
                 'submecanismo.required' => 'La actividad asociada es requerida.',
                 'frecuencia.required' => 'La frecuencia es requerida.'
@@ -947,8 +947,8 @@ class IniciativasController extends Controller {
             'inic_fecha_fin' => $request->fechafin,
             'pila_codigo' => $request->pilar,
             'frec_codigo' => $request->frecuencia,
-            'foim_codigo' => $request->implementacion,
-            'conv_codigo' => $request->convenio,
+            'foim_codigo' => NUll,//TODO:Consultar si es neceario dejar algun parametro por defecto
+            'conv_codigo' => NULL,
             'inic_nombre_responsable' => $request->nombreresponsable,
             'inic_cargo_responsable' => $request->cargoresponsable,
             'subm_codigo' => $request->submecanismo,

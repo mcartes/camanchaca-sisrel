@@ -18,7 +18,7 @@
                 @endif
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-12 col-md-12 col-lg-12">
                 <div class="card">
@@ -39,7 +39,7 @@
                                 <div class="col-12 col-md-12 col-lg-12">
                                     <div class="form-group">
                                         <label>Nombre de actividad</label> <label for="" style="color: red;">*</label>
-                                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ old('nombre') ?? @$iniciativa->inic_nombre }}">                                        
+                                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ old('nombre') ?? @$iniciativa->inic_nombre }}">
                                         @if($errors->has('nombre'))
                                             <div class="alert alert-warning alert-dismissible show fade mt-2">
                                                 <div class="alert-body">
@@ -117,7 +117,7 @@
                                             </div>
                                         @endif
                                     </div>
-                                </div> 
+                                </div>
                                 <div class="col-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         <label>Pilar</label> <label for="" style="color: red;">*</label><i data-toggle="tooltip" data-placement="right" title="Pilar programa Camanchaca Amiga" class="fas fa-info-circle"></i>
@@ -182,7 +182,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-4 col-md-4 col-lg-4">
+                                {{-- <div class="col-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Convenio</label> <i data-toggle="tooltip" data-placement="right" title="Convenio con entidad participante" class="fas fa-info-circle"></i>
                                         @if (isset($iniciativa))
@@ -213,7 +213,7 @@
                                             </div>
                                         @endif
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Mecanismo</label> <label for="" style="color: red;">*</label>
@@ -245,10 +245,10 @@
                                             </div>
                                         @endif
                                     </div>
-                                </div>   
+                                </div>
                             </div>
                             <div class="row">
-                                <div class="col-4 col-md-4 col-lg-4">
+                                {{-- <div class="col-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Formato de implementación</label> <label for="" style="color: red;">*</label>
                                         @if (isset($iniciativa))
@@ -279,7 +279,7 @@
                                             </div>
                                         @endif
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Nombre encargado responsable</label>

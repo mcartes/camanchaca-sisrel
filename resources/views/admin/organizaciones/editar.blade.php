@@ -29,23 +29,25 @@
                                 <div class="card-body">
                                     <form action="{{ route('admin.actualizar.org', $org->orga_codigo) }}" method="POST">
                                         @csrf
-    
+
                                         <div class="row">
                                             <div class="col-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
-                                                    <label>Nombre</label>
+                                                    <label>Nombre</label> <label for=""
+                                                        style="color: red;">*</label>
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">
                                                                 <i class="fas fa-hotel"></i>
                                                             </div>
                                                         </div>
-                                                        <input type="text" class="form-control" id="nombre" name="nombre"
-                                                            value="{{ old('nombre') ?? @$org->orga_nombre }}"
+                                                        <input type="text" class="form-control" id="nombre"
+                                                            name="nombre" value="{{ old('nombre') ?? @$org->orga_nombre }}"
                                                             autocomplete="off">
                                                     </div>
                                                     @if ($errors->has('nombre'))
-                                                        <div class="alert alert-warning alert-dismissible show fade mt-2 text">
+                                                        <div
+                                                            class="alert alert-warning alert-dismissible show fade mt-2 text">
                                                             <div class="alert-body">
                                                                 <button class="close"
                                                                     data-dismiss="alert"><span>&times;</span></button>
@@ -57,9 +59,9 @@
                                             </div>
                                             <div class="col-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
-                                                    <label>Tipo</label>
+                                                    <label>Tipo</label> <label for="" style="color: red;">*</label>
                                                     <div class="input-group">
-    
+
                                                         <select class="form-control form-control-sm" name="tiporg"
                                                             id="tiporg">
                                                             <option value="" selected disabled>Seleccione...</option>
@@ -72,7 +74,8 @@
                                                         </select>
                                                     </div>
                                                     @if ($errors->has('tiporg'))
-                                                        <div class="alert alert-warning alert-dismissible show fade mt-2 text">
+                                                        <div
+                                                            class="alert alert-warning alert-dismissible show fade mt-2 text">
                                                             <div class="alert-body">
                                                                 <button class="close"
                                                                     data-dismiss="alert"><span>&times;</span></button>
@@ -84,9 +87,10 @@
                                             </div>
                                             <div class="col-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
-                                                    <label>Comuna</label>
+                                                    <label>Comuna</label> <label for=""
+                                                        style="color: red;">*</label>
                                                     <div class="input-group">
-    
+
                                                         <select class="form-control form-control-sm" name="comuna"
                                                             id="comuna" onchange="cargarCoordenadas()">
                                                             <option value="" selected disabled>Seleccione...</option>
@@ -98,7 +102,8 @@
                                                         </select>
                                                     </div>
                                                     @if ($errors->has('comuna'))
-                                                        <div class="alert alert-warning alert-dismissible show fade mt-2 text">
+                                                        <div
+                                                            class="alert alert-warning alert-dismissible show fade mt-2 text">
                                                             <div class="alert-body">
                                                                 <button class="close"
                                                                     data-dismiss="alert"><span>&times;</span></button>
@@ -109,82 +114,85 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-6 col-md-6 col-lg-6">
-                                                <div class="form-group">
-                                                    <label>Geolocalización</label>
+
+                                        <div id="miDiv">
+                                            <div class="row">
+                                                <div class="col-6 col-md-6 col-lg-6">
                                                     <div class="form-group">
-                                                        <label>Latitud</label>
+                                                        <label>Geolocalización</label>
+                                                        <div class="form-group">
+                                                            <label>Latitud</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend">
+                                                                    <div class="input-group-text">
+                                                                        <i class="fas fa-map-marker-alt"></i>
+                                                                    </div>
+                                                                </div>
+                                                                <input type="text" class="form-control" id="lat"
+                                                                    name="lat" value="{{ old('lat') ?? @$org->lat }}"
+                                                                    autocomplete="off">
+                                                            </div>
+                                                            @if ($errors->has('lat'))
+                                                                <div
+                                                                    class="alert alert-warning alert-dismissible show fade mt-2 text">
+                                                                    <div class="alert-body">
+                                                                        <button class="close"
+                                                                            data-dismiss="alert"><span>&times;</span></button>
+                                                                        <strong>{{ $errors->first('lat') }}</strong>
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        </div>
+
+                                                        <div class="form-group">
+                                                            <label>Longitud</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend">
+                                                                    <div class="input-group-text">
+                                                                        <i class="fas fa-map-marker-alt"></i>
+                                                                    </div>
+                                                                </div>
+                                                                <input type="text" class="form-control" id="lng"
+                                                                    name="lng" value="{{ old('lng') ?? @$org->lng }}"
+                                                                    autocomplete="off">
+                                                            </div>
+                                                            @if ($errors->has('lng'))
+                                                                <div
+                                                                    class="alert alert-warning alert-dismissible show fade mt-2 text">
+                                                                    <div class="alert-body">
+                                                                        <button class="close"
+                                                                            data-dismiss="alert"><span>&times;</span></button>
+                                                                        <strong>{{ $errors->first('lng') }}</strong>
+                                                                    </div>
+                                                                </div>
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {{-- <div class="col-6 col-md-6 col-lg-6">
+                                                    <div class="form-group">
+                                                        <label for="descripcion">Descripción</label>
                                                         <div class="input-group">
                                                             <div class="input-group-prepend">
-                                                                <div class="input-group-text">
-                                                                    <i class="fas fa-map-marker-alt"></i>
-                                                                </div>
                                                             </div>
-                                                            <input type="text" class="form-control" id="lat"
-                                                                name="lat" value="{{ old('lat') ?? @$org->lat }}"
-                                                                autocomplete="off">
+                                                            <textarea cols="100" rows="8" name="descripcion" id="descripcion"
+                                                                placeholder="Ingrese una descripción para la organización" class="formbold-form-input">{{ old('descripcion') ?? @$org->orga_descripcion }}</textarea>
                                                         </div>
-                                                        @if ($errors->has('lat'))
-                                                            <div
-                                                                class="alert alert-warning alert-dismissible show fade mt-2 text">
+                                                        @if ($errors->has('descripcion'))
+                                                            <div class="alert alert-warning alert-dismissible show fade mt-2 text">
                                                                 <div class="alert-body">
                                                                     <button class="close"
                                                                         data-dismiss="alert"><span>&times;</span></button>
-                                                                    <strong>{{ $errors->first('lat') }}</strong>
+                                                                    <strong>{{ $errors->first('descripcion') }}</strong>
                                                                 </div>
                                                             </div>
                                                         @endif
                                                     </div>
-    
-                                                    <div class="form-group">
-                                                        <label>Longitud</label>
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <div class="input-group-text">
-                                                                    <i class="fas fa-map-marker-alt"></i>
-                                                                </div>
-                                                            </div>
-                                                            <input type="text" class="form-control" id="lng"
-                                                                name="lng" value="{{ old('lng') ?? @$org->lng }}"
-                                                                autocomplete="off">
-                                                        </div>
-                                                        @if ($errors->has('lng'))
-                                                            <div
-                                                                class="alert alert-warning alert-dismissible show fade mt-2 text">
-                                                                <div class="alert-body">
-                                                                    <button class="close"
-                                                                        data-dismiss="alert"><span>&times;</span></button>
-                                                                    <strong>{{ $errors->first('lng') }}</strong>
-                                                                </div>
-                                                            </div>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6 col-md-6 col-lg-6">
-                                                <div class="form-group">
-                                                    <label for="descripcion">Descripción</label>
-                                                    <div class="input-group">
-                                                        <div class="input-group-prepend">
-                                                        </div>
-                                                        <textarea cols="100" rows="8" name="descripcion" id="descripcion"
-                                                            placeholder="Ingrese una descripción para la organización" class="formbold-form-input">{{ old('descripcion') ?? @$org->orga_descripcion }}</textarea>
-                                                    </div>
-                                                    @if ($errors->has('descripcion'))
-                                                        <div class="alert alert-warning alert-dismissible show fade mt-2 text">
-                                                            <div class="alert-body">
-                                                                <button class="close"
-                                                                    data-dismiss="alert"><span>&times;</span></button>
-                                                                <strong>{{ $errors->first('descripcion') }}</strong>
-                                                            </div>
-                                                        </div>
-                                                    @endif
-                                                </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-4 col-md-4 col-lg-4">
+                                            {{-- <div class="col-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Fecha de vinculación</label>
                                                     <div class="input-group">
@@ -196,7 +204,7 @@
                                                             autocomplete="off">
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             <div class="col-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Cantidad de socios registrados</label>
@@ -212,7 +220,8 @@
                                                             autocomplete="off">
                                                     </div>
                                                     @if ($errors->has('socios'))
-                                                        <div class="alert alert-warning alert-dismissible show fade mt-2 text">
+                                                        <div
+                                                            class="alert alert-warning alert-dismissible show fade mt-2 text">
                                                             <div class="alert-body">
                                                                 <button class="close"
                                                                     data-dismiss="alert"><span>&times;</span></button>
@@ -222,7 +231,7 @@
                                                     @endif
                                                 </div>
                                             </div>
-    
+
                                             <div class="col-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Domicilio (dirección de la sede)</label>
@@ -239,9 +248,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-    
-                                        <div class="row">
+
                                             <div class="col-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label for="vigencia">Estado</label>
@@ -262,7 +269,8 @@
                                                         </select>
                                                     </div>
                                                     @if ($errors->has('vigencia'))
-                                                        <div class="alert alert-warning alert-dismissible show fade mt-2 text">
+                                                        <div
+                                                            class="alert alert-warning alert-dismissible show fade mt-2 text">
                                                             <div class="alert-body">
                                                                 <button class="close"
                                                                     data-dismiss="alert"><span>&times;</span></button>
@@ -273,7 +281,10 @@
                                                 </div>
                                             </div>
                                         </div>
-    
+
+                                        <div class="row">
+                                        </div>
+
                                         <div class="text-right">
                                             <button type="submit" class="btn btn-primary waves-effect"> <i
                                                     class="fas fa-undo-alt"></i> Actualizar</button>
@@ -302,4 +313,10 @@
         </div>
     </section>
     <script src="{{ asset('public/js/organizaciones.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#miDiv").hide();
+        });
+    </script>
 @endsection

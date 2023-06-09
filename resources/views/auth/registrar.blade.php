@@ -7,7 +7,7 @@
                     <div class="row">
                         <div class="col-3"></div>
                         <div class="col-6">
-                            @if(Session::has('errorUsuario'))
+                            @if (Session::has('errorUsuario'))
                                 <div class="alert alert-danger alert-dismissible show fade mb-4 text-center">
                                     <div class="alert-body">
                                         <strong>{{ Session::get('errorUsuario') }}</strong>
@@ -137,7 +137,8 @@
                                     <div class="col-4">
                                         <div class="form-group">
                                             <label for="Frecuencia">Cargo del usuario</label>
-                                            <input value="{{old('cargo')}}" type="text" class="form-control" name="cargo" id="cargo" autocomplete="off">
+                                            <input value="{{ old('cargo') }}" type="text" class="form-control"
+                                                name="cargo" id="cargo" autocomplete="off">
                                         </div>
                                     </div>
                                 </div>
@@ -148,9 +149,11 @@
                                             <label for="profesion">Profesión</label>
                                             <div class="input-group">
                                                 <div class="input-group-prepend">
-                                                    <div class="input-group-text"><i class="fas fa-user-graduate"></i></div>
+                                                    <div class="input-group-text"><i class="fas fa-user-graduate"></i>
+                                                    </div>
                                                 </div>
-                                                <input type="text" value="{{old('profesion')}}" name="profesion" id="profesion" class="form-control"  autocomplete="off"/>
+                                                <input type="text" value="{{ old('profesion') }}" name="profesion"
+                                                    id="profesion" class="form-control" autocomplete="off" />
                                             </div>
                                         </div>
                                     </div>
@@ -160,7 +163,8 @@
                                             <select class="form-control" id="rol" name="rol">
                                                 <option value="" disabled selected>Seleccione...</option>
                                                 @foreach ($roles as $rol)
-                                                    <option value="{{ $rol->rous_codigo }}" {{old('rol') == $rol->rous_codigo ? 'selected':''}}>
+                                                    <option value="{{ $rol->rous_codigo }}"
+                                                        {{ old('rol') == $rol->rous_codigo ? 'selected' : '' }}>
                                                         {{ $rol->rous_nombre }}</option>
                                                 @endforeach
                                             </select>
@@ -175,17 +179,28 @@
                                             </div>
                                         @endif
                                     </div>
-
                                     <div class="col-4">
                                         <div class="form-group">
                                             <label for="unidad">Unidad</label>
                                             <div class="input-group">
-                                                <div class="input-group-prepend">
-                                                    <div class="input-group-text"><i class="fas fa-users"></i></div>
-                                                </div>
-                                                <input type="text" class="form-control" id="unidad" name="unidad"
-                                                    value="{{ old('unidad') }}" autocomplete="off">
+                                                <select name="unidad" id="unidad" class="form-control select2">
+                                                    <option value="" disabled selected>Seleccione...</option>
+                                                    @foreach ($unidades as $unidad)
+                                                        <option value="{{ $unidad->unid_codigo }}"
+                                                            {{ old('unidad') == $unidad->unid_codigo ? 'selected' : '' }}>
+                                                            {{ $unidad->unid_nombre }}</option>
+                                                    @endforeach
+                                                </select>
                                             </div>
+                                            @if ($errors->has('unidad'))
+                                                <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                    <div class="alert-body">
+                                                        <button class="close"
+                                                            data-dismiss="alert"><span>&times;</span></button>
+                                                        <strong>{{ $errors->first('unidad') }}</strong>
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
@@ -221,7 +236,8 @@
                                     </div>
                                 </div>
                                 <div class="form-group text-right">
-                                    <button type="submit" class="btn btn-primary waves-effect"><i class="fas fa-save"></i> Registrar</button>
+                                    <button type="submit" class="btn btn-primary waves-effect"><i
+                                            class="fas fa-save"></i> Registrar</button>
                                 </div>
                             </form>
                         </div>
@@ -230,5 +246,4 @@
             </div>
         </div>
     </section>
-
 @endsection

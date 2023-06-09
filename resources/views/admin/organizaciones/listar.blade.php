@@ -74,7 +74,7 @@
                                             <th>Entorno</th>
                                             <th>Cantidad de socios</th>
                                             <th>Ubicación</th>
-                                            <th>Fecha de vínculo</th>
+                                            {{-- <th>Fecha de vínculo</th> --}}
                                             <th>Estado</th>
                                             <th>Modificado por</th>
                                             <th>Acción</th>
@@ -89,7 +89,7 @@
                                                 <td>{{ $orga->ento_nombre }}</td>
                                                 <td>{{ $orga->orga_cantidad_socios }}</td>
                                                 <td>{{ $orga->orga_domicilio }}</td>
-                                                <td>{{ date('d-m-Y', strtotime($orga->orga_fecha_vinculo)) }}</td>
+                                                {{-- <td>{{ date('d-m-Y', strtotime($orga->orga_fecha_vinculo)) }}</td> --}}
                                                 <td>
                                                     @if ($orga->orga_vigente == 'S')
                                                         <div class="badge badge-success badge-shadow">Activo</div>

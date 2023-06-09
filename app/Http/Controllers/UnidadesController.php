@@ -72,8 +72,8 @@ class UnidadesController extends Controller
             [
                 'unid_nombre' => 'required|max:50',
                 'unid_nombre_cargo' => 'required|max:50',
-                'unid_descripcion' => 'required|max:200',
-                'unid_responsable' => 'required|max:50',
+                // 'unid_descripcion' => 'required|max:200',
+                // 'unid_responsable' => 'required|max:50',
                 'tuni_codigo' => 'required',
                 'comu_codigo' => 'required',
 
@@ -81,9 +81,9 @@ class UnidadesController extends Controller
             ],
             [
                 'unid_nombre.required' => 'El nombre de la unidad es requerido.',
-                'unid_nombre_cargo.required' => 'El nombre del cargo de la unidad es requerido.',
-                'unid_descripcion.required' => 'La descripción de las actividades de la unidad es requerida.',
-                'unid_responsable.required' => 'El nombre la persona a cargo requerido.',
+                // 'unid_nombre_cargo.required' => 'El nombre del cargo de la unidad es requerido.',
+                // 'unid_descripcion.required' => 'La descripción de las actividades de la unidad es requerida.',
+                // 'unid_responsable.required' => 'El nombre la persona a cargo requerido.',
                 'tuni_codigo.required' => 'Seleccione el codigo del tipo de unidad adjunta.',
                 'comu_codigo.required' => 'Seleccione la comuna adjuna a la unidad.'
             ]
@@ -98,9 +98,9 @@ class UnidadesController extends Controller
             'tuni_codigo' => $request->tuni_codigo,
             'comu_codigo' => $request->comu_codigo,
             'unid_nombre' => $request->unid_nombre,
-            'unid_descripcion' => $request->unid_descripcion,
-            'unid_responsable' => $request->unid_responsable,
-            'unid_nombre_cargo' => $request->unid_nombre_cargo,
+            // 'unid_descripcion' => $request->unid_descripcion,
+            // 'unid_responsable' => $request->unid_responsable,
+            // 'unid_nombre_cargo' => $request->unid_nombre_cargo,
             'unid_geoubicacion' => Json::encode(['lat' => $request->lat, 'lng' => $request->lng]),
             'unid_rol_mod' => Session::get('admin')->rous_codigo,
             'unid_rut_mod' => Session::get('admin')->usua_rut,
@@ -131,9 +131,9 @@ class UnidadesController extends Controller
         $request->validate(
             [
                 'unid_nombre' => 'required|max:50',
-                'unid_nombre_cargo' => 'required|max:50',
-                'unid_descripcion' => 'required|max:200',
-                'unid_responsable' => 'required|max:50',
+                // 'unid_nombre_cargo' => 'required|max:50',
+                // 'unid_descripcion' => 'required|max:200',
+                // 'unid_responsable' => 'required|max:50',
                 'tuni_codigo' => 'required',
                 'comu_codigo' => 'required',
                 'unid_vigente' => 'required',
@@ -141,9 +141,9 @@ class UnidadesController extends Controller
             ],
             [
                 'unid_nombre.required' => 'El nombre de la unidad es requerido.',
-                'unid_nombre_cargo.required' => 'El nombre de la unidad a cargo es requerido.',
-                'unid_descripcion.required' => 'La descripcion de las actividades de la unidad es requerida.',
-                'unid_responsable.required' => 'El nombre la persona a cargo requerido.',
+                // 'unid_nombre_cargo.required' => 'El nombre de la unidad a cargo es requerido.',
+                // 'unid_descripcion.required' => 'La descripcion de las actividades de la unidad es requerida.',
+                // 'unid_responsable.required' => 'El nombre la persona a cargo requerido.',
                 'tuni_codigo.required' => 'seleccione el codigo del tipo de unidad adjunta.',
                 'comu_codigo.required' => 'seleccione la comuna adjuna a la unidad.',
                 'unid_vigente.required' => 'seleccione la vigencia de la unidad.',

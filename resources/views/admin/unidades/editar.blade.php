@@ -16,12 +16,6 @@
                                     </div>
                                 </div>
                             @endif
-
-
-
-
-
-
                         </div>
                         <div class="col-3"></div>
                     </div>
@@ -38,9 +32,10 @@
                                         @method('PUT')
                                         @csrf
                                         <div class="row">
-                                            <div class="col-6 col-md-6 col-lg-6">
+                                            <div class="col-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
-                                                    <label>Nombre de la unidad</label>
+                                                    <label>Nombre de la unidad</label> <label for=""
+                                                        style="color: red;">*</label>
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">
@@ -64,7 +59,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group col-3">
-                                                <label class="label" for="tuni_codigo">Tipo de unidad</label>
+                                                <label class="label" for="tuni_codigo">Tipo de unidad</label> <label
+                                                    for="" style="color: red;">*</label>
                                                 <div class="form-group">
                                                     <select class="form-control" id="tuni_codigo" name="tuni_codigo">
                                                         @foreach ($tuni as $tuni)
@@ -77,7 +73,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group col-3">
-                                                <label class="label" for="comu_codigo">Comuna asociada</label>
+                                                <label class="label" for="comu_codigo">Comuna asociada</label> <label
+                                                    for="" style="color: red;">*</label>
                                                 <div class="form-group">
                                                     <select class="form-control select2" id="comu_codigo" name="comu_codigo"
                                                         onchange="cargarCoordenadas()">
@@ -92,53 +89,55 @@
                                             </div>
 
                                         </div>
-                                        <div class="row">
-                                            <div class="col-6 col-md-6 col-lg-6">
-                                                <div class="form-group">
-                                                    <label>Geolocalización</label>
+                                        <div id="miDiv">
+                                            <div class="row">
+                                                <div class="col-6 col-md-6 col-lg-6">
                                                     <div class="form-group">
-                                                        <label>Latitud</label>
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <div class="input-group-text">
-                                                                    <i class="fas fa-map-marker-alt"></i>
+                                                        <label>Geolocalización</label>
+                                                        <div class="form-group">
+                                                            <label>Latitud</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend">
+                                                                    <div class="input-group-text">
+                                                                        <i class="fas fa-map-marker-alt"></i>
+                                                                    </div>
                                                                 </div>
+                                                                <input type="text" class="form-control" id="lat"
+                                                                    name="lat" value="{{ old('lat') ?? @$unid->lat }}"
+                                                                    autocomplete="off">
                                                             </div>
-                                                            <input type="text" class="form-control" id="lat"
-                                                                name="lat" value="{{ old('lat') ?? @$unid->lat }}"
-                                                                autocomplete="off">
                                                         </div>
-                                                    </div>
 
-                                                    <div class="form-group">
-                                                        <label>Longitud</label>
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <div class="input-group-text">
-                                                                    <i class="fas fa-map-marker-alt"></i>
+                                                        <div class="form-group">
+                                                            <label>Longitud</label>
+                                                            <div class="input-group">
+                                                                <div class="input-group-prepend">
+                                                                    <div class="input-group-text">
+                                                                        <i class="fas fa-map-marker-alt"></i>
+                                                                    </div>
                                                                 </div>
+                                                                <input type="text" class="form-control" id="lng"
+                                                                    name="lng" value="{{ old('lng') ?? @$unid->lng }}"
+                                                                    autocomplete="off">
                                                             </div>
-                                                            <input type="text" class="form-control" id="lng"
-                                                                name="lng" value="{{ old('lng') ?? @$unid->lng }}"
-                                                                autocomplete="off">
                                                         </div>
+
                                                     </div>
-
                                                 </div>
-                                            </div>
-
-                                            <div class="form-group col-6">
-                                                <label for="run">Descripción de la unidad</label>
-                                                <div class="input-group">
-                                                    <textarea rows="7" cols="60" class="formbold-form-input" placeholder="Ingrese una descripción..."
-                                                        id="unid_descripcion" name="unid_descripcion" autocomplete="off">{{ old('unid_descripcion') ?? @$unid->unid_descripcion }}</textarea>
-                                                </div>
+                                                {{--
+                                                <div class="form-group col-6">
+                                                    <label for="run">Descripción de la unidad</label>
+                                                    <div class="input-group">
+                                                        <textarea rows="7" cols="60" class="formbold-form-input" placeholder="Ingrese una descripción..."
+                                                            id="unid_descripcion" name="unid_descripcion" autocomplete="off">{{ old('unid_descripcion') ?? @$unid->unid_descripcion }}</textarea>
+                                                    </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                         <div class="row">
 
 
-                                            <div class="form-group col-3">
+                                            {{-- <div class="form-group col-3">
                                                 <label for="apellido">Cargo de la unidad</label>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
@@ -160,10 +159,10 @@
                                                         </div>
                                                     </div>
                                                 @endif
-                                            </div>
+                                            </div> --}}
 
 
-                                            <div class="form-group col-3">
+                                            {{-- <div class="form-group col-3">
                                                 <label for="text">Persona a cargo</label>
                                                 <div class="input-group">
                                                     <div class="input-group-prepend">
@@ -176,7 +175,7 @@
                                                         value="{{ old('unid_responsable') ?? @$unid->unid_responsable }}"
                                                         autocomplete="off">
                                                 </div>
-                                            </div>
+                                            </div> --}}
                                             <div class="col-3 col-md-3 col-lg-3">
                                                 <div class="form-group">
                                                     <label>Estado de la unidad</label>
@@ -236,4 +235,10 @@
         </div>
     </section>
     <script src="{{ asset('public/js/unidades.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $("#miDiv").hide();
+        });
+    </script>
 @endsection
