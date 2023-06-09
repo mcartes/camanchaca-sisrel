@@ -3,7 +3,61 @@
     <section class="section">
 
         <div class="row">
-            <div class="col-4"></div>
+            <div class="col-1"></div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                <div class="card card-statistic-2">
+                    <div class="card-icon l-bg-green">
+                        <i class="fas fa-clipboard"></i>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="padding-20">
+                            <div class="text-right">
+                                <h3 class="font-light mb-0">
+                                    <i class="ti-arrow-up text-success"></i> {{ count($actividades) }}
+                                </h3>
+                                <h6 class="text-muted">Actividades</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                <div class="card card-statistic-2">
+                    <div class="card-icon l-bg-orange">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="padding-20">
+                            <div class="text-right">
+                                <h3 class="font-light mb-0">
+                                    {{-- <i class="ti-arrow-up text-success"></i>  --}}
+                                </h3>
+                                <h6 class="text-muted">Participantes</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                <div class="card card-statistic-2">
+                    <div class="card-icon l-bg-blue">
+                        <i class="fas fa-hotel"></i>
+                    </div>
+                    <a href="{{route('digitador.organizaciones.view')}}">
+                        <div class="card-wrap">
+                            <div class="padding-20">
+                                <div class="text-right">
+                                    <h3 class="font-light mb-0">
+                                        <i class="ti-arrow-up text-success"></i> {{ count($coun_orga) }}
+                                    </h3>
+                                    <h6 class="text-muted">Organizaciones</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {{-- <div class="col-4"></div>
             <div class="col-xl-4 col-lg-6 col-md-6 col-sm-6 col-xs-12">
                 <div class="card mb-3 bg-blue">
                     <div class="row g-0">
@@ -20,7 +74,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
         </div>
 
@@ -35,19 +89,6 @@
 
                         <div class="card-body">
                             <form action="" method="GET">
-                                <div class="form-group">
-                                    <label for="">Región</label>
-                                    <select name="regi_codigo" id="regi_codigo" class="form-control select2"
-                                        onchange="cargarComunas()">
-                                        <option value="" selected disabled>Seleccione...</option>
-                                        @foreach ($regiones as $region)
-                                            <option value="{{ $region->regi_codigo }}"
-                                                {{ Request::get('regi_codigo') == $region->regi_codigo ? 'selected' : '' }}>
-                                                {{ $region->regi_nombre }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
                                 <div class="form-group">
                                     <label for="">Comuna</label>
                                     <select name="comu_codigo" id="comu_codigo" class="form-control select2"
@@ -98,7 +139,9 @@
                 <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
                     <div class="card">
                         <div class="card-body">
-                            <div class="row">
+
+                            <h1 class="text-center">Sin datos registrados</h1>
+                            {{-- <div class="row">
                                 <div class="col-12 col-md-6 col-lg-6">
                                     <div class="card">
                                         <div class="card-header">
@@ -119,7 +162,7 @@
                                             <canvas id="ActiEstadosP"></canvas>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -131,5 +174,5 @@
 
     <script src="{{ asset('public/js/chart.min.js') }}"></script>
     <script src="{{ asset('public/js/jquery.min.js') }}"></script>
-    <script src="{{ asset('public/js/home_admin/actividades.js') }}"></script>
+    <script src="{{ asset('public/js/home_digitador/actividades.js') }}"></script>
 @endsection

@@ -95,7 +95,7 @@
                                     <label>Acuerdos</label> <label for="" style="color: red;">*</label>
                                     <div class="input-group">
                                         <textarea class="formbold-form-input" id="acuerdos" name="acuerdos" rows="5" style="width: 100%;">{{ old('acuerdos') ?? @$actividad->acti_acuerdos }}</textarea>
-                                    </div>                                    
+                                    </div>
                                     @if($errors->has('acuerdos'))
                                         <div class="alert alert-warning alert-dismissible show fade mt-2">
                                             <div class="alert-body">
@@ -132,7 +132,7 @@
                                         <select class="form-control select2" id="avance" name="avance">
                                             <option value="" selected disabled>Seleccione...</option>
                                             <option value="Ejecutada" {{ old('avance')=='Ejecutada' ? 'selected' : '' }}>Ejecutada</option>
-                                            <option value="En avance conforme a plazo" {{ old('avance')=='En avance conforme a plazo' ? 'selected' : '' }}>En avance conforme a plazo</option>
+                                            <option selected value="En avance conforme a plazo" {{ old('avance')=='En avance conforme a plazo' ? 'selected' : '' }}>En avance conforme a plazo</option>
                                             <option value="En avance con retraso" {{ old('avance')=='En avance con retraso' ? 'selected' : '' }}>En avance con retraso</option>
                                             <option value="Suspendida" {{ old('avance')=='Suspendida' ? 'selected' : '' }}>Suspendida</option>
                                             <option value="Descartada" {{ old('avance')=='Descartada' ? 'selected' : '' }}>Descartada</option>

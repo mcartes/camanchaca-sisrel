@@ -301,8 +301,7 @@ Route::middleware('verificar.digitador')->group(function () {
     Route::post('digitador/dashboard/obtener/comunas',[Home_DigiController::class,'ObtenerComunas']);
     Route::post('digitador/dashboard/obtener/organizaciones',[Home_DigiController::class,'ObtenerOrganizaciones']);
     Route::post('digitador/dashboard/obtener/datos-actividades',[Home_DigiController::class,'ActividadesData']);
-
-
+    Route::get('digitado/dashboard/obtener/organizaciones',[Home_DigiController::class,'listarOrganizaciones'])->name('digitador.organizaciones.view');
 
 
     // inicio rutas perfil de usuario
@@ -391,7 +390,7 @@ Route::middleware('verificar.digitador')->group(function () {
     Route::get('digitador/actividad/obtener-dirigente', [Digi_Bitacora::class, 'ObtenerDirigente']);
     Route::post('digitador/actividad/eliminar-participante', [Digi_Bitacora::class, 'EliminarParticipante']);
     // fin rutas de actividades bitácora
-    
+
     // inicio de rutas donaciones bitácora
     Route::get('digitador/donaciones/listar', [Digi_Donaciones::class, 'ListarDonaciones'])->name('digitador.donaciones.listar');
     Route::get('digitador/donaciones/crear', [Digi_Donaciones::class, 'CrearDonaciones'])->name('digitador.donaciones.crear');
@@ -487,7 +486,7 @@ Route::middleware('verificar.superadmin')->group(function () {
     Route::put('superadmin/deshabilitar-usuario/{usua_rut}', [SuperadminController::class, 'deshabilitarAdmin'])->name('superadmin.deshabilitar.admin');
     Route::delete('superadmin/eliminar-usuario/', [SuperadminController::class, 'eliminarAdmin'])->name('superadmin.eliminar.admin');
     // fin rutas para gestionar usuarios
-    
+
     // inicio rutas para gestionar categorías encuestas de clima
     Route::get('superadmin/categoria-cl/listar', [SuperadminController::class, 'ListarCategoriaCl'])->name('superadmin.categoriacl.listar');
     Route::post('superadmin/categoria-cl/crear', [SuperadminController::class, 'CrearCategoriaCl'])->name('superadmin.categoriacl.crear');

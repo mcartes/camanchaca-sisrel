@@ -9,7 +9,7 @@ use App\Models\Participantes;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Carbon\Carbon;
-use App\Models\Subentornos;
+use App\Models\SubEntornos;
 
 class EntornosController extends Controller
 {
@@ -76,7 +76,7 @@ class EntornosController extends Controller
         ]);
 
         if (!$entorno) {
-            return redirect()->back()->with('errorEntorno', 'Ocurrió un error al registrar el entorno, por favor intente de nuevo más tarde, si el error persiste por favor asegúrese de que los campos fueron completados correctamente, 
+            return redirect()->back()->with('errorEntorno', 'Ocurrió un error al registrar el entorno, por favor intente de nuevo más tarde, si el error persiste por favor asegúrese de que los campos fueron completados correctamente,
             si aun así continua con el error de registro por favor póngase en contacto con su supervisor o administrador.');
         }
 
@@ -126,7 +126,7 @@ class EntornosController extends Controller
         $entoOrga = Organizaciones::where('ento_codigo', $ento_codigo)->get();
         if (sizeof($entoOrga) > 0) return redirect()->back()->with('errorEntorno', 'El entorno no se puede eliminar porque posee organizaciones asociadas.');
 
-        $entoSubentornos = Subentornos::where('ento_codigo', $ento_codigo)->get();
+        $entoSubentornos = SubEntornos::where('ento_codigo', $ento_codigo)->get();
         if (sizeof($entoSubentornos) > 0) return redirect()->back()->with('errorEntorno', 'El entorno no se puede eliminar porque posee subentornos asociados.');
 
         $entoEliminar = Entornos::where('ento_codigo', $ento_codigo)->delete();
@@ -153,7 +153,7 @@ class EntornosController extends Controller
             return redirect()->back()->withErrors($validacion)->withInput();
         }
 
-        $subentorno = Subentornos::create([
+        $subentorno = SubEntornos::create([
             'sube_nombre' => $request->sube_nombre,
             'sube_creado' => Carbon::now()->format('Y-m-d H:i:s'),
             'sube_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -188,11 +188,11 @@ class EntornosController extends Controller
             ]
         );
 
-        $subeVerificar = Subentornos::where('sube_codigo', $sube_codigo)->first();
+        $subeVerificar = SubEntornos::where('sube_codigo', $sube_codigo)->first();
         if (!$subeVerificar)
             return redirect()->back()->with('errorSubEntorno', 'El subentorno no se encuentra registrado.');
 
-        $subeActualizar = Subentornos::where('sube_codigo', $sube_codigo)->update([
+        $subeActualizar = SubEntornos::where('sube_codigo', $sube_codigo)->update([
             'sube_nombre' => $request->sube_nombre,
             'sube_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'sube_vigente' => $request->sube_vigencia,
@@ -211,7 +211,7 @@ class EntornosController extends Controller
         $subeParticipantes = Participantes::where('sube_codigo', $sube_codigo)->get();
         if (sizeof($subeParticipantes) > 0) return redirect()->back()->with('errorSubEntorno', 'El subentorno no se puede eliminar porque tiene algunas iniciativas asociadas.');
 
-        $subeEliminar = Subentornos::where('sube_codigo', $sube_codigo)->delete();
+        $subeEliminar = SubEntornos::where('sube_codigo', $sube_codigo)->delete();
         if (!$subeEliminar) return redirect()->back()->with('errorSubEntorno', 'Ocurrió un error al eliminar el subentorno.');
         return redirect()->route('admin.subentornos.listar')->with('exitoSubEntorno', 'El subentorno fue eliminado correctamente.');
     }

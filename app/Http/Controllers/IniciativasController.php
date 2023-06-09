@@ -29,11 +29,12 @@ use App\Models\Participantes;
 use App\Models\Pilares;
 use App\Models\Regiones;
 use App\Models\Resultados;
-use App\Models\Subentornos;
+use App\Models\SubEntornos;
 use App\Models\Submecanismos;
 use App\Models\TipoInfraestructura;
 use App\Models\TipoRrhh;
 use App\Models\Unidades;
+use App\Models\Organizaciones;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -48,7 +49,7 @@ class IniciativasController extends Controller {
         $inicListar = null;
 
         if (count($request->all()) > 0) {
-            if ($request->region!='' && $request->comuna=='' && $request->unidad=='') {                
+            if ($request->region!='' && $request->comuna=='' && $request->unidad=='') {
                 $inicListar = DB::table('iniciativas')
                     ->select('iniciativas.inic_codigo', 'inic_nombre', 'inic_nombre_responsable', 'meca_nombre', 'inic_aprobada')
                     ->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')
@@ -125,7 +126,7 @@ class IniciativasController extends Controller {
             ->orderBy('inic_creado', 'desc')
             ->get();
         }
-        
+
         return view('admin.iniciativas.listar', [
             'iniciativas' => $inicListar,
             'regiones' => $regiListar,
@@ -197,7 +198,7 @@ class IniciativasController extends Controller {
         $costosEspecies = CostosEspecies::select(DB::raw('IFNULL(SUM(coes_valorizacion), 0) AS coes_valorizacion'))->where('inic_codigo', $inic_codigo)->first();
         $costosInfraestructura = CostosInfraestructura::select(DB::raw('IFNULL(SUM(coin_valorizacion), 0) AS coin_valorizacion'))->where('inic_codigo', $inic_codigo)->first();
         $costosRrhh = CostosRrhh::select(DB::raw('IFNULL(SUM(corh_valorizacion), 0) AS corh_valorizacion'))->where('inic_codigo', $inic_codigo)->first();
-        $entidadesRecursos = Entidades::select('enti_codigo', 'enti_nombre')->get(); 
+        $entidadesRecursos = Entidades::select('enti_codigo', 'enti_nombre')->get();
         $codiListar = CostosDinero::select('enti_codigo', DB::raw('IFNULL(SUM(codi_valorizacion), 0) AS suma_dinero'))->where('inic_codigo', $inic_codigo)->groupBy('enti_codigo')->get();
         $coesListar = CostosEspecies::select('enti_codigo', 'coes_nombre', DB::raw('IFNULL(SUM(coes_valorizacion), 0) AS suma_especies'))->where('inic_codigo', $inic_codigo)->groupBy('enti_codigo', 'coes_nombre')->get();
         $coinListar = CostosInfraestructura::select('enti_codigo', 'costos_infraestructura.tiin_codigo', 'tiin_nombre', DB::raw('IFNULL(SUM(coin_valorizacion), 0) AS suma_infraestructura'))
@@ -210,7 +211,7 @@ class IniciativasController extends Controller {
             ->where('inic_codigo', $inic_codigo)
             ->groupBy('enti_codigo', 'costos_rrhh.tirh_codigo', 'tirh_nombre')
             ->get();
-        
+
         // datos para cálculo de INVI
         $mecaDatos = DB::table('mecanismo')->select('meca_puntaje', 'meca_nombre')
             ->join('submecanismo', 'submecanismo.meca_codigo', '=', 'mecanismo.meca_codigo')
@@ -224,7 +225,7 @@ class IniciativasController extends Controller {
         $partDatos = Participantes::select(DB::raw('IFNULL(part_cantidad_inicial, 0) AS part_cantidad_inicial'), DB::raw('IFNULL(part_cantidad_final, 0) AS part_cantidad_final'))->where('inic_codigo', $inic_codigo)->get();
         $resuDatos = Resultados::select(DB::raw('IFNULL(resu_cuantificacion_inicial, 0) AS resu_cuantificacion_inicial'), DB::raw('IFNULL(resu_cuantificacion_final, 0) AS resu_cuantificacion_final'))->where('inic_codigo', $inic_codigo)->get();
         $evalDatos = Evaluaciones::select('eval_plazos', 'eval_horarios', 'eval_infraestructura', 'eval_equipamiento', 'eval_conexion_dl', 'eval_desempenho_responsable', 'eval_desempenho_participantes', 'eval_calidad_presentaciones')->where('inic_codigo', $inic_codigo)->first();
-        
+
         return view('admin.iniciativas.mostrar', [
             'iniciativa' => $iniciativa,
             'objetivos' => $inodListar,
@@ -494,7 +495,7 @@ class IniciativasController extends Controller {
             'inic_rut_mod' => Session::get('admin')->usua_rut,
             'inic_rol_mod' => Session::get('admin')->rous_codigo
         ]);
-        
+
         if (!$evalActualizar) return redirect()->back()->with('errorEvaluacion', 'Ocurrió un error al actualizar la evaluación de la iniciativa, intente más tarde')->withInput();
         return redirect()->route('admin.iniciativas.index')->with('exitoEvaluacion', 'La evaluación de la iniciativa fue actualizada correctamente.');
     }
@@ -544,7 +545,7 @@ class IniciativasController extends Controller {
     public function completarCobertura($inic_codigo) {
         $partVerificar = Participantes::where('inic_codigo', $inic_codigo)->count();
         if ($partVerificar == 0) return redirect()->back()->with('errorIniciativa', 'La iniciativa no posee subentornos esperados.');
-        
+
         $inicObtener = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         $partObtener = DB::table('participantes')
             ->select('ento_nombre', 'participantes.inic_codigo', 'participantes.sube_codigo', 'sube_nombre', 'part_cantidad_inicial', 'part_cantidad_final')
@@ -559,13 +560,13 @@ class IniciativasController extends Controller {
     }
 
     public function actualizarCobertura(Request $request, $inic_codigo) {
-        $validacion = Validator::make($request->all(), 
-            ['inic_codigo' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['inic_codigo' => 'exists:iniciativas,inic_codigo'],
             ['inic_codigo.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return redirect()->back()->with('errorCobertura', $validacion->errors()->first());
         if ($request->inic_codigo != $inic_codigo) return redirect()->back()->with('errorCobertura', 'Ha ocurrido un problema de vulnerabilidad, intente más tarde.');
-        
+
         $subeCodigos = $request->all();
         $actualizados = 0;
         foreach ($subeCodigos as $sube_codigo => $cantidad) {
@@ -618,7 +619,7 @@ class IniciativasController extends Controller {
             'inic_rut_mod' => Session::get('admin')->usua_rut,
             'inic_rol_mod' => Session::get('admin')->rous_codigo
         ]);
-        
+
         if ($actualizados != (count($request->all()) -2)) return redirect()->route('admin.cobertura.index', $inic_codigo)->with('errorCobertura', 'Algunos registros no fueron actualizados correctamente.');
         return redirect()->route('admin.cobertura.index', $inic_codigo)->with('exitoCobertura', 'Los participantes finales fueron actualizados correctamente.');
     }
@@ -626,7 +627,7 @@ class IniciativasController extends Controller {
     public function completarResultados($inic_codigo) {
         $resuVerificar = Resultados::where('inic_codigo', $inic_codigo)->count();
         if ($resuVerificar == 0) return redirect()->back()->with('errorIniciativa', 'La iniciativa no posee resultados esperados.');
-        
+
         $inicObtener = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         $resuObtener = DB::table('resultados')
             ->select('resu_codigo', 'resu_nombre', 'resu_cuantificacion_inicial', 'resu_cuantificacion_final')
@@ -639,13 +640,13 @@ class IniciativasController extends Controller {
     }
 
     public function actualizarResultados(Request $request, $inic_codigo) {
-        $validacion = Validator::make($request->all(), 
-            ['inic_codigo' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['inic_codigo' => 'exists:iniciativas,inic_codigo'],
             ['inic_codigo.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return redirect()->back()->with('errorResultados', $validacion->errors()->first());
         if ($request->inic_codigo != $inic_codigo) return redirect()->back()->with('errorResultados', 'Ha ocurrido un problema de vulnerabilidad, intente más tarde.');
-        
+
         $resuCodigos = $request->all();
         $actualizados = 0;
         foreach ($resuCodigos as $resu_codigo => $cantidad) {
@@ -697,18 +698,18 @@ class IniciativasController extends Controller {
             'inic_rut_mod' => Session::get('admin')->usua_rut,
             'inic_rol_mod' => Session::get('admin')->rous_codigo
         ]);
-        
+
         if ($actualizados != (count($request->all()) -2)) return redirect()->route('admin.resultados.index', $inic_codigo)->with('errorResultados', 'Algunos registros no fueron actualizados correctamente.');
         return redirect()->route('admin.resultados.index', $inic_codigo)->with('exitoResultados', 'Los resultados finales fueron actualizados correctamente.');
     }
 
     public function datosIndice(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
-        
+
         $mecaDatos = DB::table('mecanismo')->select('meca_puntaje', 'meca_nombre')
             ->join('submecanismo', 'submecanismo.meca_codigo', '=', 'mecanismo.meca_codigo')
             ->join('iniciativas', 'iniciativas.subm_codigo', '=', 'submecanismo.subm_codigo')
@@ -746,7 +747,7 @@ class IniciativasController extends Controller {
     public function listarEvidencia($inic_codigo) {
         $inicVerificar = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         if (!$inicVerificar) return redirect()->route('admin.iniciativas.index')->with('errorIniciativa', 'La iniciativa no se encuentra registrada en el sistema.');
-        
+
         $inevListar = IniciativasEvidencias::where(['inic_codigo' => $inic_codigo, 'inev_vigente' => 'S'])->get();
         return view('admin.iniciativas.evidencias', [
             'iniciativa' => $inicVerificar,
@@ -792,13 +793,13 @@ class IniciativasController extends Controller {
             $archivo = $request->file('inev_archivo');
             $rutaEvidencia = 'files/evidencias/'.$inevGuardar;
             if (File::exists(public_path($rutaEvidencia))) File::delete(public_path($rutaEvidencia));
-            $moverArchivo = $archivo->move(public_path('files/evidencias'), $inevGuardar);    
+            $moverArchivo = $archivo->move(public_path('files/evidencias'), $inevGuardar);
             if (!$moverArchivo) {
                 IniciativasEvidencias::where('inev_codigo', $inevGuardar)->delete();
                 return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
             }
 
-            $inevActualizar = IniciativasEvidencias::where('inev_codigo', $inevGuardar)->update([            
+            $inevActualizar = IniciativasEvidencias::where('inev_codigo', $inevGuardar)->update([
                 'inev_ruta' => 'files/evidencias/'.$inevGuardar,
                 'inev_mime' => $archivo->getClientMimeType(),
                 'inev_nombre_origen' => $archivo->getClientOriginalName(),
@@ -832,7 +833,7 @@ class IniciativasController extends Controller {
             );
             if ($validarEntradas->fails()) return redirect()->route('admin.evidencia.listar', $evidencia->inic_codigo)->with('errorValidacion', $validarEntradas->errors()->first());
 
-            $inevActualizar = IniciativasEvidencias::where('inev_codigo', $inev_codigo)->update([            
+            $inevActualizar = IniciativasEvidencias::where('inev_codigo', $inev_codigo)->update([
                 'inev_nombre' => $request->inev_nombre_edit,
                 'inev_descripcion' => $request->inev_descripcion_edit,
                 'inev_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -867,7 +868,7 @@ class IniciativasController extends Controller {
         try {
             $evidencia = IniciativasEvidencias::where('inev_codigo', $inev_codigo)->first();
             if (!$evidencia) return redirect()->back()->with('errorEvidencia', 'La evidencia no se encuentra registrada o vigente en el sistema.');
-            
+
             if (File::exists(public_path($evidencia->inev_ruta))) File::delete(public_path($evidencia->inev_ruta));
             $inevEliminar = IniciativasEvidencias::where('inev_codigo', $inev_codigo)->delete();
             if (!$inevEliminar) return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al eliminar la evidencia, intente más tarde.');
@@ -905,7 +906,7 @@ class IniciativasController extends Controller {
             'frecuencias' => $listarFrecuencias
         ]);
     }
-    
+
     public function verificarPaso1(Request $request) {
         $request->validate(
             [
@@ -959,7 +960,7 @@ class IniciativasController extends Controller {
             'inic_rol_mod' => Session::get('admin')->rous_codigo
         ]);
         if (!$inicCrear) return redirect()->back()->with('errorPaso1', 'Ocurrió un error durante el registro de los datos de la iniciativa, intente más tarde.')->withInput();
-        
+
         // prepara datos para insertar en tabla iniciativas_unidades
         $inicCodigo = $inicCrear;
         $unidCodigos = array_map('intval', $request->unidad);
@@ -975,7 +976,7 @@ class IniciativasController extends Controller {
                 'inun_rol_mod' => Session::get('admin')->rous_codigo
             ]);
         }
-        
+
         $inunCrear = IniciativasUnidades::insert($inunDatos);
         // si ocurre un error al insertar los datos en tabla iniciativas_unidades, entonces se eliminan los registros insertados previamente
         if (!$inunCrear) {
@@ -1002,15 +1003,15 @@ class IniciativasController extends Controller {
                         'inod_vigente' => 'S',
                         'inod_rut_mod' => Session::get('admin')->usua_rut,
                         'inod_rol_mod' => Session::get('admin')->rous_codigo
-                    ]);                    
+                    ]);
                 }
                 IniciativasOds::insert($inodDatos);
-            }            
+            }
         } catch (\Throwable $th) {
             //throw $th;
         }
 
-        return redirect()->route('admin.paso2.editar', $inicCodigo)->with('exitoPaso1', 'Los datos de la iniciativa fueron registrados correctamente.');        
+        return redirect()->route('admin.paso2.editar', $inicCodigo)->with('exitoPaso1', 'Los datos de la iniciativa fueron registrados correctamente.');
     }
 
     public function editarPaso1($inic_codigo) {
@@ -1101,7 +1102,7 @@ class IniciativasController extends Controller {
             'inic_rol_mod' => Session::get('admin')->rous_codigo
         ]);
         if (!$inicActualizar) return redirect()->back()->with('errorPaso1', 'Ocurrió un error durante el registro de los datos de la iniciativa, intente más tarde.')->withInput();
-        
+
         // elimina los registros antiguos y prepara los datos para registrar en tabla iniciativas_unidades
         IniciativasUnidades::where('inic_codigo', $inic_codigo)->delete();
         $unidCodigos = array_map('intval', $request->unidad);
@@ -1117,7 +1118,7 @@ class IniciativasController extends Controller {
                 'inun_rol_mod' => Session::get('admin')->rous_codigo
             ]);
         }
-        
+
         $inunCrear = IniciativasUnidades::insert($inunDatos);
         // si ocurre un error al insertar los datos en tabla iniciativas_unidades, entonces se eliminan los registros insertados previamente
         if (!$inunCrear) {
@@ -1145,10 +1146,10 @@ class IniciativasController extends Controller {
                         'inod_vigente' => 'S',
                         'inod_rut_mod' => Session::get('admin')->usua_rut,
                         'inod_rol_mod' => Session::get('admin')->rous_codigo
-                    ]);                    
+                    ]);
                 }
                 IniciativasOds::insert($inodDatos);
-            }            
+            }
         } catch (\Throwable $th) {
             //throw $th;
         }
@@ -1156,7 +1157,7 @@ class IniciativasController extends Controller {
         return redirect()->route('admin.paso2.editar', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa fueron actualizados correctamente.');
     }
 
-    public function editarPaso2($inic_codigo) { 
+    public function editarPaso2($inic_codigo) {
         $inicAgregada = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         $listarRegiones = Regiones::select('regi_codigo', 'regi_nombre')->orderBy('regi_codigo')->get();
         $listarParticipantes = DB::table('participantes')
@@ -1217,13 +1218,13 @@ class IniciativasController extends Controller {
                 'inim_rol_mod' => Session::get('admin')->rous_codigo
             ]);
         }
-        
+
         $inimCrear = IniciativasImpactos::insert($inimDatos);
         // si ocurre un error al insertar los datos en tabla iniciativas_impactos, entonces se eliminan los registros insertados previamente
         if (!$inimCrear) {
             IniciativasImpactos::where('inic_codigo', $inicCodigo)->delete();
             return redirect()->back()->with('errorPaso2', 'Ocurrió un error durante el registro de los impactos relacionados a la iniciativa, intente más tarde.')->withInput();
-        }        
+        }
         return redirect()->route('admin.paso3.editar', $inic_codigo)->with('exitoPaso2', 'Los datos de la iniciativa fueron actualizados correctamente.');
     }
 
@@ -1244,18 +1245,18 @@ class IniciativasController extends Controller {
     }
 
     public function obtenerSubentornos(Request $request) {
-        $listarSubentornos = Subentornos::select('sube_codigo', 'sube_nombre')->where('ento_codigo', $request->ento_codigo)->get();
+        $listarSubentornos = SubEntornos::select('sube_codigo', 'sube_nombre')->where('ento_codigo', $request->ento_codigo)->get();
         return json_encode($listarSubentornos);
     }
 
     public function guardarParticipante(Request $request) {
-        $validacion = Validator::make($request->all(), 
+        $validacion = Validator::make($request->all(),
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
                 'entorno' => 'required|exists:entornos,ento_codigo',
                 'subentorno' => 'required|exists:subentornos,sube_codigo',
                 'cantidad' => 'required|integer|min:0'
-            ], 
+            ],
             [
                 'iniciativa.exists' => 'La iniciativa no se encuentra registrada.',
                 'entorno.required' => 'El entorno es requerido.',
@@ -1314,8 +1315,8 @@ class IniciativasController extends Controller {
     }
 
     public function listarParticipantes(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
@@ -1358,8 +1359,8 @@ class IniciativasController extends Controller {
     }
 
     public function listarSubentornosParticipantes(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
@@ -1385,12 +1386,12 @@ class IniciativasController extends Controller {
     }
 
     public function guardarResultado(Request $request) {
-        $validacion = Validator::make($request->all(), 
+        $validacion = Validator::make($request->all(),
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
                 'cantidad' => 'required|integer|min:1',
                 'nombre' => 'required|max:100'
-            ], 
+            ],
             [
                 'iniciativa.exists' => 'La iniciativa no se encuentra registrada.',
                 'cantidad.required' => 'La cuantificación es requerida.',
@@ -1417,12 +1418,12 @@ class IniciativasController extends Controller {
     }
 
     public function listarResultados(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
-        
+
         $resuListar = DB::table('resultados')
             ->select('resu_codigo', 'resultados.inic_codigo', 'resu_nombre', 'resu_cuantificacion_inicial')
             ->join('iniciativas', 'iniciativas.inic_codigo', '=', 'resultados.inic_codigo')
@@ -1443,8 +1444,8 @@ class IniciativasController extends Controller {
     }
 
     public function listarComunas(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
@@ -1460,8 +1461,8 @@ class IniciativasController extends Controller {
     }
 
     public function guardarUbicacion(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
@@ -1483,8 +1484,8 @@ class IniciativasController extends Controller {
     }
 
     public function listarUbicacion(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
@@ -1503,15 +1504,15 @@ class IniciativasController extends Controller {
     public function eliminarUbicacion(Request $request) {
         $inubVerificar = IniciativasUbicaciones::where(['inic_codigo' => $request->inic_codigo, 'comu_codigo' => $request->comu_codigo])->first();
         if (!$inubVerificar) return json_encode(['estado' => false, 'resultado' => 'La ubicación no se encuentra asociada a la iniciativa.']);
-        
+
         $inubEliminar = IniciativasUbicaciones::where(['inic_codigo' => $request->inic_codigo, 'comu_codigo' => $request->comu_codigo])->delete();
         if (!$inubEliminar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar la ubicación, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'La ubicación fue eliminada correctamente.']);
     }
 
     public function consultarCantidad(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
@@ -1522,11 +1523,11 @@ class IniciativasController extends Controller {
     }
 
     public function guardarDinero(Request $request) {
-        $validacion = Validator::make($request->all(), 
+        $validacion = Validator::make($request->all(),
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
                 'entidad' => 'exists:entidades,enti_codigo'
-            ], 
+            ],
             [
                 'iniciativa.exists' => 'La iniciativa no se encuentra registrada.',
                 'entidad.exists' => 'La entidad no se encuentra registrada.'
@@ -1560,13 +1561,13 @@ class IniciativasController extends Controller {
     }
 
     public function guardarEspecie(Request $request) {
-        $validacion = Validator::make($request->all(), 
+        $validacion = Validator::make($request->all(),
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
                 'entidad' => 'exists:entidades,enti_codigo',
                 'nombre' => 'required|max:100',
                 'valorizacion' => 'required|integer|min:0'
-            ], 
+            ],
             [
                 'iniciativa.exists' => 'La iniciativa no se encuentra registrada.',
                 'entidad.exists' => 'La entidad no se encuentra registrada.',
@@ -1591,16 +1592,16 @@ class IniciativasController extends Controller {
             'coes_rol_mod' => Session::get('admin')->rous_codigo
         ]);
         if (!$coesGuardar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al guardar la especie, intente más tarde.']);
-        return json_encode(['estado' => true, 'resultado' => 'La especie fue guardada correctamente.']);        
+        return json_encode(['estado' => true, 'resultado' => 'La especie fue guardada correctamente.']);
     }
 
     public function listarEspecie(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
-        
+
         $coesListar = CostosEspecies::select('coes_codigo', 'inic_codigo', 'enti_codigo', 'coes_nombre', 'coes_valorizacion')->where('inic_codigo', $request->iniciativa)->orderBy('coes_creado', 'asc')->get();
         if (sizeof($coesListar) == 0) return json_encode(['estado' => false, 'resultado' => '']);
         return json_encode(['estado' => true, 'resultado' => $coesListar]);
@@ -1626,13 +1627,13 @@ class IniciativasController extends Controller {
     }
 
     public function guardarInfraestructura(Request $request) {
-        $validacion = Validator::make($request->all(), 
+        $validacion = Validator::make($request->all(),
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
                 'entidad' => 'exists:entidades,enti_codigo',
                 'tipoinfra' => 'exists:tipo_infraestructura,tiin_codigo',
                 'horas' => 'required|integer|min:0'
-            ], 
+            ],
             [
                 'iniciativa.exists' => 'La iniciativa no se encuentra registrada.',
                 'entidad.exists' => 'La entidad no se encuentra registrada.',
@@ -1665,12 +1666,12 @@ class IniciativasController extends Controller {
     }
 
     public function listarInfraestructura(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
-        
+
         $coinListar = DB::table('costos_infraestructura')
             ->select('inic_codigo', 'enti_codigo', 'costos_infraestructura.tiin_codigo', 'tiin_nombre', 'coin_horas', 'coin_valorizacion')
             ->join('tipo_infraestructura', 'tipo_infraestructura.tiin_codigo', '=', 'costos_infraestructura.tiin_codigo')
@@ -1701,13 +1702,13 @@ class IniciativasController extends Controller {
     }
 
     public function guardarRrhh(Request $request) {
-        $validacion = Validator::make($request->all(), 
+        $validacion = Validator::make($request->all(),
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
                 'entidad' => 'exists:entidades,enti_codigo',
                 'tiporrhh' => 'exists:tipo_rrhh,tirh_codigo',
                 'horas' => 'required|integer|min:0'
-            ], 
+            ],
             [
                 'iniciativa.exists' => 'La iniciativa no se encuentra registrada.',
                 'entidad.exists' => 'La entidad no se encuentra registrada.',
@@ -1721,7 +1722,7 @@ class IniciativasController extends Controller {
 
         $corhVerificar = CostosRrhh::where(['inic_codigo' => $request->iniciativa, 'enti_codigo' => $request->entidad, 'tirh_codigo' => $request->tiporrhh])->first();
         if ($corhVerificar) return json_encode(['estado' => false, 'resultado' => 'El recurso humano ya se encuentra asociado a la entidad.']);
-        
+
         $tirhConsultar = TipoRrhh::select('tirh_valor')->where('tirh_codigo', $request->tiporrhh)->first();
         $corhGuardar = CostosRrhh::create([
             'inic_codigo' => $request->iniciativa,
@@ -1740,12 +1741,12 @@ class IniciativasController extends Controller {
     }
 
     public function listarRrhh(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
-        
+
         $corhListar = DB::table('costos_rrhh')
             ->select('inic_codigo', 'enti_codigo', 'costos_rrhh.tirh_codigo', 'tirh_nombre', 'corh_horas', 'corh_valorizacion')
             ->join('tipo_rrhh', 'tipo_rrhh.tirh_codigo', '=', 'costos_rrhh.tirh_codigo')
@@ -1766,8 +1767,8 @@ class IniciativasController extends Controller {
     }
 
     public function listarRecursos(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
@@ -1781,8 +1782,8 @@ class IniciativasController extends Controller {
     }
 
     public function consultarDinero(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
@@ -1792,8 +1793,8 @@ class IniciativasController extends Controller {
     }
 
     public function consultarEspecies(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
@@ -1803,8 +1804,8 @@ class IniciativasController extends Controller {
     }
 
     public function consultarInfraestructura(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
@@ -1814,8 +1815,8 @@ class IniciativasController extends Controller {
     }
 
     public function consultarRrhh(Request $request) {
-        $validacion = Validator::make($request->all(), 
-            ['iniciativa' => 'exists:iniciativas,inic_codigo'], 
+        $validacion = Validator::make($request->all(),
+            ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);

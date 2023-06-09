@@ -4,7 +4,7 @@
 
 <section class="section">
     <div class="section-body">
-        <div class="row">            
+        <div class="row">
             <div class="col-12">
                 <div class="row">
                     <div class="col-3"></div>
@@ -46,14 +46,14 @@
                         @endif
                     </div>
                     <div class="col-3"></div>
-                </div>              
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h4>Listado de iniciativas</h4>
                         <!--<div class="card-header-action">
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCrearInfraestructura"><i class="fas fa-plus"></i> Nueva infraestructura</button>
                         </div>-->
-                    </div>                    
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-3 col-md-3 col-lg-3"></div>
@@ -61,7 +61,7 @@
                             <div class="col-3 col-md-3 col-lg-3"></div>
                         </div>
                         <form action="{{ route('digitador.iniciativas.index') }}" method="GET">
-                            <div class="row">                            
+                            <div class="row">
                                 <div class="col-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Región</label>
@@ -138,7 +138,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <div class="dropdown d-inline">
+                                                {{-- <div class="dropdown d-inline">
                                                     <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         Opciones
                                                     </button>
@@ -146,13 +146,13 @@
                                                         <a class="dropdown-item has-icon" href="{{ route('digitador.paso1.editar', $iniciativa->inic_codigo) }}"><i class="fas fa-edit"></i> Editar iniciativa</a>
                                                         <a href="javascript:void(0)" class="dropdown-item has-icon" onclick="eliminarIniciativa({{ $iniciativa->inic_codigo }})"><i class="fas fa-trash"></i>Eliminar iniciativa</a>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                                 <a href="{{ route('digitador.iniciativas.show', $iniciativa->inic_codigo) }}" class="btn btn-icon btn-warning" data-toggle="tooltip" data-placement="top" title="Ver detalles"><i class="fas fa-eye"></i></a>
                                                 <a href="javascript:void(0)" class="btn btn-icon btn-warning" data-toggle="tooltip" data-placement="top" title="Calcular INVI" onclick="calcularIndice({{ $iniciativa->inic_codigo }})"><i class="fas fa-tachometer-alt"></i></a>
-                                                <a href="{{ route('digitador.evidencia.listar', $iniciativa->inic_codigo) }}" class="btn btn-icon btn-warning" data-toggle="tooltip" data-placement="top" title="Adjuntar evidencia"><i class="fas fa-paperclip"></i></a>
+                                                {{-- <a href="{{ route('digitador.evidencia.listar', $iniciativa->inic_codigo) }}" class="btn btn-icon btn-warning" data-toggle="tooltip" data-placement="top" title="Adjuntar evidencia"><i class="fas fa-paperclip"></i></a>
                                                 <a href="{{ route('digitador.cobertura.index', $iniciativa->inic_codigo) }}" class="btn btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Ingresar cobertura"><i class="fas fa-users"></i></a>
                                                 <a href="{{ route('digitador.resultados.index', $iniciativa->inic_codigo) }}" class="btn btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Ingresar resultados"><i class="fas fa-flag"></i></a>
-                                                <a href="{{ route('digitador.evaluacion.index', $iniciativa->inic_codigo) }}" class="btn btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Evaluar iniciativa"><i class="fas fa-file-signature"></i></a>
+                                                <a href="{{ route('digitador.evaluacion.index', $iniciativa->inic_codigo) }}" class="btn btn-icon btn-success" data-toggle="tooltip" data-placement="top" title="Evaluar iniciativa"><i class="fas fa-file-signature"></i></a> --}}
                                             </td>
                                         </tr>
                                     @endforeach

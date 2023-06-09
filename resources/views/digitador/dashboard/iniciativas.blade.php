@@ -1,23 +1,25 @@
 @extends('digitador.panel_digitador')
 @section('contenido')
     <section class="section">
-        
+
         <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <div class="card card-statistic-1">
                     <div class="card-icon l-bg-cyan">
                         <i class="fab fa-slack"></i>
                     </div>
-                    <div class="card-wrap">
-                        <div class="padding-20">
-                            <div class="text-right">
-                                <h3 class="font-light mb-0">
-                                    <i class="ti-arrow-up text-success"></i> {{ $iniciativas }}
-                                </h3>
-                                <h6 class="text-muted">Iniciativas</h6>
+                    <a href="{{route('digitador.iniciativas.index')}}">
+                        <div class="card-wrap">
+                            <div class="padding-20">
+                                <div class="text-right">
+                                    <h3 class="font-light mb-0">
+                                        <i class="ti-arrow-up text-success"></i> {{ $iniciativas }}
+                                    </h3>
+                                    <h6 class="text-muted">Iniciativas</h6>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
@@ -46,7 +48,7 @@
                         <div class="padding-20">
                             <div class="text-right">
                                 <h3 class="font-light mb-0" data-toggle="tooltip" data-placement="right" title="{{ '$'.number_format($inversion, 0, ',', '.') }}">
-                                    <i class="ti-arrow-up text-success"></i> 
+                                    <i class="ti-arrow-up text-success"></i>
                                     @if ($inversion > 1000000)
                                         {{ number_format($inversion / 1000000, 1).' M' }}
                                     @else
@@ -77,7 +79,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -91,7 +93,7 @@
                             <div class="col-3 col-md-3 col-lg-3"></div>
                         </div>
                         <form action="{{ route('admin.index.iniciativas') }}" method="GET">
-                            <div class="row">                            
+                            <div class="row">
                                 <div class="col-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Región</label>

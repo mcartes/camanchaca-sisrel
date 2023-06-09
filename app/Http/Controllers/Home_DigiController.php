@@ -20,6 +20,7 @@ use App\Models\Organizaciones;
 use App\Models\Participantes;
 use App\Models\Pilares;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Js;
 
 class Home_DigiController extends Controller
@@ -98,7 +99,7 @@ class Home_DigiController extends Controller
         $inversionDonaciones = DB::table('donaciones')->select('pila_codigo', DB::raw('IFNULL(sum(dona_monto), 0) as total'))
             ->groupBy('pila_codigo')
             ->get();
-        
+
         $inversionPilares = [];
         foreach ($pilares as $pilar) {
             $totalPilar = 0;
@@ -119,7 +120,7 @@ class Home_DigiController extends Controller
             }
             array_push($inversionPilares, $totalPilar);
         }
-        
+
         return json_encode(['estado' => true, 'resultado' => [$pilares, $inversionPilares]]);
     }
 
@@ -318,7 +319,7 @@ class Home_DigiController extends Controller
                 ->groupBy('pila_codigo')
                 ->where('unid_codigo', $unidad)
                 ->get();
-            
+
             $totalInversion = [];
             foreach ($pilares as $pilar) {
                 $inversion = 0;
@@ -362,7 +363,7 @@ class Home_DigiController extends Controller
                 ->groupBy('pila_codigo')
                 ->where('comu_codigo', $comuna)
                 ->get();
-            
+
             $totalInversion = [];
             foreach ($pilares as $pilar) {
                 $inversion = 0;
@@ -410,7 +411,7 @@ class Home_DigiController extends Controller
                 ->groupBy('pila_codigo')
                 ->where('comunas.regi_codigo', $region)
                 ->get();
-                
+
             $totalInversion = [];
             foreach ($pilares as $pilar) {
                 $inveDinero = 0;
@@ -449,7 +450,7 @@ class Home_DigiController extends Controller
                 ->join('costos_rrhh', 'costos_rrhh.inic_codigo', '=', 'iniciativas.inic_codigo')
                 ->groupBy('pila_codigo')
                 ->get();
-            
+
             $totalInversion = [];
             foreach ($pilares as $pilar) {
                 $inversion = 0;
@@ -824,47 +825,17 @@ class Home_DigiController extends Controller
 
     public function ActividadesIndex(Request $request) {
         $actividades = null;
+        $filter = DB::table('usuarios')
+        ->join('unidades','unidades.unid_codigo','=','usuarios.unid_codigo')
+        ->join('comunas','comunas.comu_codigo','=','unidades.comu_codigo')
+        ->join('regiones','regiones.regi_codigo','=','comunas.regi_codigo')
+        ->select('regiones.regi_codigo')
+        ->where('usuarios.usua_rut','=',Session::get('digitador')->usua_rut)
+        ->get();
 
         if (count($request->all()) > 0) {
-            if ($request->regi_codigo != "" && $request->comu_codigo != "" && $request->orga_codigo != "" && $request->acti_fecha != "") {
-                $actividades = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                    ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
-                    ->select('comunas.comu_nombre', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
-                    ->where('comunas.regi_codigo', $request->regi_codigo)
-                    ->where('comunas.comu_codigo', $request->comu_codigo)
-                    ->where('organizaciones.orga_codigo', $request->orga_codigo)
-                    ->where('actividades.acti_fecha', $request->acti_fecha)
-                    ->get();
-            }
 
-            if ($request->regi_codigo != "" && $request->comu_codigo != "" && $request->orga_codigo != "" && $request->acti_fecha == "") {
-                $actividades = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                    ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
-                    ->select('comunas.comu_nombre', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
-                    ->where('comunas.regi_codigo', $request->regi_codigo)
-                    ->where('comunas.comu_codigo', $request->comu_codigo)
-                    ->where('organizaciones.orga_codigo', $request->orga_codigo)
-                    ->get();
-            }
-
-            if ($request->regi_codigo != "" && $request->comu_codigo != "" && $request->orga_codigo == "" && $request->acti_fecha == "") {
-                $actividades = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                    ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
-                    ->select('comunas.comu_nombre', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
-                    ->where('comunas.regi_codigo', $request->regi_codigo)
-                    ->where('comunas.comu_codigo', $request->comu_codigo)
-                    ->get();
-            }
-
-            if ($request->regi_codigo != "" && $request->comu_codigo == "" && $request->orga_codigo == "" && $request->acti_fecha == "") {
-                $actividades = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                    ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
-                    ->select('comunas.comu_nombre', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
-                    ->where('comunas.regi_codigo', $request->regi_codigo)
-                    ->get();
-            }
-
-            if ($request->regi_codigo == "" && $request->comu_codigo != "" && $request->orga_codigo != "" && $request->acti_fecha != "") {
+            if ($request->comu_codigo != "" && $request->orga_codigo != "" && $request->acti_fecha != "") {
                 $actividades = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
                     ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
                     ->select('comunas.comu_nombre', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
@@ -874,7 +845,7 @@ class Home_DigiController extends Controller
                     ->get();
             }
 
-            if ($request->regi_codigo == "" && $request->comu_codigo != "" && $request->orga_codigo != "" && $request->acti_fecha == "") {
+            if ($request->comu_codigo != "" && $request->orga_codigo != "" && $request->acti_fecha == "") {
                 $actividades = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
                     ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
                     ->select('comunas.comu_nombre', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
@@ -883,7 +854,7 @@ class Home_DigiController extends Controller
                     ->get();
             }
 
-            if ($request->regi_codigo == "" && $request->comu_codigo == "" && $request->orga_codigo != "" && $request->acti_fecha != "") {
+            if ($request->comu_codigo == "" && $request->orga_codigo != "" && $request->acti_fecha != "") {
                 $actividades = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
                     ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
                     ->select('comunas.comu_nombre', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
@@ -892,7 +863,7 @@ class Home_DigiController extends Controller
                     ->get();
             }
 
-            if ($request->regi_codigo == "" && $request->comu_codigo == "" && $request->orga_codigo == "" && $request->acti_fecha != "") {
+            if ($request->comu_codigo == "" && $request->orga_codigo == "" && $request->acti_fecha != "") {
                 $actividades = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
                     ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
                     ->select('comunas.comu_nombre', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
@@ -900,63 +871,34 @@ class Home_DigiController extends Controller
                     ->get();
             }
 
-            if ($request->regi_codigo == "" && $request->comu_codigo == "" && $request->orga_codigo == "" && $request->acti_fecha == "") {
+            if ($request->comu_codigo == "" && $request->orga_codigo == "" && $request->acti_fecha == "") {
                 $actividades = Actividades::all();
             }
         } else {
             $actividades = Actividades::all();
         }
-        return view('digitador.dashboard.actividades', ['regiones' => Regiones::orderBy('regi_nombre', 'asc')->get(), 'comunas' => Comunas::orderBy('comu_nombre', 'asc')->get(), 'organizaciones' => Organizaciones::orderBy('orga_nombre', 'asc')->get(), 'actividades' => $actividades]);
+        $orga = Organizaciones::join('comunas','comunas.comu_codigo','=','organizaciones.comu_codigo')
+        ->join('regiones','regiones.regi_codigo','=','comunas.regi_codigo')
+        ->where('regiones.regi_codigo',$filter[0]->regi_codigo)->get();
+
+        $comunas = Comunas::join('regiones','regiones.regi_codigo','=','comunas.regi_codigo')
+        ->where('regiones.regi_codigo',$filter[0]->regi_codigo)->get();
+        return view('digitador.dashboard.actividades', ['comunas' => $comunas, 'organizaciones' => $orga, 'actividades' => $actividades,'coun_orga'=> $orga]);
     }
 
     public function ActividadesData(Request $request) {
         $actiData = null;
 
+        $filter = DB::table('usuarios')
+        ->join('unidades','unidades.unid_codigo','=','usuarios.unid_codigo')
+        ->join('comunas','comunas.comu_codigo','=','unidades.comu_codigo')
+        ->join('regiones','regiones.regi_codigo','=','comunas.regi_codigo')
+        ->select('regiones.regi_codigo')
+        ->where('usuarios.usua_rut','=',Session::get('digitador')->usua_rut)
+        ->get();
+
         if (count($request->all()) > 0) {
-
-            if ($request->regi_codigo != "" && $request->comu_codigo != "" && $request->orga_codigo != "" && $request->acti_fecha != "") {
-                $actiData = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                    ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
-                    ->select('actividades.acti_avance', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
-                    ->where('comunas.regi_codigo', $request->regi_codigo)
-                    ->where('comunas.comu_codigo', $request->comu_codigo)
-                    ->where('organizaciones.orga_codigo', $request->orga_codigo)
-                    ->where('actividades.acti_fecha', $request->acti_fecha)
-                    ->get();
-                    return response()->json(['actiData' => $actiData]);
-            }
-
-            if ($request->regi_codigo != "" && $request->comu_codigo != "" && $request->orga_codigo != "" && $request->acti_fecha == "") {
-                $actiData = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                    ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
-                    ->select('actividades.acti_avance', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
-                    ->where('comunas.regi_codigo', $request->regi_codigo)
-                    ->where('comunas.comu_codigo', $request->comu_codigo)
-                    ->where('organizaciones.orga_codigo', $request->orga_codigo)
-                    ->get();
-                    return response()->json(['actiData' => $actiData]);
-            }
-
-            if ($request->regi_codigo != "" && $request->comu_codigo != "" && $request->orga_codigo == "" && $request->acti_fecha == "") {
-                $actiData = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                    ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
-                    ->select('actividades.acti_avance', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
-                    ->where('comunas.regi_codigo', $request->regi_codigo)
-                    ->where('comunas.comu_codigo', $request->comu_codigo)
-                    ->get();
-                    return response()->json(['actiData' => $actiData]);
-            }
-
-            if ($request->regi_codigo != "" && $request->comu_codigo == "" && $request->orga_codigo == "" && $request->acti_fecha == "") {
-                $actiData = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                    ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
-                    ->select('actividades.acti_avance', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
-                    ->where('comunas.regi_codigo', $request->regi_codigo)
-                    ->get();
-                return response()->json(['actiData' => $actiData]);
-            }
-
-            if ($request->regi_codigo == "" && $request->comu_codigo != "" && $request->orga_codigo != "" && $request->acti_fecha != "") {
+            if ($request->comu_codigo != "" && $request->orga_codigo != "" && $request->acti_fecha != "") {
                 $actiData = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
                     ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
                     ->select('actividades.acti_avance', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
@@ -967,7 +909,7 @@ class Home_DigiController extends Controller
                 return response()->json(['actiData' => $actiData]);
             }
 
-            if ($request->regi_codigo == "" && $request->comu_codigo != "" && $request->orga_codigo != "" && $request->acti_fecha == "") {
+            if ($request->comu_codigo != "" && $request->orga_codigo != "" && $request->acti_fecha == "") {
                 $actiData = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
                     ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
                     ->select('actividades.acti_avance', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
@@ -977,7 +919,7 @@ class Home_DigiController extends Controller
                 return response()->json(['actiData' => $actiData]);
             }
 
-            if ($request->regi_codigo == "" && $request->comu_codigo == "" && $request->orga_codigo != "" && $request->acti_fecha != "") {
+            if ($request->comu_codigo == "" && $request->orga_codigo != "" && $request->acti_fecha != "") {
                 $actiData = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
                     ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
                     ->select('actividades.acti_avance', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
@@ -987,7 +929,7 @@ class Home_DigiController extends Controller
                 return response()->json(['actiData' => $actiData]);
             }
 
-            if ($request->regi_codigo == "" && $request->comu_codigo == "" && $request->orga_codigo == "" && $request->acti_fecha != "") {
+            if ($request->comu_codigo == "" && $request->orga_codigo == "" && $request->acti_fecha != "") {
                 $actiData = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
                     ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
                     ->select('actividades.acti_avance', DB::raw("DATE_FORMAT(acti_fecha, '%Y-%m-%d')"))
@@ -996,7 +938,7 @@ class Home_DigiController extends Controller
                 return response()->json(['actiData' => $actiData]);
             }
 
-            if ($request->regi_codigo == "" && $request->comu_codigo == "" && $request->orga_codigo == "" && $request->acti_fecha == "") {
+            if ($request->comu_codigo == "" && $request->orga_codigo == "" && $request->acti_fecha == "") {
                 $actiData = Actividades::all();
                 return response()->json(['actiData' => $actiData]);
             }
@@ -1005,6 +947,14 @@ class Home_DigiController extends Controller
     }
 
     public function ObtenerComunas(Request $request) {
+        $filter = DB::table('usuarios')
+        ->join('unidades','unidades.unid_codigo','=','usuarios.unid_codigo')
+        ->join('comunas','comunas.comu_codigo','=','unidades.comu_codigo')
+        ->join('regiones','regiones.regi_codigo','=','comunas.regi_codigo')
+        ->select('regiones.regi_codigo')
+        ->where('usuarios.usua_rut','=',Session::get('digitador')->usua_rut)
+        ->get();
+
         if ($request->region != "") {
             return response()->json([
                 'comunas' => Comunas::all()->where('regi_codigo', $request->region),
@@ -1013,7 +963,7 @@ class Home_DigiController extends Controller
                         'comunas.regi_codigo',
                         'organizaciones.orga_codigo',
                         'organizaciones.orga_nombre'
-                    )->where('comunas.regi_codigo', $request->region)->get(),
+                    )->where('comunas.regi_codigo', $filter[0]->regi_codigo)->get(),
                 'success' => true
             ]);
         } else {
@@ -1040,4 +990,25 @@ class Home_DigiController extends Controller
             return response()->json(['organizaciones' => Organizaciones::all(), 'success' => false]);
         }
     }
+
+
+    public function listarOrganizaciones()
+    {
+        $filter = DB::table('usuarios')
+        ->join('unidades','unidades.unid_codigo','=','usuarios.unid_codigo')
+        ->join('comunas','comunas.comu_codigo','=','unidades.comu_codigo')
+        ->join('regiones','regiones.regi_codigo','=','comunas.regi_codigo')
+        ->select('regiones.regi_codigo')
+        ->where('usuarios.usua_rut','=',Session::get('digitador')->usua_rut)
+        ->get();
+
+        $organizaciones = Organizaciones::join('comunas','comunas.comu_codigo','=','organizaciones.comu_codigo')
+        ->join('regiones','regiones.regi_codigo','=','comunas.regi_codigo')
+        ->where('comunas.regi_codigo',$filter[0]->regi_codigo)
+        ->get();
+        // return $organizaciones;
+
+        return view('digitador.organizaciones.listar',['organizaciones'=>$organizaciones]);
+    }
+
 }
