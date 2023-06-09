@@ -9,16 +9,18 @@
                     <div class="card-icon l-bg-green">
                         <i class="fas fa-clipboard"></i>
                     </div>
-                    <div class="card-wrap">
-                        <div class="padding-20">
-                            <div class="text-right">
-                                <h3 class="font-light mb-0">
-                                    <i class="ti-arrow-up text-success"></i> {{ count($actividades) }}
-                                </h3>
-                                <h6 class="text-muted">Actividades</h6>
+                    <a href="{{route('digitador.actividad.listar')}}">
+                        <div class="card-wrap">
+                            <div class="padding-20">
+                                <div class="text-right">
+                                    <h3 class="font-light mb-0">
+                                        <i class="ti-arrow-up text-success"></i> {{ count($actividades) }}
+                                    </h3>
+                                    <h6 class="text-muted">Actividades</h6>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </a>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">

@@ -89,7 +89,7 @@
                                         <tr>
                                             <th>Nombre unidad</th>
                                             <th>Tipo de unidad</th>
-                                            <th>Responsable</th>
+                                            {{-- <th>Responsable</th> --}}
                                             <th>Comuna</th>
                                             <th>Estado</th>
                                             <th>Modificado por</th>
@@ -101,7 +101,7 @@
                                             <tr>
                                                 <td>{{ $unidad->unid_nombre }}</td>
                                                 <td>{{ $unidad->tuni_nombre }}</td>
-                                                <td>{{ $unidad->unid_responsable }}</td>
+                                                {{-- <td>{{ $unidad->unid_responsable }}</td> --}}
                                                 <td>{{ $unidad->comu_nombre }}</td>
                                                 <td>
                                                     @if ($unidad->unid_vigente == 'S')

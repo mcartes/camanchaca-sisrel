@@ -4,11 +4,11 @@
 
         <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
+                <div class="card card-statistic-2">
                     <div class="card-icon l-bg-cyan">
                         <i class="fab fa-slack"></i>
                     </div>
-                    <a href="{{route('digitador.iniciativas.index')}}">
+                    <a href="{{ route('digitador.iniciativas.index') }}">
                         <div class="card-wrap">
                             <div class="padding-20">
                                 <div class="text-right">
@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
+                <div class="card card-statistic-2">
                     <div class="card-icon l-bg-green">
                         <i class="fas fa-users"></i>
                     </div>
@@ -40,6 +40,23 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                <div class="card card-statistic-2">
+                    <div class="card-icon l-bg-orange">
+                        <i class="fas fa-hotel"></i>
+                    </div>
+                    <div class="card-wrap">
+                        <div class="padding-20">
+                            <div class="text-right">
+                                <h3 class="font-light mb-0">
+                                    <i class="ti-arrow-up text-success"></i> 3
+                                </h3>
+                                <h6 class="text-muted">Organizaciones</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {{-- <div class="col-lg-3 col-md-6 col-sm-6 col-12">
                 <div class="card card-statistic-1">
                     <div class="card-icon l-bg-orange">
                         <i class="fas fa-dollar-sign"></i>
@@ -60,9 +77,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
+                <div class="card card-statistic-2">
                     <div class="card-icon l-bg-red">
                         <i class="fas fa-flag-checkered"></i>
                     </div>
@@ -81,7 +98,8 @@
         </div>
 
         <div class="row">
-            <div class="col-12">
+
+            <div class="col-6">
                 <div class="card">
                     <div class="card-header">
                         <h4>Filtrar por</h4>
@@ -94,7 +112,7 @@
                         </div>
                         <form action="{{ route('admin.index.iniciativas') }}" method="GET">
                             <div class="row">
-                                <div class="col-4 col-md-4 col-lg-4">
+                                {{-- <div class="col-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Región</label>
                                         <select class="form-control select2" id="region" name="region" onchange="consultarComunas()">
@@ -106,21 +124,24 @@
                                             @endforelse
                                         </select>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Comuna</label>
-                                        <select class="form-control select2" id="comuna" name="comuna" onchange="consultarUnidades()">
+                                        <select class="form-control select2" id="comuna" name="comuna"
+                                            onchange="consultarUnidades()">
                                             <option value="" selected disabled>Seleccione...</option>
                                             @forelse ($comunas as $comuna)
-                                                <option value="{{ $comuna->comu_codigo }}" {{ Request::get('comuna') == $comuna->comu_codigo ? 'selected' : '' }}>{{ $comuna->comu_nombre }}</option>
+                                                <option value="{{ $comuna->comu_codigo }}"
+                                                    {{ Request::get('comuna') == $comuna->comu_codigo ? 'selected' : '' }}>
+                                                    {{ $comuna->comu_nombre }}</option>
                                             @empty
                                                 <option value="-1">No existen registros</option>
                                             @endforelse
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-4 col-md-4 col-lg-4">
+                                {{-- <div class="col-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Unidad</label>
                                         <select class="form-control select2" id="unidad" name="unidad">
@@ -132,28 +153,32 @@
                                             @endforelse
                                         </select>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div class="col-12 col-md-12 col-lg-12 text-right mb-4">
-                                    <button type="submit" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-search"></i> Filtrar</button>
-                                    <a href="{{ route('admin.index.iniciativas') }}" type="button" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-broom"></i> Limpiar</a>
+                                    <button type="submit" class="btn btn-primary mr-1 waves-effect"><i
+                                            class="fas fa-search"></i> Filtrar</button>
+                                    <a href="{{ route('admin.index.iniciativas') }}" type="button"
+                                        class="btn btn-primary mr-1 waves-effect"><i class="fas fa-broom"></i> Limpiar</a>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-12 col-md-6 col-lg-6">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>Iniciativas por unidades</h4>
-                            </div>
-                            <div class="card-body">
-                                <canvas id="chartUnidades"></canvas>
-                            </div>
-                        </div>
+            </div>
+            <div class="col-12 col-md-6 col-lg-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Iniciativas por unidades</h4>
                     </div>
-
+                    <div class="card-body">
+                        <canvas id="chartUnidades"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="row">
                     <div class="col-12 col-md-6 col-lg-6">
                         <div class="card">
                             <div class="card-header">
@@ -184,14 +209,17 @@
                             <div class="card-body">
                                 <div class="gallery gallery-md">
                                     @foreach ($objetivos as $obj)
-                                        <div class="gallery-item" id="img-{{ $obj->obde_codigo }}" style="filter: saturate(0) opacity(0.40);" data-image="{{ asset($obj->obde_ruta_imagen) }}" data-toggle="tooltip" data-placement="top" title=""></div>
+                                        <div class="gallery-item" id="img-{{ $obj->obde_codigo }}"
+                                            style="filter: saturate(0) opacity(0.40);"
+                                            data-image="{{ asset($obj->obde_ruta_imagen) }}" data-toggle="tooltip"
+                                            data-placement="top" title=""></div>
                                     @endforeach
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-3 col-lg-3"></div>
+                    {{-- <div class="col-12 col-md-3 col-lg-3"></div> --}}
                     <div class="col-12 col-md-6 col-lg-6">
                         <div class="card">
                             <div class="card-header">

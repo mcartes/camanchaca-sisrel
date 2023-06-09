@@ -71,7 +71,7 @@ class UnidadesController extends Controller
         $request->validate(
             [
                 'unid_nombre' => 'required|max:50',
-                'unid_nombre_cargo' => 'required|max:50',
+                // 'unid_nombre_cargo' => 'required|max:50',
                 // 'unid_descripcion' => 'required|max:200',
                 // 'unid_responsable' => 'required|max:50',
                 'tuni_codigo' => 'required',

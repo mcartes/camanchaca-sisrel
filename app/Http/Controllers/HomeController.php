@@ -98,7 +98,7 @@ class HomeController extends Controller
         $inversionDonaciones = DB::table('donaciones')->select('pila_codigo', DB::raw('IFNULL(sum(dona_monto), 0) as total'))
             ->groupBy('pila_codigo')
             ->get();
-        
+
         $inversionPilares = [];
         foreach ($pilares as $pilar) {
             $totalPilar = 0;
@@ -119,7 +119,7 @@ class HomeController extends Controller
             }
             array_push($inversionPilares, $totalPilar);
         }
-        
+
         return json_encode(['estado' => true, 'resultado' => [$pilares, $inversionPilares]]);
     }
 
@@ -129,7 +129,7 @@ class HomeController extends Controller
         $unidListar = Unidades::select('unid_codigo', 'unid_nombre')->where('unid_vigente', 'S')->orderBy('unid_nombre', 'asc')->get();
 
         $cantidadIniciativas = Iniciativas::where('inic_vigente', 'S')->count();
-        $cantidadParticipantes = Participantes::select(DB::raw('IFNULL(sum(part_cantidad_final), 0) as total'))
+        $cantidadParticipantes = Participantes::select(DB::raw('IFNULL(sum(part_cantidad_inicial), 0) as total'))
             ->join('iniciativas', 'iniciativas.inic_codigo', '=', 'participantes.inic_codigo')
             ->where('inic_vigente', 'S')
             ->first()->total;
@@ -318,7 +318,7 @@ class HomeController extends Controller
                 ->groupBy('pila_codigo')
                 ->where('unid_codigo', $unidad)
                 ->get();
-            
+
             $totalInversion = [];
             foreach ($pilares as $pilar) {
                 $inversion = 0;
@@ -362,7 +362,7 @@ class HomeController extends Controller
                 ->groupBy('pila_codigo')
                 ->where('comu_codigo', $comuna)
                 ->get();
-            
+
             $totalInversion = [];
             foreach ($pilares as $pilar) {
                 $inversion = 0;
@@ -410,7 +410,7 @@ class HomeController extends Controller
                 ->groupBy('pila_codigo')
                 ->where('comunas.regi_codigo', $region)
                 ->get();
-                
+
             $totalInversion = [];
             foreach ($pilares as $pilar) {
                 $inveDinero = 0;
@@ -449,7 +449,7 @@ class HomeController extends Controller
                 ->join('costos_rrhh', 'costos_rrhh.inic_codigo', '=', 'iniciativas.inic_codigo')
                 ->groupBy('pila_codigo')
                 ->get();
-            
+
             $totalInversion = [];
             foreach ($pilares as $pilar) {
                 $inversion = 0;

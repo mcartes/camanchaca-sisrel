@@ -248,7 +248,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                {{-- <div class="col-4 col-md-4 col-lg-4">
+                                <div class="col-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Formato de implementación</label> <label for="" style="color: red;">*</label>
                                         @if (isset($iniciativa))
@@ -279,7 +279,7 @@
                                             </div>
                                         @endif
                                     </div>
-                                </div> --}}
+                                </div>
                                 <div class="col-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Nombre encargado responsable</label>
