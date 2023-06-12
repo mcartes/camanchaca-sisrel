@@ -33,7 +33,8 @@
                                         <div class="row">
                                             <div class="col-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
-                                                    <label>Nombre</label> <label for="" style="color: red;">*</label>
+                                                    <label>Nombre</label> <label for=""
+                                                        style="color: red;">*</label>
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
                                                             <div class="input-group-text">
@@ -85,7 +86,8 @@
                                             </div>
                                             <div class="col-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
-                                                    <label>Comuna</label> <label for="" style="color: red;">*</label>
+                                                    <label>Comuna</label> <label for=""
+                                                        style="color: red;">*</label>
                                                     <div class="input-group">
 
                                                         <select class="form-control form-control-sm select2" name="comuna"
@@ -262,7 +264,8 @@
                                             </div> --}}
                                         </div>
                                         <div class="text-right">
-                                            <button type="submit" class="btn btn-primary waves-effect"><i class="fa fa-save"></i> Registrar</button>
+                                            <button type="submit" class="btn btn-primary waves-effect"><i
+                                                    class="fa fa-save"></i> Registrar</button>
                                         </div>
                                     </form>
                                 </div>
@@ -287,11 +290,97 @@
             </div>
         </div>
     </section>
-    <script src="{{ asset('public/js/organizaciones.js') }}"></script>
+    {{-- <script src="{{ asset('public/js/organizaciones.js') }}"></script> --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ asset('public/css/geocoder.css') }}" />
+    <script src="https://unpkg.com/leaflet@latest/dist/leaflet-src.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
     <script>
+        const csrftoken = document.head.querySelector(
+            "[name~=csrf-token][content]"
+        ).content;
+        var map = L.map('map').setView([-33.42486299783035, -70.68914200046231], 5);
+
+        var geocoder = L.Control.Geocoder.nominatim();
+        if (typeof URLSearchParams !== 'undefined' && location.search) {
+            // parse /?geocoder=nominatim from URL
+            var params = new URLSearchParams(location.search);
+            var geocoderString = params.get('geocoder');
+            if (geocoderString && L.Control.Geocoder[geocoderString]) {
+                console.log('Using geocoder', geocoderString);
+                geocoder = L.Control.Geocoder[geocoderString]();
+            } else if (geocoderString) {
+                console.warn('Unsupported geocoder', geocoderString);
+            }
+        }
+
+        var control = L.Control.geocoder({
+            placeholder: 'Buscar ubicación...',
+            geocoder: geocoder
+        }).addTo(map);
+        var marker;
+
+
+        L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        map.on('click', function(e) {
+            geocoder.reverse(e.latlng, map.options.crs.scale(map.getZoom()), function(results) {
+                var r = results[0];
+                if (r) {
+                    if (marker) {
+                        marker
+                            .setLatLng(r.center)
+                            .setPopupContent(r.html || r.name)
+                            .openPopup();
+                        // var coordendas = marker.getLatLng();
+                        // document.getElementById("lat").value = coordendas.lat;
+                        // document.getElementById("lng").value = coordendas.lng;
+                    } else {
+                        marker = L.marker(r.center)
+                            .bindPopup(r.name)
+                            .addTo(map)
+                            .openPopup();
+                        // marker.getLatLng();
+                        // document.getElementById("lat").value = coordendas.lat;
+                        // document.getElementById("lng").value = coordendas.lng;
+                    }
+                }
+            });
+        });
+
+
+        function cargarCoordenadas() {
+            var comuna = document.getElementById("comuna").value;
+
+            fetch(window.location.origin + "/admin/organizaciones/comuna", {
+                method: "POST",
+                body: JSON.stringify({
+                    comuna: comuna,
+                }),
+                headers: {
+                    "Content-Type": "aplication/json",
+                    "X-CSRF-TOKEN": csrftoken,
+                },
+            }).then(response => {
+                return response.json();
+            }).then(data => {
+                for (let i in data.comuna) {
+                    var coords = JSON.parse(data.comuna[i].comu_geoubicacion);
+                    // map.flyTo([coords.lat,coords.lng],14);
+                    map.setView([coords.lat, coords.lng], 14);
+                }
+            })
+        }
+    </script>
+
+    {{-- <script>
         $(document).ready(function() {
             $("#miDiv").hide();
         });
-    </script>
+    </script> --}}
 @endsection

@@ -36,18 +36,26 @@ class HomeController extends Controller
         $objetivosDesarrollo = ObjetivosDesarrollo::select('obde_codigo', 'obde_nombre', 'obde_ruta_imagen')->where('obde_vigente', 'S')->get();
         $objetivosVinculados = ObjetivosDesarrollo::select('objetivos_desarrollo.obde_codigo')->join('iniciativas_ods', 'iniciativas_ods.obde_codigo', '=', 'objetivos_desarrollo.obde_codigo')->where('obde_vigente', 'S')->distinct('objetivos_desarrollo.obde_codigo')->get();
         $odsVinculados = [];
+
+        $regiones = Regiones::orderBy('regi_cut','asc')->get();
+
         foreach ($objetivosVinculados as $obj) {
             array_push($odsVinculados, $obj->obde_codigo);
         }
-        return view('admin.dashboard.general', [
+        return view('admin.dashboard.newgeneral', [
             'iniciativas' => $cantidadIniciativas,
             'organizaciones' => $cantidadOrganizaciones,
             'inversion' => $costosDinero+$costosEspecies+$costosInfra+$costosRrhh+$costosDonaciones,
             'ods' => $cantidadODS,
             'objetivos' => $objetivosDesarrollo,
-            'odsvinculados' => $odsVinculados
+            'odsvinculados' => $odsVinculados,
+            'regiones' => $regiones
         ]);
     }
+
+    // public function GeneralInf(Request $request ){
+    //     $iniciativas = DB::table()
+    // }
 
     public function iniciativasGeneral() {
         $pilares = Pilares::select('pila_codigo', 'pila_nombre')->where('pila_vigente', 'S')->get();

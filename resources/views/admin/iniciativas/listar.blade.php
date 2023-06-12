@@ -4,7 +4,7 @@
 
 <section class="section">
     <div class="section-body">
-        <div class="row">            
+        <div class="row">
             <div class="col-12">
                 <div class="row">
                     <div class="col-3"></div>
@@ -46,14 +46,15 @@
                         @endif
                     </div>
                     <div class="col-3"></div>
-                </div>              
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h4>Listado de iniciativas</h4>
-                        <!--<div class="card-header-action">
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalCrearInfraestructura"><i class="fas fa-plus"></i> Nueva infraestructura</button>
-                        </div>-->
-                    </div>                    
+                        <div class="card-header-action">
+                            <a type="button" class="btn btn-primary" href="{{route('admin.paso1.crear')}}"><i class="fas fa-plus"></i> Nueva iniciativa</a>
+                            <a href="{{route('admin.dbgeneral.index')}}" type="button" class="btn btn-warning" title="Ir a inicio"><i class="fas fa-home"></i> Volver</a>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-3 col-md-3 col-lg-3"></div>
@@ -61,7 +62,7 @@
                             <div class="col-3 col-md-3 col-lg-3"></div>
                         </div>
                         <form action="{{ route('admin.iniciativas.index') }}" method="GET">
-                            <div class="row">                            
+                            <div class="row">
                                 <div class="col-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Región</label>

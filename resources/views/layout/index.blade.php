@@ -84,7 +84,7 @@
                                 @elseif (Session::has('observador'))
                                     <a href="{{ route('observador.perfil.show', ['usua_rut' => Session::get('observador.usua_rut'), 'rous_codigo' => Session::get('observador.rous_codigo')]) }}" class="dropdown-item has-icon"><i class="far fa-user"></i> Perfil</a>
                                 @endif
-                                
+
                                 <a href="{{ route('auth.cerrar') }}" class="dropdown-item has-icon text-danger"><i class="fas fa-sign-out-alt"></i>
                                     Cerrar sesión
                                 </a>

@@ -2,7 +2,7 @@
 
 
 @section('acceso')
-    <ul class="sidebar-menu">
+    {{-- <ul class="sidebar-menu">
         <li class="menu-header">Digitador</li>
 
         <li
@@ -16,10 +16,10 @@
                 <li><a class="nav-link" href="{{ route('digitador.index.iniciativas') }}">Por iniciativas</a></li>
                 <li><a class="nav-link" href="{{ route('digitador.index.actividades') }}">Por relacionamiento</a></li>
                 {{-- <li><a class="nav-link" href="{{ route('digitador.index.donaciones') }}">Por donaciones</a></li> --}}
-            </ul>
-        </li>
+            {{-- </ul> --}}
+        {{-- </li> s --}}
 
-        <li
+        {{-- <li
             class="{{ Route::is('digitador.actividad.crear') ||
             Route::is('digitador.actividad.editar') ||
             Route::is('digitador.actividad.participantes.editar') ||
@@ -30,8 +30,8 @@
             Route::is('digitador.donaciones.editar') ||
             Route::is('digitador.donaciones.info')
                 ? 'dropdown active'
-                : 'dropdown' }}">
-            <a href="javascript:void(0)" class="menu-toggle nav-link has-dropdown"><i
+                : 'dropdown' }}"> --}}
+            {{-- <a href="javascript:void(0)" class="menu-toggle nav-link has-dropdown"><i
                     data-feather="file-text"></i><span>Bitácora de relacionamiento</span></a>
             <ul class="dropdown-menu">
                 <li><a class="nav-link" href="{{ route('digitador.actividad.crear') }}">Ingresar actividad</a></li>
@@ -39,8 +39,8 @@
                 <!-- <li><a class="nav-link" href="{{ route('digitador.donaciones.crear') }}">Ingresar donación</a></li>
                         <li><a class="nav-link" href="{{ route('digitador.donaciones.listar') }}">Listar donaciones</a></li> -->
             </ul>
-        </li>
-        <li
+        </li> --}}
+        {{-- <li
             class="{{ Route::is('digitador.paso1.crear') ||
             Route::is('digitador.paso1.editar') ||
             Route::is('digitador.paso2.crear') ||
@@ -63,11 +63,11 @@
                 : 'dropdown' }}">
             <a href="javascript:void(0)" class="menu-toggle nav-link has-dropdown"><i
                     data-feather="slack"></i><span>Iniciativas</span></a>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu"> --}}
                 {{-- <li><a class="nav-link" href="{{ route('digitador.paso1.crear') }}">Crear iniciativa</a></li> --}}
-                <li><a class="nav-link" href="{{ route('digitador.iniciativas.index') }}">Iniciativas creadas</a></li>
+                {{-- <li><a class="nav-link" href="{{ route('digitador.iniciativas.index') }}">Iniciativas creadas</a></li>
             </ul>
-        </li>
+        </li> --}}
         <!-- <li class="{{ Route::is('digitador.listar.encuestapr') ||
         Route::is('digitador.crear.encuestapr') ||
         Route::is('digitador.encuestapr.editar') ||
@@ -87,6 +87,5 @@
                 </ul>
             </li> -->
     </ul>
-    </aside>
     </div>
 @endsection

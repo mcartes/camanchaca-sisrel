@@ -35,6 +35,9 @@
                                     Nueva
                                     organización</a>
                             </div> --}}
+                            <div class="card-header-action">
+                                <a href="{{route('digitador.dbgeneral.index')}}" type="button" class="btn btn-warning" title="Ir a inicio"><i class="fas fa-home"></i> Volver</a>
+                            </div>
                         </div>
                         <div class="card-body">
                             {{-- <form action="{{ route('admin.listar.org') }}" method="GET">

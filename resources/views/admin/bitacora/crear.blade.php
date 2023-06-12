@@ -95,7 +95,7 @@
                                     <label>Acuerdos</label> <label for="" style="color: red;">*</label>
                                     <div class="input-group">
                                         <textarea class="formbold-form-input" id="acuerdos" name="acuerdos" rows="5" style="width: 100%;">{{ old('acuerdos') ?? @$actividad->acti_acuerdos }}</textarea>
-                                    </div>                                    
+                                    </div>
                                     @if($errors->has('acuerdos'))
                                         <div class="alert alert-warning alert-dismissible show fade mt-2">
                                             <div class="alert-body">
@@ -149,6 +149,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-12 text-right">
+                                        <a href="{{route('admin.dbgeneral.index')}}" type="button" class="btn btn-warning" title="Ir a inicio"><i class="fas fa-home"></i> Volver</a>
+                                        <a href="{{route('admin.actividad.listar')}}" type="button" class="btn btn-success" title="Ir a lista"><i class="fas fa-backward"></i> Ir a actividades</a>
                                         <button type="submit" class="btn btn-icon btn-primary"><i class="fas fa-save"></i> Siguiente</button>
                                     </div>
                                 </div>

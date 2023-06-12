@@ -45,10 +45,10 @@ class AutenticationController extends Controller {
 
         if ($usuario->rous_codigo == 1) {
             $request->session()->put('admin', $usuario);
-            return redirect()->route('admin.index.iniciativas');
+            return redirect()->route('admin.dbgeneral.index');
         } elseif ($usuario->rous_codigo == 2) {
             $request->session()->put('digitador', $usuario);
-            return redirect()->route('digitador.index.actividades');
+            return redirect()->route('digitador.dbgeneral.index');
         } elseif ($usuario->rous_codigo == 3) {
             $request->session()->put('observador', $usuario);
             return redirect()->route('observador.index.iniciativas');

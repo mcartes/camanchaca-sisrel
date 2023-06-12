@@ -149,6 +149,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-12 text-right">
+                                        <a href="{{route('digitador.dbgeneral.index')}}" class="btn btn-icon btn-warning"><i class="fas fa-home"></i> Inicio</a>
                                         <button type="submit" class="btn btn-icon btn-primary"><i class="fas fa-save"></i> Siguiente</button>
                                     </div>
                                 </div>

@@ -52,14 +52,14 @@ Route::middleware('verificar.admin')->group(function () {
     Route::get('admin/dashboard/iniciativas/inve-pila', [HomeController::class, 'inversionPilares']);
     Route::get('admin/dashboard/iniciativas/inic-ods', [HomeController::class, 'iniciativasOds']);
     Route::get('admin/dashboard/iniciativas/invi', [HomeController::class, 'indiceVinculacion']);
-    Route::post('admin-iniciativas/obtener/comunas',[HomeController::class,'ObtenerComunas']);
-    Route::post('admin-iniciativas/obtener/unidades',[HomeController::class,'ObtenerUnidades']);
-    Route::get('admin-actividades', [HomeController::class,'ActividadesIndex'])->name('admin.index.actividades');
-    Route::get('admin-donaciones',[HomeController::class,'DonacionesIndex'])->name('admin.index.donaciones');
-    Route::post('admin/dashboard/obtener/datos',[HomeController::class,'DonacionesData']);
-    Route::post('admin/dashboard/obtener/comunas',[HomeController::class,'ObtenerComunas']);
-    Route::post('admin/dashboard/obtener/organizaciones',[HomeController::class,'ObtenerOrganizaciones']);
-    Route::post('admin/dashboard/obtener/datos-actividades',[HomeController::class,'ActividadesData']);
+    Route::post('admin-iniciativas/obtener/comunas', [HomeController::class, 'ObtenerComunas']);
+    Route::post('admin-iniciativas/obtener/unidades', [HomeController::class, 'ObtenerUnidades']);
+    Route::get('admin-actividades', [HomeController::class, 'ActividadesIndex'])->name('admin.index.actividades');
+    Route::get('admin-donaciones', [HomeController::class, 'DonacionesIndex'])->name('admin.index.donaciones');
+    Route::post('admin/dashboard/obtener/datos', [HomeController::class, 'DonacionesData']);
+    Route::post('admin/dashboard/obtener/comunas', [HomeController::class, 'ObtenerComunas']);
+    Route::post('admin/dashboard/obtener/organizaciones', [HomeController::class, 'ObtenerOrganizaciones']);
+    Route::post('admin/dashboard/obtener/datos-actividades', [HomeController::class, 'ActividadesData']);
     // fin rutas para dashboard
 
     // inicio rutas perfil de usuario
@@ -158,8 +158,8 @@ Route::middleware('verificar.admin')->group(function () {
     Route::get('admin/donaciones/{dona_codigo}/editar', [DonacionesController::class, 'EditarDonacion'])->name('admin.donaciones.editar');
     Route::put('admin/donaciones/{dona_codigo}/editar', [DonacionesController::class, 'ActualizarDonacion'])->name('admin.donaciones.actualizar');
     Route::post('admin/donaciones/obtener-dirigentes', [DonacionesController::class, 'TraerDirigentes']);
-    Route::get('admin/donaciones/{dona_codigo}/mostrar',[DonacionesController::class,'MoreInfo'])->name('admin.donaciones.info');
-    Route::post('admin/donaciones/{dona_codigo}/eliminar',[DonacionesController::class,'EliminarDonaciones'])->name('admin.donaciones.eliminar');
+    Route::get('admin/donaciones/{dona_codigo}/mostrar', [DonacionesController::class, 'MoreInfo'])->name('admin.donaciones.info');
+    Route::post('admin/donaciones/{dona_codigo}/eliminar', [DonacionesController::class, 'EliminarDonaciones'])->name('admin.donaciones.eliminar');
     // fin de rutas actividades donaciones
 
     // inicio rutas para gestionar mapas
@@ -182,7 +182,7 @@ Route::middleware('verificar.admin')->group(function () {
     // fin rutas para gestionar convenios
 
     // inicio rutas para gestionar dirigentes de las organizaciones
-    Route::get('admin/dirigentes/listar',[AdminController::class,'ListarDirigentes'])->name('admin.dirigente.listar');
+    Route::get('admin/dirigentes/listar', [AdminController::class, 'ListarDirigentes'])->name('admin.dirigente.listar');
     Route::get('admin/dirigentes/creardirigente', [AdminController::class, 'CrearDirigente'])->name('admin.dirigente.crear');
     Route::post('admin/dirigentes/creardirigente', [AdminController::class, 'GuardarDirigente'])->name('admin.dirigente.guardar');
     Route::get('admin/dirigentes/{diri_codigo}/editardirigente', [AdminController::class, 'EditarDirigente'])->name('admin.dirigente.editar');
@@ -221,10 +221,10 @@ Route::middleware('verificar.admin')->group(function () {
     // fin rutas para gestionar evaluación de prensa
 
     // inicio rutas para gestionar entornos
-    Route::get('admin/entornos/listar',[EntornosController::class,'ListarEntornos'])->name('admin.entornos.listar');
-    Route::post('admin/entornos/crear',[EntornosController::class,'CrearEntornos'])->name('admin.entornos.guardar');
-    Route::put('admin/entornos/{ento_codigo}/editar',[EntornosController::class,'EditarEntornos'])->name('admin.entornos.actualizar');
-    Route::delete('admin/entornos/{ento_codigo}/borrar',[EntornosController::class,'EliminarEntornos'])->name('admin.entornos.borrar');
+    Route::get('admin/entornos/listar', [EntornosController::class, 'ListarEntornos'])->name('admin.entornos.listar');
+    Route::post('admin/entornos/crear', [EntornosController::class, 'CrearEntornos'])->name('admin.entornos.guardar');
+    Route::put('admin/entornos/{ento_codigo}/editar', [EntornosController::class, 'EditarEntornos'])->name('admin.entornos.actualizar');
+    Route::delete('admin/entornos/{ento_codigo}/borrar', [EntornosController::class, 'EliminarEntornos'])->name('admin.entornos.borrar');
     // fin rutas para gestionar entornos
 
     // inicio rutas para gestionar impactos
@@ -241,7 +241,7 @@ Route::middleware('verificar.admin')->group(function () {
     Route::get('admin/organizaciones/{orga_codigo}/editar', [AdminController::class, 'editarOrganizacion'])->name('admin.editar.org');
     Route::post('admin/organizaciones/{orga_codigo}/editar', [AdminController::class, 'actualizarOrganizacion'])->name('admin.actualizar.org');
     Route::post('admin/organizacion/{orga_codigo}/eliminar', [AdminController::class, 'eliminarOrganizacion'])->name('admin.borrar.org');
-    Route::post('admin/organizaciones/comuna',[AdminController::class,'ObtenerUbicacionComuna']);
+    Route::post('admin/organizaciones/comuna', [AdminController::class, 'ObtenerUbicacionComuna']);
     // fin rutas para gestionar organizaciones
 
     // inicio rutas para gestionar pilares
@@ -252,10 +252,10 @@ Route::middleware('verificar.admin')->group(function () {
     // fin rutas para gestionar pilares
 
     // inicio rutas para gestionar subentornos
-    Route::get('admin/subentornos/listar',[EntornosController::class,'ListarSubentornos'])->name('admin.subentornos.listar');
-    Route::post('admin/subentornos/crear',[EntornosController::class,'CrearSubentornos'])->name('admin.subentornos.guardar');
-    Route::put('admin/subentornos/{sube_codigo}/editar',[EntornosController::class,'EditarSubentornos'])->name('admin.subentornos.actualizar');
-    Route::delete('admin/subentornos/{sube_codigo}/borrar',[EntornosController::class,'EliminarSubentornos'])->name('admin.subentornos.borrar');
+    Route::get('admin/subentornos/listar', [EntornosController::class, 'ListarSubentornos'])->name('admin.subentornos.listar');
+    Route::post('admin/subentornos/crear', [EntornosController::class, 'CrearSubentornos'])->name('admin.subentornos.guardar');
+    Route::put('admin/subentornos/{sube_codigo}/editar', [EntornosController::class, 'EditarSubentornos'])->name('admin.subentornos.actualizar');
+    Route::delete('admin/subentornos/{sube_codigo}/borrar', [EntornosController::class, 'EliminarSubentornos'])->name('admin.subentornos.borrar');
     // fin rutas para gestionar subentornos
 
     // inicio rutas para gestionar las unidades
@@ -293,16 +293,20 @@ Route::middleware('verificar.digitador')->group(function () {
     Route::get('digitador/dashboard/iniciativas/inve-pila', [Home_DigiController::class, 'inversionPilares']);
     Route::get('digitador/dashboard/iniciativas/inic-ods', [Home_DigiController::class, 'iniciativasOds']);
     Route::get('digitador/dashboard/iniciativas/invi', [Home_DigiController::class, 'indiceVinculacion']);
-    Route::post('digitador-iniciativas/obtener/comunas',[Home_DigiController::class,'ObtenerComunas']);
-    Route::post('digitador-iniciativas/obtener/unidades',[Home_DigiController::class,'ObtenerUnidades']);
-    Route::get('digitador-actividades', [Home_DigiController::class,'ActividadesIndex'])->name('digitador.index.actividades');
-    Route::get('digitador-donaciones',[Home_DigiController::class,'DonacionesIndex'])->name('digitador.index.donaciones');
-    Route::post('digitador/dashboard/obtener/datos',[Home_DigiController::class,'DonacionesData']);
-    Route::post('digitador/dashboard/obtener/comunas',[Home_DigiController::class,'ObtenerComunas']);
-    Route::post('digitador/dashboard/obtener/organizaciones',[Home_DigiController::class,'ObtenerOrganizaciones']);
-    Route::post('digitador/dashboard/obtener/datos-actividades',[Home_DigiController::class,'ActividadesData']);
-    Route::get('digitado/dashboard/obtener/organizaciones',[Home_DigiController::class,'listarOrganizaciones'])->name('digitador.organizaciones.view');
+    Route::post('digitador-iniciativas/obtener/comunas', [Home_DigiController::class, 'ObtenerComunas']);
+    Route::post('digitador-iniciativas/obtener/unidades', [Home_DigiController::class, 'ObtenerUnidades']);
+    Route::get('digitador-actividades', [Home_DigiController::class, 'ActividadesIndex'])->name('digitador.index.actividades');
+    Route::get('digitador-donaciones', [Home_DigiController::class, 'DonacionesIndex'])->name('digitador.index.donaciones');
+    Route::post('digitador/dashboard/obtener/datos', [Home_DigiController::class, 'DonacionesData']);
+    Route::post('digitador/dashboard/obtener/comunas', [Home_DigiController::class, 'ObtenerComunas']);
+    Route::post('digitador/dashboard/obtener/organizaciones', [Home_DigiController::class, 'ObtenerOrganizaciones']);
+    Route::post('digitador/dashboard/obtener/datos-actividades', [Home_DigiController::class, 'ActividadesData']);
+    Route::get('digitador/dashboard/obtener/organizaciones', [Home_DigiController::class, 'listarOrganizaciones'])->name('digitador.organizaciones.view');
 
+    Route::post('digitador/mapa/obtener/regiones', [Home_DigiController::class, 'obtenerDatosComunas'])->name('digitador.map.regiones');
+    Route::post('digitador/mapa/obtener/comuna', [Home_DigiController::class, 'obtenerDatosComuna'])->name('digitador.map.comuna');
+    Route::post('digitador/mapa/obtener/orga', [Home_DigiController::class, 'ObtenerOrg'])->name('digitador.map.organizacion');
+    Route::post('digitador/mapa/obtener/orga-data', [Home_DigiController::class, 'ObtenerDataOrg'])->name('digitador.map.orgdata');
 
     // inicio rutas perfil de usuario
     Route::get('digitador/perfil/{usua_rut}/{rous_codigo}', [DigitadorController::class, 'verPerfil'])->name('digitador.perfil.show');
@@ -398,8 +402,8 @@ Route::middleware('verificar.digitador')->group(function () {
     Route::get('digitador/donaciones/{dona_codigo}/editar', [Digi_Donaciones::class, 'EditarDonacion'])->name('digitador.donaciones.editar');
     Route::put('digitador/donaciones/{dona_codigo}/editar', [Digi_Donaciones::class, 'ActualizarDonacion'])->name('digitador.donaciones.actualizar');
     Route::post('digitador/donaciones/obtener-dirigentes', [Digi_Donaciones::class, 'TraerDirigentes']);
-    Route::get('digitador/donaciones/{dona_codigo}/mostrar', [Digi_Donaciones::class,'MoreInfo'])->name('digitador.donaciones.info');
-    Route::post('digitador/donaciones/{dona_codigo}/eliminar', [Digi_Donaciones::class,'EliminarDonaciones'])->name('digitador.donaciones.eliminar');
+    Route::get('digitador/donaciones/{dona_codigo}/mostrar', [Digi_Donaciones::class, 'MoreInfo'])->name('digitador.donaciones.info');
+    Route::post('digitador/donaciones/{dona_codigo}/eliminar', [Digi_Donaciones::class, 'EliminarDonaciones'])->name('digitador.donaciones.eliminar');
     // fin de rutas donaciones bitácora
 
     // inicio rutas para gestionar encuestas de clima
@@ -445,14 +449,14 @@ Route::middleware('verificar.observador')->group(function () {
     Route::get('observador/dashboard/iniciativas/inve-pila', [HomeobservadorController::class, 'inversionPilares']);
     Route::get('observador/dashboard/iniciativas/inic-ods', [HomeobservadorController::class, 'iniciativasOds']);
     Route::get('observador/dashboard/iniciativas/invi', [HomeobservadorController::class, 'indiceVinculacion']);
-    Route::post('observador-iniciativas/obtener/comunas',[HomeobservadorController::class,'ObtenerComunas']);
-    Route::post('observador-iniciativas/obtener/unidades',[HomeobservadorController::class,'ObtenerUnidades']);
-    Route::get('observador-actividades', [HomeobservadorController::class,'ActividadesIndex'])->name('observador.index.actividades');
-    Route::get('observador-donaciones',[HomeobservadorController::class,'DonacionesIndex'])->name('observador.index.donaciones');
-    Route::post('observador/dashboard/obtener/datos',[HomeobservadorController::class,'DonacionesData']);
-    Route::post('observador/dashboard/obtener/comunas',[HomeobservadorController::class,'ObtenerComunas']);
-    Route::post('observador/dashboard/obtener/organizaciones',[HomeobservadorController::class,'ObtenerOrganizaciones']);
-    Route::post('observador/dashboard/obtener/datos-actividades',[HomeobservadorController::class,'ActividadesData']);
+    Route::post('observador-iniciativas/obtener/comunas', [HomeobservadorController::class, 'ObtenerComunas']);
+    Route::post('observador-iniciativas/obtener/unidades', [HomeobservadorController::class, 'ObtenerUnidades']);
+    Route::get('observador-actividades', [HomeobservadorController::class, 'ActividadesIndex'])->name('observador.index.actividades');
+    Route::get('observador-donaciones', [HomeobservadorController::class, 'DonacionesIndex'])->name('observador.index.donaciones');
+    Route::post('observador/dashboard/obtener/datos', [HomeobservadorController::class, 'DonacionesData']);
+    Route::post('observador/dashboard/obtener/comunas', [HomeobservadorController::class, 'ObtenerComunas']);
+    Route::post('observador/dashboard/obtener/organizaciones', [HomeobservadorController::class, 'ObtenerOrganizaciones']);
+    Route::post('observador/dashboard/obtener/datos-actividades', [HomeobservadorController::class, 'ActividadesData']);
     // fin rutas para dashboard
 
     // inicio rutas para gestionar mapas

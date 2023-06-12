@@ -199,7 +199,7 @@ function cargarInfoComuna() {
                         });
                 }
             }
-            
+
             for (let i in data.operaciones) {
                 var indice = data.operaciones[i].evop_valor;
                 if (indice >= 0 && indice <= 9) {
@@ -210,23 +210,23 @@ function cargarInfoComuna() {
             }
             if (data.operaciones.length == 0) operaciones = 0;
             else operaciones = Math.round(operaciones / data.operaciones.length);
-            
+
             for (let i in data.percepcion) {
                 percepcion += data.percepcion[i].enpe_puntaje;
             }
             percepcion = Math.round(percepcion/3);
-            
+
             for (let i in data.prensa) {
                 prensa += data.prensa[i].evpr_valor;
             }
             prensa = Math.round(prensa);
-            
+
             for (let i in data.clima) {
                 clima += data.clima[i].encl_puntaje;
             }
             if (data.n_cat_cl == 0) clima = 0;
             else clima = Math.round(clima / data.n_cat_cl);
-            
+
             comu_avg = Math.round(
                 percepcion * 0.25 +
                 clima * 0.25 +
@@ -357,7 +357,7 @@ function cargarInfoOrganizacion() {
                 orga_fecha = data.organizacion[i].orga_fecha_vinculo == null ? "No específica":new Date(data.organizacion[i].orga_fecha_vinculo);
                 final_fecha = orga_fecha == "No específica" ? "No específica" :  orga_fecha.getDate()+"/"+(orga_fecha.getMonth() + 1) + "/" + orga_fecha.getFullYear();
             }
-            
+
             for(let i in data.donaciones){
                 donaciones += `${parseInt(i)+1}.- ${data.donaciones[i].dona_motivo}<br>`
             }
@@ -377,19 +377,24 @@ function cargarInfoOrganizacion() {
                 iconSize: [22, 35],
                 iconAnchor: [12, 24],
             });
-            var marker = L.marker([coords.lat, coords.lng], {
-                icon: mrIcon,
-            })
-                .addTo(map)
-                .on("click", function () {
-                    var info =`<b>Descripción: </b>${orga_descripcion}<br><b>Dirección: </b>${orga_direcion}<br>
-                    <b>N° de socios: </b>${orga_socios}<br><b>Fecha de vinculación: </b>${final_fecha}<br>
-                    <b>Últimas donaciones: </b><br>${donaciones}<br><b>Últimas actividades:</b><br>${actividades}`;
+            if(coords.lat == null || coords.lng == null){
 
-                    $("#titulo").html(orga_nombre);
-                    $("#informacion").html(info);
-                    sidebar.toggle();
-                });
+                var marker = L.marker([coords.lat, coords.lng], {
+                    icon: mrIcon,
+                })
+                    .addTo(map)
+                    .on("click", function () {
+                        var info =`<b>Descripción: </b>${orga_descripcion}<br><b>Dirección: </b>${orga_direcion}<br>
+                        <b>N° de socios: </b>${orga_socios}<br><b>Fecha de vinculación: </b>${final_fecha}<br>
+                        <b>Últimas donaciones: </b><br>${donaciones}<br><b>Últimas actividades:</b><br>${actividades}`;
+
+                        $("#titulo").html(orga_nombre);
+                        $("#informacion").html(info);
+                        sidebar.toggle();
+                    });
+            }else{
+                console.log("no hay coordenas")
+            }
         });
 }
 

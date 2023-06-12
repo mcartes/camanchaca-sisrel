@@ -30,6 +30,10 @@
                     <div class="card">
                         <div class="card-header">
                             <h4>Listado de actividades</h4>
+                            <div class="card-header-action">
+                                <a type="button" class="btn btn-primary" href="{{route('admin.actividad.crear')}}"><i class="fas fa-plus"></i> Nueva actividad</a>
+                                <a href="{{route('admin.dbgeneral.index')}}" type="button" class="btn btn-warning" title="Ir a inicio"><i class="fas fa-home"></i> Volver</a>
+                            </div>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('admin.actividad.listar') }}" method="GET">
@@ -123,7 +127,7 @@
             display: none;
         }
     </style>
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="{{ asset('public/bundles/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('public/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js') }}"></script>
@@ -135,5 +139,5 @@
     <script src="{{ asset('public/bundles/datatables/export-tables/vfs_fonts.js') }}"></script>
     <script src="{{ asset('public/bundles/datatables/export-tables/buttons.print.min.js') }}"></script>
     <script src="{{ asset('public/js/page/datatables.js') }}"></script>
-    
+
 @endsection

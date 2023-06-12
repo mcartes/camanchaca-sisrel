@@ -1,4 +1,4 @@
-@extends('digitador.panel_digitador')
+@extends('admin.panel_admin')
 
 @section('contenido')
     <section class="section">
@@ -46,47 +46,29 @@
                         </div>
                         <div class="col-3"></div>
                     </div>
+
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-                            <div class="row">
-                                <div class="card card-statistic-2 l-bg-orange">
-                                    <div class="card-icon l-bg-cyan">
-                                        <i class="fas fa-map-marker-alt"></i>
-                                    </div>
-                                    <div class="card-wrap">
-                                        <div class="padding-20 text-center">
-                                            <h2 style="color: white">{{ $region[0]->regi_nombre }}</h2>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-
-                                <div class="card card-statistic-2 l-bg-cyan">
-                                    <a href="{{ route('digitador.actividad.listar') }}" style="text-decoration: none">
-                                        <div class="card-icon l-bg-green">
-                                            <i class="fas fa-users"></i>
+                            @foreach ($regiones as $region)
+                                <div class="row" onclick="ocultarRegi(this)" id="{{ $region->regi_codigo }}">
+                                    <div class="card card-statistic-2 l-bg-orange">
+                                        <div class="card-icon l-bg-cyan">
+                                            <i class="fas fa-map-marker-alt"></i>
                                         </div>
                                         <div class="card-wrap">
-                                            <div class="padding-20">
-                                                <div class="text-right">
-                                                    <h3 class="font-light mb-0" style="color: white">
-                                                        <i class="ti-arrow-up text-success"></i> {{ count($actividades) }}
-                                                    </h3>
-                                                    <h4 style="color: white">Relacionamientos</h4>
-                                                </div>
+                                            <div class="padding-20 text-center">
+                                                <h2 style="color: white">{{ $region->regi_nombre }}</h2>
                                             </div>
                                         </div>
-                                    </a>
+                                    </div>
                                 </div>
+                            @endforeach
 
-                            </div>
-
-                            <div class="row">
+                            <div class="row" id="div-iniciativas">
 
                                 <div class="card card-statistic-2 l-bg-cyan">
-                                    <a href="{{ route('digitador.iniciativas.index') }}" style="text-decoration: none">
+                                    <a href="{{ route('admin.iniciativas.index') }}" style="text-decoration: none">
+
                                         <div class="card-icon l-bg-red">
                                             <i class="fab fa-slack"></i>
                                         </div>
@@ -94,7 +76,7 @@
                                             <div class="padding-20">
                                                 <div class="text-right">
                                                     <h3 class="font-light mb-0" style="color: white">
-                                                        <i class="ti-arrow-up text-success"></i> {{ $iniciativas }}
+                                                        {{-- <i class="ti-arrow-up text-success"></i> {{ $iniciativas }} --}}
                                                     </h3>
                                                     <h4 style="color: white">Iniciativas</h4>
                                                 </div>
@@ -105,7 +87,63 @@
 
                             </div>
 
-                            <div class="row">
+                            <div class="row" id="div-realacionamiento">
+
+                                <div class="card card-statistic-2 l-bg-cyan">
+
+                                    <div class="card-icon l-bg-green">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div class="card-wrap">
+                                        <div class="padding-20">
+                                            <div class="text-right">
+                                                <h3 class="font-light mb-0" style="color: white">
+                                                    {{-- <i class="ti-arrow-up text-success"></i> {{ count($actividades) }} --}}
+                                                </h3>
+                                                <h4 style="color: white">Bitácoras</h4>
+                                            </div>
+                                            <ul style="color: white; font-size: 20px;margin-left: 20%">
+                                                <a href="{{ route('admin.actividad.listar') }}"
+                                                    style="text-decoration: none;color: white">
+                                                    <li>
+                                                        Relacionamiento
+                                                    </li>
+                                                </a>
+                                                <a href="{{ route('admin.donaciones.listar') }}"
+                                                    style="text-decoration: none;color: white">
+
+                                                    <li>Donaciones</li>
+                                                </a>
+                                            </ul>
+
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+                            <div class="row" id="div-estadisticas">
+                                <div class="card card-statistic-2 l-bg-cyan">
+                                    {{-- <a href="{{ route('admin.iniciativas.index') }}" style="text-decoration: none"> --}}
+
+                                    <div class="card-icon l-bg-red">
+                                        <i class="fas fa-book"></i>
+                                    </div>
+                                    <div class="card-wrap">
+                                        <div class="padding-20">
+                                            <div class="text-right">
+                                                <h3 class="font-light mb-0" style="color: white">
+                                                    {{-- <i class="ti-arrow-up text-success"></i> {{ $iniciativas }} --}}
+                                                </h3>
+                                                <h4 style="color: white">Estadísticas</h4>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{-- </a> --}}
+                                </div>
+                            </div>
+
+                            <div class="row" id="div-comunas">
                                 <div class="card card-statistic-2 l-bg-orange">
                                     <div class="card-icon l-bg-cyan">
                                         <i class="fas fa-map-marker-alt"></i>
@@ -117,12 +155,25 @@
                                         <br>
                                         <ul id="comunas" style="font-size: 20px; margin-left: 37%"></ul>
                                     </div>
+                                    <div class="row" style="margin-bottom: 3% ">
+                                        <div class="col-12 col-md-12 col-lg-12">
+                                            <div class="text-right">
+                                                <button class="btn btn-primary mr-4 waves-effect" onclick="mostrarRegi()"><i
+                                                        class="fas fa-"></i>Seleccionar región</button>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-
                             </div>
+
+                            <div class="row" id="div-image">
+                                <div class="card card-statistic-2 ">
+                                    <img src="{{ asset('public/img/camanchaca.png') }}" alt="" height="400px" width="400px">
+                                </div>
+                            </div>
+
+
                         </div>
-
-
 
                         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
                             <div class="card">
@@ -137,24 +188,14 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="map" class="w-auto p-3 sidebar-map" style="height: 600px;"></div>
+                                    <div id="map" class="w-auto p-3 sidebar-map" style="height: 750px;"></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
             </div>
-
-            <div class="form-group" id="div-regiones">
-                <label for="region">Seleccione región</label>
-                <select name="region" id="region" class="form-control">
-                    <option selected>Seleccione...</option>
-                    <option selected value="{{ $region[0]->regi_codigo }}">{{ $region[0]->regi_nombre }}
-                    </option>
-                </select>
-            </div>
-
-
         </div>
         </div>
     </section>
@@ -162,7 +203,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="{{ asset('public/js/chart.min.js') }}"></script>
     <script src="{{ asset('public/js/mapa.js') }}"></script>
-    <script src="{{ asset('public/js/home_digitador/mapa_db.js') }}"></script>
+    <script src="{{ asset('public/js/home_admin/mapa_db.js') }}"></script>
     <script src="{{ asset('public/js/page/gallery1.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 @endsection
