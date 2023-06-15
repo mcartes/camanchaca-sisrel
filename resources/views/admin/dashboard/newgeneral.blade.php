@@ -76,7 +76,7 @@
                                             <div class="padding-20">
                                                 <div class="text-right">
                                                     <h3 class="font-light mb-0" style="color: white">
-                                                        {{-- <i class="ti-arrow-up text-success"></i> {{ $iniciativas }} --}}
+                                                        <i class="ti-arrow-up text-success"></i> <h2 style="color: white" id="c_iniciativas">{{ $iniciativas }}</h2>
                                                     </h3>
                                                     <h4 style="color: white">Iniciativas</h4>
                                                 </div>

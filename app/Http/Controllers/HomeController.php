@@ -25,7 +25,9 @@ use Illuminate\Support\Js;
 class HomeController extends Controller
 {
     public function GeneralIndex() {
+
         $cantidadIniciativas = Iniciativas::where('inic_vigente', 'S')->count();
+
         $cantidadOrganizaciones = Organizaciones::where('orga_vigente', 'S')->count();
         $costosDinero = CostosDinero::select(DB::raw('IFNULL(sum(codi_valorizacion), 0) as total'))->where('codi_vigente', 'S')->first()->total;
         $costosEspecies = CostosEspecies::select(DB::raw('IFNULL(sum(coes_valorizacion), 0) as total'))->where('coes_vigente', 'S')->first()->total;

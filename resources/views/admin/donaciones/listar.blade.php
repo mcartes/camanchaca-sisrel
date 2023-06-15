@@ -28,8 +28,8 @@
                             <h4>Listado de donaciones</h4>
 
                             <div class="card-header-action">
-                                <a type="button" class="btn btn-primary" href="{{route('admin.donaciones.crear')}}"><i class="fas fa-plus"></i> Nueva donación</a>
                                 <a href="{{route('admin.dbgeneral.index')}}" type="button" class="btn btn-warning" title="Ir a inicio"><i class="fas fa-home"></i> Volver</a>
+                                <a type="button" class="btn btn-primary" href="{{route('admin.donaciones.crear')}}"><i class="fas fa-plus"></i> Nueva donación</a>
                             </div>
                         </div>
                         <div class="card-body">

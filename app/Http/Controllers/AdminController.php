@@ -6,6 +6,7 @@ use App\Models\Actividades;
 use App\Models\Asistentes;
 use App\Models\AsistentesActividades;
 use App\Models\CategoriasClima;
+use App\Models\IniciativasUnidades;
 use App\Models\Usuarios;
 use App\Models\Regiones;
 use Illuminate\Http\Request;
@@ -675,8 +676,14 @@ class AdminController extends Controller
     {
         if (isset($request->region)) {
             $comunas = Comunas::all()->where('regi_codigo', $request->region);
+            $cantidadDeIniciativas = IniciativasUnidades::join('unidades', 'unidades.unid_codigo', '=', 'iniciativas_unidades.unid_codigo')
+            ->join('comunas', 'comunas.comu_codigo', '=', 'unidades.comu_codigo')
+            ->join('regiones', 'regiones.regi_codigo', '=', 'comunas.regi_codigo')
+            ->where('iniciativas_unidades.inun_vigente', 'S')
+            ->where('regiones.regi_codigo', $request->region)
+            ->count();
 
-            return response()->json(['comunas' => $comunas, 'success' => true]);
+            return response()->json(['comunas' => $comunas,"iniciativas" => $cantidadDeIniciativas, 'success' => true]);
         } else {
             return response()->json(['success' => false]);
         }
@@ -711,8 +718,22 @@ class AdminController extends Controller
                 ->get();
 
             $n_categorias_cl = CategoriasClima::all()->count();
+            $inviIniciativas = Iniciativas::select(DB::raw('IFNULL(SUM(inic_inrel), 0) AS suma_total, COUNT(*) as total_iniciativas'))
+            ->join('iniciativas_ubicaciones','iniciativas_ubicaciones.inic_codigo','=','iniciativas.inic_codigo')
+            ->where('iniciativas_ubicaciones.comu_codigo',$request->comunas)
+            ->first();
+            if ($inviIniciativas->total_iniciativas != 0) {
 
-            return response()->json(['donaciones'=>$donaciones,'actividades' =>$actividades,'comuna' => $comuna, 'entornos' => $entornos, 'success' => true, 'percepcion' => $percepcion, 'clima' => $clima, 'prensa' => $prensa, 'operaciones' => $operaciones, 'n_cat_cl' => $n_categorias_cl,'unidades' => $unidades,'organizaciones' => $organizaciones]);
+                $inviPromedio = round($inviIniciativas->suma_total / $inviIniciativas->total_iniciativas);
+            } else {
+
+                $inviPromedio = 0;
+            }
+
+            $unidades = Unidades::all()->where('comu_codigo', $request->comunas)->where('tuni_codigo', 1);
+            $cantidadIniciativas = DB::table('iniciativas_ubicaciones')->where('comu_codigo', $request->comunas)->get();
+
+            return response()->json(['donaciones'=>$donaciones,'actividades' =>$actividades,'comuna' => $comuna, 'entornos' => $entornos, 'success' => true, 'percepcion' => $percepcion, 'clima' => $clima, 'prensa' => $prensa, 'operaciones' => $operaciones, 'n_cat_cl' => $n_categorias_cl,'unidades' => $unidades,'organizaciones' => $organizaciones,'iniciativas' => $cantidadIniciativas,'invi' =>$inviPromedio]);
         } else {
             return response()->json(['success' => false]);
         }

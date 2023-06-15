@@ -313,6 +313,7 @@
                                 <div class="col-12 col-md-12 col-lg-12">
                                     <div class="text-right">
                                         <a href="{{route('admin.dbgeneral.index')}}" type="button" class="btn btn-warning" title="Ir a inicio"><i class="fas fa-home"></i> Volver</a>
+                                        <a href="{{route('admin.iniciativas.index')}}" type="button" class="btn btn-success" title="Ir a iniciativas"><i class="fas fa-backward"></i></a>
                                         <button type="submit" class="btn btn-primary mr-1 waves-effect">Siguiente <i class="fas fa-chevron-right"></i></button>
                                         @if (isset($iniciativa))
                                             <a href="{{ route('admin.paso1.editar', $iniciativa->inic_codigo) }}" type="button" class="btn btn-warning waves-effect">Recargar</a>

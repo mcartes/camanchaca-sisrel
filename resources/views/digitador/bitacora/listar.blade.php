@@ -32,7 +32,10 @@
                         <div class="card-header">
                             <h4>Bitácora de relacionamiento</h4>
                             <div class="card-header-action">
-                                <a href="{{route('digitador.dbgeneral.index')}}" type="button" class="btn btn-warning" title="Ir a inicio"><i class="fas fa-home"></i> Volver</a> <a href="{{ route('digitador.actividad.crear') }}" class="btn btn-primary"><i class="fas fa-plus"></i> Registrar
+                                <a href="{{ route('digitador.dbgeneral.index') }}" type="button" class="btn btn-warning"
+                                    title="Ir a inicio"><i class="fas fa-home"></i> Volver</a>
+                                <a href="{{ route('digitador.actividad.crear') }}" class="btn btn-primary"><i
+                                        class="fas fa-plus"></i> Registrar
                                     actividad</a>
                             </div>
                         </div>
@@ -57,8 +60,11 @@
                                     </div>
                                     <div class="col-4 col-md-4 col-lg-4">
                                         <div style="position: absolute; top: 50%; transform: translateY(-50%);">
-                                            <button type="submit" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-search"></i> Filtrar</button>
-                                            <a href="{{ route('digitador.actividad.listar') }}" type="button" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-broom"></i>Limpiar</a>
+                                            <button type="submit" class="btn btn-primary mr-1 waves-effect"><i
+                                                    class="fas fa-search"></i> Filtrar</button>
+                                            <a href="{{ route('digitador.actividad.listar') }}" type="button"
+                                                class="btn btn-primary mr-1 waves-effect"><i
+                                                    class="fas fa-broom"></i>Limpiar</a>
                                         </div>
                                     </div>
                                 </div>
@@ -84,26 +90,35 @@
                                                 <td>{{ $actividad->acti_nombre }}</td>
                                                 <td>
                                                     <?php
-                                                        setlocale(LC_TIME, 'spanish');
-                                                        $fecha = ucwords(strftime('%d-%m-%Y', strtotime($actividad->acti_fecha)));
-                                                        echo $fecha;
+                                                    setlocale(LC_TIME, 'spanish');
+                                                    $fecha = ucwords(strftime('%d-%m-%Y', strtotime($actividad->acti_fecha)));
+                                                    echo $fecha;
                                                     ?>
                                                 </td>
                                                 <td>
                                                     <?php
-                                                        setlocale(LC_TIME, 'spanish');
-                                                        $fecha = ucwords(strftime('%d-%m-%Y', strtotime($actividad->acti_fecha_cumplimiento)));
-                                                        echo $fecha;
+                                                    setlocale(LC_TIME, 'spanish');
+                                                    $fecha = ucwords(strftime('%d-%m-%Y', strtotime($actividad->acti_fecha_cumplimiento)));
+                                                    echo $fecha;
                                                     ?>
                                                 </td>
                                                 <td>{{ $actividad->acti_avance }}</td>
                                                 <td>
-                                                    <a href="{{ route('digitador.actividad.mostrar', $actividad->acti_codigo) }}" class="btn btn-icon btn-primary" data-toggle="tooltip" data-placement="top" title="Ver detalles"><i class="fas fa-eye"></i></a>
-                                                    <a href="{{ route('digitador.actividad.editar', $actividad->acti_codigo) }}" class="btn btn-icon btn-warning" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></a>
-                                                    <form action="{{ route('digitador.actividad.eliminar', $actividad->acti_codigo) }}" method="POST" style="display: inline-block;">
+                                                    <a href="{{ route('digitador.actividad.mostrar', $actividad->acti_codigo) }}"
+                                                        class="btn btn-icon btn-primary" data-toggle="tooltip"
+                                                        data-placement="top" title="Ver detalles"><i
+                                                            class="fas fa-eye"></i></a>
+                                                    <a href="{{ route('digitador.actividad.editar', $actividad->acti_codigo) }}"
+                                                        class="btn btn-icon btn-warning" data-toggle="tooltip"
+                                                        data-placement="top" title="Editar"><i class="fas fa-edit"></i></a>
+                                                    <form
+                                                        action="{{ route('digitador.actividad.eliminar', $actividad->acti_codigo) }}"
+                                                        method="POST" style="display: inline-block;">
                                                         @method('DELETE')
                                                         @csrf
-                                                        <button type="submit" class="btn btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fas fa-trash"></i></button>
+                                                        <button type="submit" class="btn btn-icon btn-danger"
+                                                            data-toggle="tooltip" data-placement="top" title="Eliminar"><i
+                                                                class="fas fa-trash"></i></button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -119,12 +134,15 @@
     </section>
 
     <link rel="stylesheet" href="{{ asset('public/bundles/datatables/datatables.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('public/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('public/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css') }}">
     <style>
         .dt-buttons {
             width: 30%;
         }
-        .buttons-copy, .buttons-csv {
+
+        .buttons-copy,
+        .buttons-csv {
             display: none;
         }
     </style>
@@ -140,5 +158,4 @@
     <script src="{{ asset('public/bundles/datatables/export-tables/vfs_fonts.js') }}"></script>
     <script src="{{ asset('public/bundles/datatables/export-tables/buttons.print.min.js') }}"></script>
     <script src="{{ asset('public/js/page/datatables.js') }}"></script>
-
 @endsection

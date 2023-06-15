@@ -31,6 +31,8 @@
                         <div class="card-header">
                             <h4>Información de la actividad</h4>
                             <div class="card-header-action">
+                                <a href="{{route('admin.dbgeneral.index')}}" type="button" class="btn btn-info" title="Ir a inicio"><i class="fas fa-home"></i></a>
+                                <a href="{{route('admin.actividad.listar')}}" type="button" class="btn btn-success" title="Ir a iniciativas"><i class="fas fa-backward"></i></a>
                                 <a href="{{ route('admin.actividad.editar', $actividad->acti_codigo) }}" class="btn btn-icon btn-warning" data-toggle="tooltip" data-placement="top" title="Editar"><i class="fas fa-edit"></i></a>
                                 <form action="{{ route('admin.actividad.eliminar', $actividad->acti_codigo) }}" method="POST" style="display: inline-block;">
                                     @method('DELETE')
@@ -79,7 +81,7 @@
                                                     @if (sizeof($participantes) > 0)
                                                         @foreach ($participantes as $participante)
                                                             @if ($participante->diri_codigo != null)
-                                                                <li>{{ $participante->asis_nombre.' '.$participante->asis_apellido }} (Dirigente)</li>    
+                                                                <li>{{ $participante->asis_nombre.' '.$participante->asis_apellido }} (Dirigente)</li>
                                                             @else
                                                                 <li>{{ $participante->asis_nombre.' '.$participante->asis_apellido }}</li>
                                                             @endif

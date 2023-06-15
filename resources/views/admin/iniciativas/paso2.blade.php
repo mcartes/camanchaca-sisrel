@@ -121,7 +121,7 @@
                                     <div class="form-group">
                                         <label>Subentorno relevante</label> <label for="" style="color: red;">*</label>
                                         <select class="form-control select2" id="subentorno" name="subentorno">
-                                            <option value="" selected disabled>Seleccione...</option>                                             
+                                            <option value="" selected disabled>Seleccione...</option>
                                         </select>
                                     </div>
                                 </div>
@@ -158,7 +158,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <hr>    
+                            <hr>
                         </div>
                         <div class="card-body"  style="margin-top: -5%;">
                             @if (isset($iniciativasImpactos))
@@ -241,6 +241,8 @@
                                 <div class="row">
                                     <div class="col-12 col-md-12 col-lg-12">
                                         <div class="text-right">
+                                            <a href="{{route('admin.dbgeneral.index')}}" type="button" class="btn btn-warning" title="Ir a inicio"><i class="fas fa-home"></i> Volver</a>
+                                        <a href="{{route('admin.iniciativas.index')}}" type="button" class="btn btn-success" title="Ir a iniciativas"><i class="fas fa-backward"></i></a>
                                             <a href="{{ route('admin.paso1.editar', $iniciativa->inic_codigo) }}" type="button" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-chevron-left"></i> Volver al paso anterior</a>
                                             <button type="submit" class="btn btn-primary mr-1 waves-effect">Siguiente <i class="fas fa-chevron-right"></i></button>
                                             <a href="{{ route('admin.paso2.editar', $iniciativa->inic_codigo) }}" type="button" class="btn btn-warning waves-effect">Recargar</a>
@@ -255,7 +257,7 @@
             <div class="row">
                 <div class="col-12 col-md-12 col-lg-12">
                     <div class="card">
-                        
+
                     </div>
                 </div>
             </div>

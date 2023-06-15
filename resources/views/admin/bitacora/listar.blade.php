@@ -31,8 +31,8 @@
                         <div class="card-header">
                             <h4>Listado de actividades</h4>
                             <div class="card-header-action">
-                                <a type="button" class="btn btn-primary" href="{{route('admin.actividad.crear')}}"><i class="fas fa-plus"></i> Nueva actividad</a>
                                 <a href="{{route('admin.dbgeneral.index')}}" type="button" class="btn btn-warning" title="Ir a inicio"><i class="fas fa-home"></i> Volver</a>
+                                <a type="button" class="btn btn-primary" href="{{route('admin.actividad.crear')}}"><i class="fas fa-plus"></i> Nueva actividad</a>
                             </div>
                         </div>
                         <div class="card-body">

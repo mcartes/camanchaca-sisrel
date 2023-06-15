@@ -4,7 +4,7 @@
 
 <section class="section">
     <div class="section-body">
-        <div class="row">            
+        <div class="row">
             <div class="col-12">
                 <div class="row">
                     <div class="col-3"></div>
@@ -28,7 +28,7 @@
                         @endif
                     </div>
                     <div class="col-3"></div>
-                </div>           
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h4>Información de la iniciativa</h4>
@@ -55,15 +55,17 @@
                                         <a href="javascript:void(0)" class="dropdown-item has-icon" data-toggle="modal" data-target="#modalAprobarIniciativa"><i class="fas fa-check"></i>Aprobar iniciativa</a>
                                         <a href="javascript:void(0);" class="dropdown-item has-icon" data-toggle="modal" data-target="#modalRechazarIniciativa"><i class="fas fa-times"></i>Rechazar iniciativa</a>
                                     </div>
-                                </div>  
-                            @endif                          
+                                </div>
+                            @endif
+                            <a href="{{route('digitador.dbgeneral.index')}}" type="button" class="btn btn-primary" title="Ir a inicio"><i class="fas fa-home"></i></a>
+                            <a href="{{route('digitador.iniciativas.index')}}" type="button" class="btn btn-primary" title="Ir a iniciativas"><i class="fas fa-backward"></i></a>
                             <a href="javascript:void(0)" class="btn btn-icon btn-primary" onclick="calcularIndice({{ $iniciativa->inic_codigo }})" data-toggle="tooltip" data-placement="top" title="Calcular INVI"><i class="fas fa-tachometer-alt"></i></a>
                             <a href="{{ route('digitador.evidencia.listar', $iniciativa->inic_codigo) }}" class="btn btn-icon btn-primary" data-toggle="tooltip" data-placement="top" title="Adjuntar evidencia"><i class="fas fa-paperclip"></i></a>
                             <a href="javascript:void(0);" class="btn btn-icon btn-primary" onclick="imprimirIniciativa()" data-toggle="tooltip" data-placement="top" title="Imprimir"><i class="fas fa-print"></i></a>
                             <a href="{{ route('digitador.paso1.editar', $iniciativa->inic_codigo) }}" class="btn btn-icon btn-warning" data-toggle="tooltip" data-placement="top" title="Editar iniciativa"><i class="fas fa-edit"></i></a>
                             <a href="javascript:void(0)" class="btn btn-icon btn-danger" onclick="eliminarIniciativa({{ $iniciativa->inic_codigo }})" data-toggle="tooltip" data-placement="top" title="Eliminar iniciativa"><i class="fas fa-trash"></i></a>
                         </div>
-                    </div>                    
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <table class="table table-striped table-md" id="tabla-info-iniciativa">
@@ -239,7 +241,7 @@
                                                 @foreach ($resultados as $resultado)
                                                     {{ ($resultado->resu_cuantificacion_final == null) ? '0' :  $resultado->resu_cuantificacion_final }} de
                                                     {{ $resultado->resu_cuantificacion_inicial }}
-                                                    {{ $resultado->resu_nombre }} 
+                                                    {{ $resultado->resu_nombre }}
                                                     <br>
                                                 @endforeach
                                             @endif
@@ -297,7 +299,7 @@
                                                                                 ${{ number_format($dinero->suma_dinero, 0, ',', '.') }}
                                                                             @endif
                                                                         @endforeach
-                                                                    @endif                                                                    
+                                                                    @endif
                                                                 </td>
                                                                 <td>
                                                                     @if (sizeof($recursoEspecies) == 0)
@@ -476,7 +478,7 @@
                             </div>
                         @else
                             <div class="row" id="div-ods"></div>
-                        @endif                        
+                        @endif
                     </div>
                 </div>
             </div>

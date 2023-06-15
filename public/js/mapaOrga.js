@@ -179,27 +179,30 @@ function cargarInfoComuna() {
             for (let i in data.unidades) {
                 if (data.unidades[i].unid_geoubicacion != null) {
                     var coords = JSON.parse(data.unidades[i].unid_geoubicacion);
-
-                    var marker = L.marker([coords.lat, coords.lng], {
-                        icon: myIcon,
-                    })
-                        .addTo(map)
-                        .on("click", () => {
-                            var info = `<b>Responsable de la unidad:</b><br>${data.unidades[i].unid_responsable}<br>
-                            <b>Descripción:</b><br>${data.unidades[i].unid_descripcion}<br>
-                            <b>Cargo de la unidad:</b><br> ${data.unidades[i].unid_nombre_cargo}<br>
-                            <div class="text-right">
-                                <a type=button class='btn btn-icon btn-warning' href='${window.location.origin}/admin/unidades/listar'>Ver Unidades</a>
-                            </div>`;
-                            document.getElementById("titulo").innerHTML =
-                                data.unidades[i].unid_nombre;
-                            document.getElementById("informacion").innerHTML =
-                                info;
-                            sidebar.toggle();
-                        });
+                    if(coords.lat == null || coords.lng == null){
+                        console.log("Coordenadas de unidades no disponibles")
+                    }else{
+                        var marker = L.marker([coords.lat, coords.lng], {
+                            icon: myIcon,
+                        })
+                            .addTo(map)
+                            .on("click", () => {
+                                var info = `<b>Responsable de la unidad:</b><br>${data.unidades[i].unid_responsable}<br>
+                                <b>Descripción:</b><br>${data.unidades[i].unid_descripcion}<br>
+                                <b>Cargo de la unidad:</b><br> ${data.unidades[i].unid_nombre_cargo}<br>
+                                <div class="text-right">
+                                    <a type=button class='btn btn-icon btn-warning' href='${window.location.origin}/admin/unidades/listar'>Ver Unidades</a>
+                                </div>`;
+                                document.getElementById("titulo").innerHTML =
+                                    data.unidades[i].unid_nombre;
+                                document.getElementById("informacion").innerHTML =
+                                    info;
+                                sidebar.toggle();
+                            });
+                    }
                 }
             }
-            
+
             for (let i in data.operaciones) {
                 var indice = data.operaciones[i].evop_valor;
                 if (indice >= 0 && indice <= 9) {
@@ -210,23 +213,23 @@ function cargarInfoComuna() {
             }
             if (data.operaciones.length == 0) operaciones = 0;
             else operaciones = Math.round(operaciones / data.operaciones.length);
-            
+
             for (let i in data.percepcion) {
                 percepcion += data.percepcion[i].enpe_puntaje;
             }
             percepcion = Math.round(percepcion/3);
-            
+
             for (let i in data.prensa) {
                 prensa += data.prensa[i].evpr_valor;
             }
             prensa = Math.round(prensa);
-            
+
             for (let i in data.clima) {
                 clima += data.clima[i].encl_puntaje;
             }
             if (data.n_cat_cl == 0) clima = 0;
             else clima = Math.round(clima / data.n_cat_cl);
-            
+
             comu_avg = Math.round(
                 percepcion * 0.25 +
                 clima * 0.25 +
@@ -316,7 +319,11 @@ function cargarOrganizaciones() {
         .then((data) => {
             var opciones = "<option value=''>Seleccione...</option>";
             for (let i in data.organizacion) {
-                opciones += `<option value = '${data.organizacion[i].orga_codigo}'>${data.organizacion[i].orga_nombre}</option>`;
+                if (data.comunas[i].comu_codigo == "01101"){
+                    opciones += `<li onclick="cargarInfoComuna('01101')">${data.comunas[i].comu_nombre}</li>`;
+                }else{
+                    opciones += `<li onclick="cargarInfoComuna(${data.comunas[i].comu_codigo})">${data.comunas[i].comu_nombre}</li>`;
+                }
             }
             $("#organizacion").html(opciones);
         });
@@ -357,7 +364,7 @@ function cargarInfoOrganizacion() {
                 orga_fecha = data.organizacion[i].orga_fecha_vinculo == null ? "No específica":new Date(data.organizacion[i].orga_fecha_vinculo);
                 final_fecha = orga_fecha == "No específica" ? "No específica" :  orga_fecha.getDate()+"/"+(orga_fecha.getMonth() + 1) + "/" + orga_fecha.getFullYear();
             }
-            
+
             for(let i in data.donaciones){
                 donaciones += `${parseInt(i)+1}.- ${data.donaciones[i].dona_motivo}<br>`
             }

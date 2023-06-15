@@ -69,7 +69,7 @@
                                             <td>
                                                 <div class="row mb-2">
                                                     <div class="col-12 col-md-12 col-lg-12 text-center" id="empresadinero">
-                                                        
+
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -84,7 +84,7 @@
                                             <td>
                                                 <div class="row">
                                                     <div class="col-9 col-md-9 col-lg-9 mt-2 text-center" id="empresa-especies-total">
-                                                        
+
                                                     </div>
                                                     <div class="col-3 col-md-3 col-lg-3">
                                                         <button type="button" class="btn btn-icon btn-primary" onclick="crearEspecie(1)"><i class="fas fa-plus"></i></button>
@@ -105,7 +105,7 @@
                                             <td>
                                                 <div class="row">
                                                     <div class="col-9 col-md-9 col-lg-9 mt-2 text-center" id="empresa-infra-total">
-                                                        
+
                                                     </div>
                                                     <div class="col-3 col-md-3 col-lg-3">
                                                         <button type="button" class="btn btn-icon btn-primary" onclick="crearInfra(1)"><i class="fas fa-plus"></i></button>
@@ -127,7 +127,7 @@
                                             <td>
                                                 <div class="row">
                                                     <div class="col-9 col-md-9 col-lg-9 mt-2 text-center" id="empresa-rrhh-total">
-                                                        
+
                                                     </div>
                                                     <div class="col-3 col-md-3 col-lg-3">
                                                         <button type="button" class="btn btn-icon btn-primary" onclick="crearRrhh(1)"><i class="fas fa-plus"></i></button>
@@ -149,7 +149,7 @@
                                             <td>
                                                 <div class="row text-center">
                                                     <div class="col-12 col-md-12 col-lg-12" id="empresa-total">
-                                                        
+
                                                     </div>
                                                 </div>
                                             </td>
@@ -159,7 +159,7 @@
                                             <td>
                                                 <div class="row mb-2">
                                                     <div class="col-12 col-md-12 col-lg-12 text-center" id="externodinero">
-                                                        
+
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -174,7 +174,7 @@
                                             <td>
                                                 <div class="row">
                                                     <div class="col-9 col-md-9 col-lg-9 mt-2 text-center" id="externo-especies-total">
-                                                        
+
                                                     </div>
                                                     <div class="col-3 col-md-3 col-lg-3">
                                                         <button type="button" class="btn btn-icon btn-primary" onclick="crearEspecie(2)"><i class="fas fa-plus"></i></button>
@@ -195,7 +195,7 @@
                                             <td>
                                                 <div class="row">
                                                     <div class="col-9 col-md-9 col-lg-9 mt-2 text-center" id="externo-infra-total">
-                                                        
+
                                                     </div>
                                                     <div class="col-3 col-md-3 col-lg-3">
                                                         <button type="button" class="btn btn-icon btn-primary" onclick="crearInfra(2)"><i class="fas fa-plus"></i></button>
@@ -217,7 +217,7 @@
                                             <td>
                                                 <div class="row">
                                                     <div class="col-9 col-md-9 col-lg-9 mt-2 text-center" id="externo-rrhh-total">
-                                                        
+
                                                     </div>
                                                     <div class="col-3 col-md-3 col-lg-3">
                                                         <button type="button" class="btn btn-icon btn-primary" onclick="crearRrhh(2)"><i class="fas fa-plus"></i></button>
@@ -239,7 +239,7 @@
                                             <td>
                                                 <div class="row text-center">
                                                     <div class="col-12 col-md-12 col-lg-12" id="externo-total">
-                                                        
+
                                                     </div>
                                                 </div>
                                             </td>
@@ -250,7 +250,9 @@
                             <div class="row mt-4">
                                 <div class="col-12 col-md-12 col-lg-12">
                                     <div class="text-right">
-                                        <a href="{{ route('admin.paso2.editar', $iniciativa->inic_codigo) }}" type="button" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-chevron-left"></i> Volver al paso anterior</a>                                      
+                                        <a href="{{route('admin.dbgeneral.index')}}" type="button" class="btn btn-warning" title="Ir a inicio"><i class="fas fa-home"></i> Volver</a>
+                                        <a href="{{route('admin.iniciativas.index')}}" type="button" class="btn btn-success" title="Ir a iniciativas"><i class="fas fa-backward"></i></a>
+                                        <a href="{{ route('admin.paso2.editar', $iniciativa->inic_codigo) }}" type="button" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-chevron-left"></i> Volver al paso anterior</a>
                                         <button type="button" class="btn btn-primary mr-1 waves-effect" data-toggle="modal" data-target="#modalFinalizar"><i class="fas fa-check"></i> Finalizar</button>
                                         <a href="{{ route('admin.paso3.editar', $iniciativa->inic_codigo) }}" type="button" class="btn btn-warning waves-effect">Recargar</a>
                                     </div>
@@ -261,7 +263,7 @@
                 </div>
             </div>
         @endif
-        
+
     </div>
 </section>
 
@@ -332,7 +334,7 @@
                                 </div>
                             </div>
                             <select class="form-control" id="codigoinfra" name="codigoinfra" onchange="buscarTipoInfra()">
-                                <option value="" selected disabled>Seleccione...</option>                                          
+                                <option value="" selected disabled>Seleccione...</option>
                             </select>
                         </div>
                     </div>
@@ -391,7 +393,7 @@
                                 </div>
                             </div>
                             <select class="form-control" id="codigorrhh" name="codigorrhh" onchange="buscarTipoRrhh()">
-                                <option value="" selected disabled>Seleccione...</option>                                          
+                                <option value="" selected disabled>Seleccione...</option>
                             </select>
                         </div>
                     </div>

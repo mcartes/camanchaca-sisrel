@@ -323,6 +323,8 @@
                                 </div>
                             </div>
                             <div class="text-right">
+                                <a href="{{route('digitador.dbgeneral.index')}}" type="button" class="btn btn-warning" title="Ir a inicio"><i class="fas fa-home"></i> Volver</a>
+                                <a href="{{route('digitador.donaciones.listar')}}" type="button" class="btn btn-success" title="Ir a lista"><i class="fas fa-backward"></i> Ir a donaciones</a>
                                 <button type="submit" class="btn btn-primary waves-effect"><i class="fas fa-save"></i> Guardar</button>
                             </div>
                         </form>

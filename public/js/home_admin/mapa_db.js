@@ -61,19 +61,23 @@ function ocultarRegi(codigo){
         .then((data) => {
             var opciones = "";
             for (let i in data.comunas) {
-                console.log(data.comunas[i]);
-                opciones += `<li onclick="cargarInfoComuna(${data.comunas[i].comu_codigo})">${data.comunas[i].comu_nombre}</li>`;
+                if (data.comunas[i].comu_codigo == "01101"){
+                    opciones += `<li onclick="cargarInfoComuna('01101')">${data.comunas[i].comu_nombre}</li>`;
+                }else{
+                    opciones += `<li onclick="cargarInfoComuna(${data.comunas[i].comu_codigo})">${data.comunas[i].comu_nombre}</li>`;
+                }
             }
             $("#comunas").html(opciones);
+            $("#c_iniciativas").html(data.iniciativas)
             $('#div-alert-undifined').hide();
         });
 
 }
 
 function cargarInfoComuna(comu_codigo) {
-    // var comuna = $("#comunas").val();
     var comuna = comu_codigo;
     var region = $("#region").val();
+    console.log(comuna,region)
     fetch(`${window.location.origin}/admin/mapa/obtener/comuna`, {
         method: "POST",
         body: JSON.stringify({
@@ -136,9 +140,8 @@ function cargarInfoComuna(comu_codigo) {
                 var marker = L.marker([coords.lat, coords.lng])
                     .addTo(map)
                     .on("click", function () {
-                        var info = `<b>N° de iniciativas:</b> ${
-                            Object.keys(data.iniciativas).length
-                        }
+                        var info = `<b>N° de iniciativas:</b>
+                         ${Object.keys(data.iniciativas).length}
                     <br><b>N° de organizaciones:</b> ${
                         Object.keys(data.organizaciones).length
                     }<br><b>N° de relacionamientos:</b> ${Object.keys(data.actividades).length}

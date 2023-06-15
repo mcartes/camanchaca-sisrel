@@ -38,7 +38,7 @@
         <link rel='shortcut icon' type='image/x-icon' href='{{ asset('public/img/favicon.ico') }}' />
     </head>
 
-    <body>
+    <body class="light light-sidebar theme-white sidebar-mini">
         <!-- <div class="loader"></div> -->
         <div id="app">
             <div class="main-wrapper main-wrapper-1">
@@ -92,9 +92,9 @@
                         </li>
                     </ul>
                 </nav>
-                <div class="main-sidebar sidebar-style-2">
+                <div class="main-sidebar">
                     <aside id="sidebar-wrapper">
-                        <div class="sidebar-brand">
+                        <div class="sidebar-brand theme-cyan">
                             <a href="javascript:void(0)"> <img alt="image" src="{{ asset('public/img/camanchaca.png') }}" class="header-logo" />
                                 <span class="logo-name">SISREL</span>
                             </a>
