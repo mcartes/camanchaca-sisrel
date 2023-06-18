@@ -76,7 +76,8 @@
                                             <div class="padding-20">
                                                 <div class="text-right">
                                                     <h3 class="font-light mb-0" style="color: white">
-                                                        <i class="ti-arrow-up text-success"></i> <h2 style="color: white" id="c_iniciativas">{{ $iniciativas }}</h2>
+                                                        <i class="ti-arrow-up text-success"></i>
+                                                        <h2 style="color: white" id="c_iniciativas">{{ $iniciativas }}</h2>
                                                     </h3>
                                                     <h4 style="color: white">Iniciativas</h4>
                                                 </div>
@@ -124,8 +125,6 @@
                             </div>
                             <div class="row" id="div-estadisticas">
                                 <div class="card card-statistic-2 l-bg-cyan">
-                                    {{-- <a href="{{ route('admin.iniciativas.index') }}" style="text-decoration: none"> --}}
-
                                     <div class="card-icon l-bg-red">
                                         <i class="fas fa-book"></i>
                                     </div>
@@ -137,9 +136,16 @@
                                                 </h3>
                                                 <h4 style="color: white">Estadísticas</h4>
                                             </div>
+                                            <ul style="color: white; font-size: 20px;margin-left: 20%">
+                                                <a href="{{ route('admin.estadisticas.nacionales') }}"
+                                                    style="text-decoration: none;color: white">
+                                                    <li>Nacional</li>
+                                                </a>
+                                            </ul>
+                                            <ul style="color: white; font-size: 20px;margin-left: 20%" id="ul-estadisticas">
+                                            </ul>
                                         </div>
                                     </div>
-                                    {{-- </a> --}}
                                 </div>
                             </div>
 
@@ -168,7 +174,8 @@
 
                             <div class="row" id="div-image">
                                 <div class="card card-statistic-2 ">
-                                    <img src="{{ asset('public/img/camanchaca.png') }}" alt="" height="400px" width="400px">
+                                    <img src="{{ asset('public/img/camanchaca.png') }}" alt="" height="400px"
+                                        width="400px">
                                 </div>
                             </div>
 
@@ -183,7 +190,8 @@
                                             <div class="sidebar-pane" id="home">
                                                 <h1 class="sidebar-header" id="titulo"> </h1>
 
-                                                <p class="lorem" id="informacion" style="font-size: 20px; margin-top:30%">
+                                                <p class="lorem" id="informacion"
+                                                    style="font-size: 20px; margin-top:30%">
                                                 </p>
                                             </div>
                                         </div>

@@ -62,6 +62,13 @@ Route::middleware('verificar.admin')->group(function () {
     Route::post('admin/dashboard/obtener/datos-actividades', [HomeController::class, 'ActividadesData']);
     // fin rutas para dashboard
 
+    //Rutas de estadisticas
+    Route::get('admin/estadisticas/nacional', [HomeController::class, 'estaditicasNacionales'])->name('admin.estadisticas.nacionales');
+    Route::get('admin/estadisticas/nacional/datos',[HomeController::class,'datosNacionales']);
+    Route::get('admin/estadisticas/regionales',[HomeController::class, 'estaditicasRegionales'])->name('admin.estadisticas.regionales');
+    Route::get('admin/estadisticas/regionales/datos',[HomeController::class,'datosRegionales']);
+    //Fin de estadisticas
+
     // inicio rutas perfil de usuario
     Route::get('admin/perfil/{usua_rut}/{rous_codigo}', [AdminController::class, 'verPerfil'])->name('admin.perfil.show');
     Route::put('admin/perfil/{usua_rut}/{rous_codigo}/actualizar', [AdminController::class, 'actualizarPerfil'])->name('admin.perfil.update');

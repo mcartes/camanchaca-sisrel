@@ -60,6 +60,7 @@ function ocultarRegi(codigo){
         })
         .then((data) => {
             var opciones = "";
+            var stasts = "";
             for (let i in data.comunas) {
                 if (data.comunas[i].comu_codigo == "01101"){
                     opciones += `<li onclick="cargarInfoComuna('01101')">${data.comunas[i].comu_nombre}</li>`;
@@ -67,11 +68,17 @@ function ocultarRegi(codigo){
                     opciones += `<li onclick="cargarInfoComuna(${data.comunas[i].comu_codigo})">${data.comunas[i].comu_nombre}</li>`;
                 }
             }
+            stasts += `<li onclick="IraDatosRegionales('${regionSeleccionada}')">Regionales</li>`;
             $("#comunas").html(opciones);
+            $("#ul-estadisticas").html(stasts);
             $("#c_iniciativas").html(data.iniciativas)
             $('#div-alert-undifined').hide();
         });
 
+}
+
+function IraDatosRegionales(region){
+    window.location.href = `${window.location.origin}/admin/estadisticas/regionales?regi_codigo=${region}`;
 }
 
 function cargarInfoComuna(comu_codigo) {
