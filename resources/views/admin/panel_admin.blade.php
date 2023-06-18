@@ -10,13 +10,14 @@
                 ? 'dropdown active' : 'dropdown'
             }}"> --}}
         <li class="dropdown">
-            <a href="javascript:void(0)" class="menu-toggle nav-link has-dropdown"><i
+            {{-- <a href="{{route('admin.dbgeneral.index')}}" class="menu-toggle nav-link has-dropdown"><i --}}
+            <a href="{{route('admin.dbgeneral.index')}}"><i
                     data-feather="monitor"></i><span>Dashboard</span></a>
-            <ul class="dropdown-menu">
+            {{-- <ul class="dropdown-menu">
                 <li><a class="nav-link" href="{{ route('admin.index.iniciativas') }}">Por iniciativas</a></li>
                 <li><a class="nav-link" href="{{ route('admin.index.actividades') }}">Por actividades</a></li>
                 <li><a class="nav-link" href="{{ route('admin.index.donaciones') }}">Por donaciones</a></li>
-            </ul>
+            </ul> --}}
         </li>
         {{-- <li
             class="{{ Route::is('admin.paso1.crear') ||

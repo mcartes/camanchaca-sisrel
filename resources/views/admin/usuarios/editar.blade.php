@@ -171,6 +171,26 @@
                                             </div>
                                         @endif
                                     </div>
+                                    <div class="form-group col-4">
+                                        <label for="">Rol</label>
+                                        <div class="input-group">
+                                            <select name="rol" id="rol" class="form-control select2">
+                                                <option value="" disabled selected>Seleccione...</option>
+                                                @foreach ($roles as $rol)
+                                                    <option value="{{ $rol->rous_codigo }}" {{ $rol->rous_codigo==$rol->rous_codigo ? 'selected' : '' }}>{{ $rol->rous_nombre }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        @if ($errors->has('roles'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('roles') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
                                     <div class="form-group col-3">
                                         <label for="vigente" class="d-block">Estado</label>
                                         <div class="input-group">

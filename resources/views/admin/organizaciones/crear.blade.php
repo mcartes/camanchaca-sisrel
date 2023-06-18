@@ -378,9 +378,9 @@
         }
     </script>
 
-    {{-- <script>
+    <script>
         $(document).ready(function() {
             $("#miDiv").hide();
         });
-    </script> --}}
+    </script>
 @endsection

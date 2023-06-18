@@ -73,7 +73,7 @@
                                         @elseif ($usuario->rous_codigo == 2)
                                             <div class="badge badge-info badge-shadow">Embajador</div>
                                         @elseif ($usuario->rous_codigo == 3)
-                                            <div class="badge badge-primary badge-shadow">Dirigente</div>
+                                            <div class="badge badge-primary badge-shadow">Directivo/a</div>
                                         @endif
                                     </td>
                                     <td>
@@ -115,7 +115,7 @@
             </div>
         </div>
     </div>
-    
+
     <script>
         function eliminarUsuario(usua_rut, rous_codigo) {
             $('#usua_rut').val(usua_rut);
@@ -126,7 +126,7 @@
 
     <link rel="stylesheet" href="{{ asset('public/bundles/datatables/datatables.min.css') }}">
     <link rel="stylesheet" href="{{ asset('public/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css') }}">
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="{{ asset('public/bundles/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('public/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js') }}"></script>

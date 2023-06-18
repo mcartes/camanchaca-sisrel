@@ -7,6 +7,7 @@ use App\Models\Asistentes;
 use App\Models\AsistentesActividades;
 use App\Models\CategoriasClima;
 use App\Models\IniciativasUnidades;
+use App\Models\RolesUsuarios;
 use App\Models\Usuarios;
 use App\Models\Regiones;
 use Illuminate\Http\Request;
@@ -59,7 +60,8 @@ class AdminController extends Controller
     {
         $usuario = Usuarios::where(['usua_rut' => $rut, 'rous_codigo' => $rol])->first();
         $unidades = Unidades::all();
-        return view('admin.usuarios.editar', compact('usuario','unidades'));
+        $roles = DB::table('roles_usuarios')->select('rous_codigo','rous_nombre')->limit(3)->orderBy('rous_codigo')->get();
+        return view('admin.usuarios.editar', compact('usuario','unidades','roles'));
     }
 
     public function actualizarUsuario(Request $request, $rut, $rol)
@@ -68,12 +70,13 @@ class AdminController extends Controller
             [
                 'nombre' => 'required|max:100',
                 'apellido' => 'required|max:100',
-                'email' => 'required|max:100',
+                'email' => 'max:100',
                 'email_alt' => 'max:100',
-                'cargo' => 'required',
+                // 'cargo' => 'required',
                 'vigente' => 'required|in:S,N',
                 'profesion' => 'max:100',
-                'unidad' => 'required'
+                'unidad' => 'required',
+                'rol' => 'required'
 
             ],
             [
@@ -81,14 +84,15 @@ class AdminController extends Controller
                 'nombre.max' => 'El nombre excede el máximo de caracteres permitidos (100).',
                 'apellido.required' => 'El apellido del usuario es requerido.',
                 'apellido.max' => 'El apellido excede el máximo de caracteres permitidos (100).',
-                'email.required' => 'El correo electrónico del usuario es requerido.',
+                // 'email.required' => 'El correo electrónico del usuario es requerido.',
                 'email.max' => 'El correo electrónico excede el máximo de caracteres permitidos (100).',
                 'email_alt.max' => 'El correo electrónico alternativo excede el máximo de caracteres permitidos (100).',
-                'cargo.required' => 'El cargo del usuario es requerido.',
+                // 'cargo.required' => 'El cargo del usuario es requerido.',
                 'vigente.required' => 'El estado del usuario es requerido.',
                 'vigente.in' => 'El estado del usuario debe ser activo o inactivo.',
                 'profesion.max' => 'La profesión excede el máximo de caracteres permitidos (100).',
-                'unidad.required' => 'La unidad del usuario es requerida.'
+                'unidad.required' => 'La unidad del usuario es requerida.',
+                'rol.required' => 'El rol de usuario es requerido.'
             ]
         );
 
@@ -103,6 +107,7 @@ class AdminController extends Controller
             'usua_apellido' => $request->apellido,
             'usua_cargo' => $request->cargo,
             'usua_profesion' => $request->profesion,
+            'rous_codigo' => $request->rol,
             'usua_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'usua_vigente' => $request->vigente,
             'usua_rut_mod' => Session::get('admin')->usua_rut,

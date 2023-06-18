@@ -73,13 +73,12 @@ class AutenticationController extends Controller {
                 'apellido' => 'required|max:100',
                 'email' => 'max:100',
                 'email_alt' => 'max:100',
-                'clave' => 'required',
                 'cargo' => 'max:100',
                 'profesion' => 'max:100',
                 'rol' => 'required',
                 'clave' => 'required|min:8|max:25',
                 'confirmarclave' => 'required|same:clave',
-                // 'unidad' => 'required'
+                'unidad' => 'required'
             ],
             [
                 'run.required' => 'Es necesario ingresar un RUT.',
@@ -99,7 +98,7 @@ class AutenticationController extends Controller {
                 'clave.max' => 'La contraseña debe tener 25 caracteres como máximo.',
                 'confirmarclave.required' => 'La confirmación de contraseña es requerida.',
                 'confirmarclave.same' => 'Las contraseñas ingresadas no coinciden, intente nuevamente.',
-                // 'unidad.required' => 'La unidad del usuario es requerida.'
+                'unidad.required' => 'La unidad del usuario es requerida.'
             ]
         );
 
