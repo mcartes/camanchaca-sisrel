@@ -49,7 +49,7 @@ class IniciativasController extends Controller {
         $inicListar = null;
 
         if (count($request->all()) > 0) {
-            if ($request->region!='' && $request->comuna=='' && $request->unidad=='') {
+            if ($request->region!='' && $request->comuna=='' && $request->unidad==''&& $request->fecha_inicio != "" && $request->fecha_termino != "") {
                 $inicListar = DB::table('iniciativas')
                     ->select('iniciativas.inic_codigo', 'inic_nombre', 'inic_nombre_responsable', 'meca_nombre', 'inic_aprobada')
                     ->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')
@@ -58,10 +58,11 @@ class IniciativasController extends Controller {
                     ->join('comunas', 'comunas.comu_codigo', '=', 'iniciativas_ubicaciones.comu_codigo')
                     ->join('regiones', 'regiones.regi_codigo', '=', 'comunas.regi_codigo')
                     ->where(['inic_vigente' => 'S', 'regiones.regi_codigo' => $request->region])
+                    ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $request->fecha_termino])
                     ->distinct()
                     ->orderBy('inic_creado', 'desc')
                     ->get();
-            } elseif ($request->region=='' && $request->comuna!='' && $request->unidad=='') {
+            } elseif ($request->region=='' && $request->comuna!='' && $request->unidad==''&& $request->fecha_inicio != "" && $request->fecha_termino != "") {
                 $inicListar = DB::table('iniciativas')
                     ->select('iniciativas.inic_codigo', 'inic_nombre', 'inic_nombre_responsable', 'meca_nombre', 'inic_aprobada')
                     ->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')
@@ -69,10 +70,11 @@ class IniciativasController extends Controller {
                     ->join('iniciativas_ubicaciones', 'iniciativas_ubicaciones.inic_codigo', '=', 'iniciativas.inic_codigo')
                     ->join('comunas', 'comunas.comu_codigo', '=', 'iniciativas_ubicaciones.comu_codigo')
                     ->where(['inic_vigente' => 'S', 'comunas.comu_codigo' => $request->comuna])
+                    ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $request->fecha_termino])
                     ->distinct()
                     ->orderBy('inic_creado', 'desc')
                     ->get();
-            } elseif ($request->region=='' && $request->comuna=='' && $request->unidad!='') {
+            } elseif ($request->region=='' && $request->comuna=='' && $request->unidad!='' && $request->fecha_inicio != "" && $request->fecha_termino != "" ) {
                 $inicListar = DB::table('iniciativas')
                     ->select('iniciativas.inic_codigo', 'inic_nombre', 'inic_nombre_responsable', 'meca_nombre', 'inic_aprobada')
                     ->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')
@@ -80,10 +82,11 @@ class IniciativasController extends Controller {
                     ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', '=', 'iniciativas.inic_codigo')
                     ->join('unidades', 'unidades.unid_codigo', '=', 'iniciativas_unidades.unid_codigo')
                     ->where(['inic_vigente' => 'S', 'unidades.unid_codigo' => $request->unidad])
+                    ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $request->fecha_termino])
                     ->distinct()
                     ->orderBy('inic_creado', 'desc')
                     ->get();
-            } elseif ($request->region!='' && $request->comuna!='' && $request->unidad=='') {
+            } elseif ($request->region!='' && $request->comuna!='' && $request->unidad=='' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
                 $inicListar = DB::table('iniciativas')
                     ->select('iniciativas.inic_codigo', 'inic_nombre', 'inic_nombre_responsable', 'meca_nombre', 'inic_aprobada')
                     ->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')
@@ -91,10 +94,11 @@ class IniciativasController extends Controller {
                     ->join('iniciativas_ubicaciones', 'iniciativas_ubicaciones.inic_codigo', '=', 'iniciativas.inic_codigo')
                     ->join('comunas', 'comunas.comu_codigo', '=', 'iniciativas_ubicaciones.comu_codigo')
                     ->where(['inic_vigente' => 'S', 'comunas.regi_codigo' => $request->region, 'comunas.comu_codigo' => $request->comuna])
+                    ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $request->fecha_termino])
                     ->distinct()
                     ->orderBy('inic_creado', 'desc')
                     ->get();
-            } elseif ($request->region=='' && $request->comuna!='' && $request->unidad!='') {
+            } elseif ($request->region=='' && $request->comuna!='' && $request->unidad!='' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
                 $inicListar = DB::table('iniciativas')
                     ->select('iniciativas.inic_codigo', 'inic_nombre', 'inic_nombre_responsable', 'meca_nombre', 'inic_aprobada')
                     ->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')
@@ -102,6 +106,19 @@ class IniciativasController extends Controller {
                     ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', '=', 'iniciativas.inic_codigo')
                     ->join('unidades', 'unidades.unid_codigo', '=', 'iniciativas_unidades.unid_codigo')
                     ->where(['inic_vigente' => 'S', 'unidades.comu_codigo' => $request->comuna, 'unidades.unid_codigo' => $request->unidad])
+                    ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $request->fecha_termino])
+                    ->distinct()
+                    ->orderBy('inic_creado', 'desc')
+                    ->get();
+            }elseif ($request->region=='' && $request->comuna=='' && $request->unidad=='' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+                $inicListar = DB::table('iniciativas')
+                    ->select('iniciativas.inic_codigo', 'inic_nombre', 'inic_nombre_responsable', 'meca_nombre', 'inic_aprobada')
+                    ->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')
+                    ->join('mecanismo', 'mecanismo.meca_codigo', '=', 'submecanismo.meca_codigo')
+                    ->join('iniciativas_ubicaciones', 'iniciativas_ubicaciones.inic_codigo', '=', 'iniciativas.inic_codigo')
+                    ->join('comunas', 'comunas.comu_codigo', '=', 'iniciativas_ubicaciones.comu_codigo')
+                    // ->where(['inic_vigente' => 'S', 'comunas.regi_codigo' => $request->region, 'comunas.comu_codigo' => $request->comuna])
+                    ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $request->fecha_termino])
                     ->distinct()
                     ->orderBy('inic_creado', 'desc')
                     ->get();

@@ -23,10 +23,35 @@ class DonacionesController extends Controller
         ->distinct()
         ->get();
         if (count($request->all()) > 0) {
-            if ($request->orga_codigo != "") {
+            if ($request->orga_codigo != "" && $request -> fecha_inicio != "" && $request -> fecha_termino != "") {
                 $donaciones = DB::table('donaciones')
                     ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
                     ->where('donaciones.orga_codigo', '=', $request->orga_codigo)
+                    ->whereBetween('donaciones.dona_fecha_entrega', [$request ->fecha_inicio, $request->fecha_termino])
+                    ->get();
+
+            }
+            elseif ($request->orga_codigo == "" && $request -> fecha_inicio != "" && $request -> fecha_termino != "") {
+                $donaciones = DB::table('donaciones')
+                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
+                    // ->where('donaciones.orga_codigo', '=', $request->orga_codigo)
+                    ->whereBetween('donaciones.dona_fecha_entrega', [$request ->fecha_inicio, $request->fecha_termino])
+                    ->get();
+
+            }
+            elseif ($request->orga_codigo == "" && $request -> fecha_inicio == "" && $request -> fecha_termino == "") {
+                $donaciones = DB::table('donaciones')
+                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
+                    ->where('dona_fecha_entrega', '>', Carbon::now()->subMonth())
+                    // ->whereBetween('donaciones.dona_fecha_entrega', [$request ->fecha_inicio, $request->fecha_termino])
+                    ->get();
+
+            }
+            elseif ($request->orga_codigo != "" && $request -> fecha_inicio == "" && $request -> fecha_termino == "") {
+                $donaciones = DB::table('donaciones')
+                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
+                    ->where('donaciones.orga_codigo', '=', $request->orga_codigo)
+                    // ->whereBetween('donaciones.dona_fecha_entrega', [$request ->fecha_inicio, $request->fecha_termino])
                     ->get();
 
             }

@@ -63,7 +63,7 @@
                         </div>
                         <form action="{{ route('admin.iniciativas.index') }}" method="GET">
                             <div class="row">
-                                <div class="col-4 col-md-4 col-lg-4">
+                                <div class="col-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Región</label>
                                         <select class="form-control select2" id="region" name="region" onchange="consultarComunas()">
@@ -76,7 +76,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-4 col-md-4 col-lg-4">
+                                <div class="col-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Comuna</label>
                                         <select class="form-control select2" id="comuna" name="comuna" onchange="consultarUnidades()">
@@ -89,7 +89,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-4 col-md-4 col-lg-4">
+                                <div class="col-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Unidad</label>
                                         <select class="form-control select2" id="unidad" name="unidad">
@@ -100,6 +100,18 @@
                                                 <option value="-1">No existen registros</option>
                                             @endforelse
                                         </select>
+                                    </div>
+                                </div>
+                                <div class="col-2 col-md-2 col-lg-2">
+                                    <div class="form-group">
+                                        <label>Fecha de inicio</label>
+                                        <input type="date" class="form-control datepicker" id="fecha_inicio" name="fecha_inicio">
+                                    </div>
+                                </div>
+                                <div class="col-2 col-md-2 col-lg-2">
+                                    <div class="form-group">
+                                        <label>Fecha de termino</label>
+                                        <input type="date" class="form-control datepicker" id="fecha_termino" name="fecha_termino">
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-12 col-lg-12 text-right mb-4">
