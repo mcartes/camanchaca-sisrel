@@ -6,6 +6,10 @@ function getURLParams(url) {
     return params;
 }
 
+// $(document).ready(() => {
+//     $("#select-region").hide();
+// });
+
 function eliminarIniciativa(inic_codigo) {
     $('#inic_codigo').val(inic_codigo);
     $('#modalEliminarIniciativa').modal('show');
@@ -15,7 +19,7 @@ function consultarComunas() {
     let regi_codigo = $('#region').val();
     let mensaje;
     $('#div-alert-iniciativas').html('');
-    
+
     if (regi_codigo == -1) {
         mensaje = `<div class="alert alert-warning alert-dismissible show fade"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>La región seleccionada no es válida.</strong></div></div>`;
         $('#div-alert-iniciativas').html(mensaje);
@@ -28,15 +32,15 @@ function consultarComunas() {
         data: {
             region: regi_codigo
         },
-        success: function(resConsultar) {            
+        success: function(resConsultar) {
             respuesta = JSON.parse(resConsultar);
             $('#comuna').find('option').not(':first').remove();
             $('#comuna').prop('selectedIndex', 0);
             consultarUnidades();
-            
-            if (!respuesta.estado) return; 
+
+            if (!respuesta.estado) return;
             respuesta.resultado.forEach(registro => {
-                if (registro.regi_codigo == regi_codigo) $('#comuna').append(new Option(registro.comu_nombre, registro.comu_codigo)); 
+                if (registro.regi_codigo == regi_codigo) $('#comuna').append(new Option(registro.comu_nombre, registro.comu_codigo));
             });
             let comu_codigo = getURLParams(window.location.href)['comuna'];
             if (comu_codigo == undefined || comu_codigo == null) $('#comuna').val('').change();
@@ -53,7 +57,7 @@ function consultarUnidades() {
     let comu_codigo = $('#comuna').val();
     let mensaje;
     $('#div-alert-iniciativas').html('');
-    
+
 
     if (comu_codigo == -1) {
         mensaje = `<div class="alert alert-warning alert-dismissible show fade"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>La región seleccionada no es válida.</strong></div></div>`;
@@ -67,14 +71,14 @@ function consultarUnidades() {
         data: {
             comuna: comu_codigo
         },
-        success: function(resConsultar) {            
+        success: function(resConsultar) {
             respuesta = JSON.parse(resConsultar);
             $('#unidad').find('option').not(':first').remove();
             $('#unidad').prop('selectedIndex', 0);
 
-            if (!respuesta.estado) return;              
+            if (!respuesta.estado) return;
             respuesta.resultado.forEach(registro => {
-                if (registro.comu_codigo == comu_codigo) $('#unidad').append(new Option(registro.unid_nombre, registro.unid_codigo)); 
+                if (registro.comu_codigo == comu_codigo) $('#unidad').append(new Option(registro.unid_nombre, registro.unid_codigo));
             });
             let unid_codigo = getURLParams(window.location.href)['unidad'];
             if (unid_codigo == undefined || unid_codigo == null) $('#unidad').val('').change();
@@ -130,7 +134,7 @@ function calcularIndice(inic_codigo) {
                 if (resuInicial > 0) resultados = Math.round((resuFinal*100)/resuInicial);
                 if (resultados > 100) resultados = 100;
             }
-            
+
             evaluacion = 0;
             if (datos.evaluacion != null) {
                 evaluacion = parseInt(datos.evaluacion.eval_plazos)+parseInt(datos.evaluacion.eval_horarios)+parseInt(datos.evaluacion.eval_infraestructura)+
@@ -138,7 +142,7 @@ function calcularIndice(inic_codigo) {
                         parseInt(datos.evaluacion.eval_desempenho_participantes)+parseInt(datos.evaluacion.eval_calidad_presentaciones);
                 evaluacion = Math.round((evaluacion * 20) / 8);
             }
-            
+
             indice = Math.round(0.2*mecanismo + 0.1*frecuencia + 0.1*cobertura + 0.35*evaluacion + 0.25*resultados);
 
             $.ajax({
@@ -156,7 +160,7 @@ function calcularIndice(inic_codigo) {
                     console.log(error);
                 }
             });
-            
+
             $('#mecanismo-nombre').text(datos.mecanismo.meca_nombre);
             $('#frecuencia-nombre').text(datos.frecuencia.frec_nombre);
             $('#mecanismo-puntaje').text(mecanismo);

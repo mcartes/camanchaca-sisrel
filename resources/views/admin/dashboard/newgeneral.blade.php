@@ -67,7 +67,7 @@
                             <div class="row" id="div-iniciativas">
 
                                 <div class="card card-statistic-2 l-bg-cyan">
-                                    <a href="{{ route('admin.iniciativas.index') }}" style="text-decoration: none">
+                                    {{-- <a href="{{ route('admin.iniciativas.index') }}" style="text-decoration: none"> --}}
 
                                         <div class="card-icon l-bg-red">
                                             <i class="fab fa-slack"></i>
@@ -79,11 +79,11 @@
                                                         <i class="ti-arrow-up text-success"></i>
                                                         <h2 style="color: white" id="c_iniciativas">{{ $iniciativas }}</h2>
                                                     </h3>
-                                                    <h4 style="color: white">Iniciativas</h4>
+                                                    <h4 style="color: white" id="h4-iniciativas">Iniciativas</h4>
                                                 </div>
                                             </div>
                                         </div>
-                                    </a>
+                                    {{-- </a> --}}
                                 </div>
 
                             </div>
@@ -173,9 +173,8 @@
                             </div>
 
                             <div class="row" id="div-image">
-                                <div class="card card-statistic-2 ">
-                                    <img src="{{ asset('public/img/camanchaca.png') }}" alt="" height="400px"
-                                        width="400px">
+                                <div class="card card-statistic-2">
+                                    <img src="{{ asset('public/img/camanchaca.png') }}" style="width: 100%">
                                 </div>
                             </div>
 
@@ -183,7 +182,7 @@
                         </div>
 
                         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                            <div class="card">
+                            <div class="card h-100">
                                 <div class="card-body">
                                     <div id="sidebar" class="sidebar collapsed">
                                         <div class="sidebar-content">
@@ -196,7 +195,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="map" class="w-auto p-3 sidebar-map" style="height: 750px;"></div>
+                                    <div id="map" class="w-auto p-3 sidebar-map" style="height: 100%;"></div>
                                 </div>
                             </div>
                         </div>

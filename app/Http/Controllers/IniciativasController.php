@@ -44,6 +44,7 @@ class IniciativasController extends Controller {
 
     public function index(Request $request) {
         $regiListar = Regiones::select('regi_codigo', 'regi_nombre')->where('regi_vigente', 'S')->get();
+        // $comuListar = Comunas::select('comu_codigo', 'comu_nombre')->where('comu_vigente', 'S')->where('regi_codigo',$request->region)->get();
         $comuListar = Comunas::select('comu_codigo', 'comu_nombre')->where('comu_vigente', 'S')->get();
         $unidListar = Unidades::select('unid_codigo', 'unid_nombre')->where('unid_vigente', 'S')->get();
         $inicListar = null;

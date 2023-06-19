@@ -63,7 +63,7 @@
                         </div>
                         <form action="{{ route('admin.iniciativas.index') }}" method="GET">
                             <div class="row">
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-2 col-md-2 col-lg-2" id="select-region">
                                     <div class="form-group">
                                         <label>Región</label>
                                         <select class="form-control select2" id="region" name="region" onchange="consultarComunas()">

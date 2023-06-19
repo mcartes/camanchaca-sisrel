@@ -73,12 +73,18 @@ function ocultarRegi(codigo){
             $("#ul-estadisticas").html(stasts);
             $("#c_iniciativas").html(data.iniciativas)
             $('#div-alert-undifined').hide();
+            var region = encodeURIComponent(regionSeleccionada)
+            $("#h4-iniciativas").html(`<h4 style="color: white" id="h4-iniciativas" onclick="IraIniciativas('${region}')">Iniciativas</h4>`)
         });
 
 }
 
 function IraDatosRegionales(region){
     window.location.href = `${window.location.origin}/admin/estadisticas/regionales?regi_codigo=${region}`;
+}
+
+function IraIniciativas(region){
+    window.location.href = `${window.location.origin}/admin/iniciativas/listar?region=${region}`;
 }
 
 function cargarInfoComuna(comu_codigo) {
