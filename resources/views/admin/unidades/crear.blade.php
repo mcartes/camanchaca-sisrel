@@ -246,11 +246,108 @@
             </div>
         </div>
     </section>
-    <script src="{{ asset('public/js/unidades.js') }}"></script>
+    {{-- <script src="{{ asset('public/js/unidades.js') }}"></script> --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@latest/dist/leaflet.css" />
+    <link rel="stylesheet" href="{{ asset('public/css/geocoder.css') }}" />
+    <script src="https://unpkg.com/leaflet@latest/dist/leaflet-src.js"></script>
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script>
-        $(document).ready(function() {
-            $("#miDiv").hide();
+        // $(document).ready(function() {
+        //     $("#miDiv").hide();
+        // });
+        const csrftoken = document.head.querySelector(
+            "[name~=csrf-token][content]"
+
+        ).content;
+        var map = L.map('map').setView([-33.42486299783035, -70.68914200046231], 5);
+
+        var geocoder = L.Control.Geocoder.nominatim({
+            geocoderOptions: {
+                format: 'json',
+                address: '10 Downing Street, London',
+                bounds: [
+                    [-0.1276, 51.505],
+                    [0.1276, 51.506]
+                ],
+
+            },
         });
+
+        // var searchInput = document.getElementById('domicilio');
+        var latInput = document.getElementById('lat');
+        var lngInput = document.getElementById('lng');
+
+        var marker;
+
+        var control = L.Control.geocoder({
+                defaultMarkGeocode: false,
+                collapsed: false,
+                placeholder: 'Buscar ubicación...',
+                geocodingQueryParams: {
+                    countrycodes: 'cl', // Limitar la búsqueda a España
+                    limit: 1, // Limitar a un solo resultado
+                    polygon_geojson: 1, // Obtener datos de límites geográficos
+                    'accept-language': 'es' // Establecer el idioma de respuesta a español
+                }
+            })
+
+            .on('markgeocode', function(e) {
+                var center = e.geocode.center;
+                var lat = center.lat;
+                var lng = center.lng;
+                // var calle = e.geocode.properties.address.road || '';
+                // var ciudad = e.geocode.properties.address.town || '';
+                // var provincia = e.geocode.properties.address.county || '';
+                // var region = e.geocode.properties.address.state || '';
+
+                latInput.value = lat;
+                lngInput.value = lng;
+                // if (calle != '') {
+                //     searchInput.value = `${calle},${ciudad},${provincia},${region}`;
+                // } else {
+                //     searchInput.value = `${ciudad},${provincia},${region}`;
+                // }
+
+                if (marker) {
+                    marker.setLatLng(center)
+                } else {
+                    marker = L.marker(center)
+                        .addTo(map)
+                }
+
+                map.setView(center, 15);
+            })
+            .addTo(map);
+
+        map.on('click', function(e) {
+            latInput.value = e.latlng.lat;
+            lngInput.value = e.latlng.lng;
+
+            var center = e.latlng;
+
+            if (marker) {
+                marker.setLatLng(center);
+            } else {
+                marker = L.marker(center).addTo(map);
+            }
+
+            var geocodeResult = geocoder.getResult();
+            var street = geocodeResult.properties.address.street || '';
+            var houseNumber = geocodeResult.properties.address.house_number || '';
+            var number = geocodeResult.properties.address.number || '';
+
+            var popupContent = '<b>' + (street ? street + ' ' : '') + houseNumber + '</b><br>' + geocodeResult
+                .properties.address.road + ', ' + geocodeResult.properties.address.city + ', ' + geocodeResult
+                .properties.address.state + ', ' + geocodeResult.properties.address.country + '<br>' + geocodeResult
+                .properties.postal_code;
+
+            marker.bindPopup(popupContent).openPopup();
+        });
+
+
+        L.tileLayer('https://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
     </script>
 @endsection
