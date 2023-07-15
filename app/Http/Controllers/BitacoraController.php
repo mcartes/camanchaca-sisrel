@@ -13,7 +13,10 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 use App\Models\Dirigentes;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Entornos;
+use App\Models\Comunas;
 
+use Psy\Util\Json;
 use function PHPSTORM_META\type;
 
 class BitacoraController extends Controller
@@ -101,10 +104,61 @@ class BitacoraController extends Controller
 
     public function CrearActividad() {
         return view('admin.bitacora.crear', [
-            'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get()
+            'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get(),
+            'tipos' => Entornos::all(),
+            'comunas' => Comunas::all()
         ]);
     }
+    public function guardarOrganizacion(Request $request)
+    {
+        $validacion = $request->validate(
+            [
+                'nombre' => 'required|max:100',
+                'tiporg' => 'required',
+                'comuna' => 'required',
+                // 'lat' => 'required',
+                // 'lng' => 'required',
+                // 'descripcion' => 'max:350'
+            ],
+            [
+                'nombre.required' => 'El nombre es un parámetro requerido.',
+                'nombre.max' => 'El nombre supera el máximo de carácteres permitidos.',
+                'tiporg.required' => 'El tipo de organización es un parámetro requerido.',
+                'comuna.required' => 'Es necesario escoger una comuna.',
+                //TODO:Descomentar latitud y longitud cuando se implemente nueva funcionalidad del mapa, pasarlo en el front como campos ocultos
+                // 'lat.required' => 'La latitud es un parámetro rquerido.',
+                // 'lng.required' => 'La longitud es un parámetro requerido',
+                // 'descripcion.max' => 'La descripción supera el máximo de carácteres permitidos.'
+            ]
+        );
 
+        if (!$validacion) {
+
+            return redirect()->back()->withErrors($validacion)->withInput();
+        }
+
+        $organizacion = Organizaciones::create([
+            'comu_codigo' => $request->comuna,
+            'ento_codigo' => $request->tiporg,
+            'orga_nombre' => $request->nombre,
+            'orga_cantidad_socios' => $request->socios,
+            'orga_domicilio' => $request->domicilio,
+            // 'orga_fecha_vinculo' => $request->fecha,
+            // 'orga_descripcion' => $request->descripcion,
+            'orga_geoubicacion' => Json::encode(['lat' => $request->lat, 'lng' => $request->lng]),
+            'orga_creado' => Carbon::now()->format('Y-m-d H:i:s'),
+            'orga_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+            'orga_vigente' => 'S',
+            'orga_rut_mod' => Session::get('admin')->usua_rut,
+            'orga_rol_mod' => Session::get('admin')->rous_codigo,
+        ]);
+
+        if ($organizacion) {
+            return redirect()->route('admin.actividad.crear')->with('exitoOrganizacion', 'La organización se registró correctamente.');
+        }
+
+        return redirect()->back()->with('errorOrganizacion', 'Ocurrió un error durante la actualización.');
+    }
     public function GuardarActividad(Request $request) {
         $request->validate(
             [
@@ -236,7 +290,7 @@ class BitacoraController extends Controller
             ['actividad.exists' => 'La actividad no se encuentra registrada.']
         ]);
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
-        
+
         $asistentes = DB::table('asistentes_actividades')
             ->join('asistentes', 'asistentes_actividades.asis_codigo', '=', 'asistentes.asis_codigo')
             ->join('actividades', 'asistentes_actividades.acti_codigo', '=', 'actividades.acti_codigo')

@@ -148,6 +148,7 @@ Route::middleware('verificar.admin')->group(function () {
     Route::get('admin/actividad/{acti_codigo}/mostrar', [BitacoraController::class, 'MostrarActividad'])->name('admin.actividad.mostrar');
     Route::get('admin/actividad/crear', [BitacoraController::class, 'CrearActividad'])->name('admin.actividad.crear');
     Route::post('admin/actividad/crear', [BitacoraController::class, 'GuardarActividad'])->name('admin.actividad.guardar');
+    Route::post('admin/actividad/crear/orga', [BitacoraController::class, 'guardarOrganizacion'])->name('admin.actividad.orga.crear');
     Route::get('admin/actividad/{acti_codigo}/editar', [BitacoraController::class, 'EditarActividad'])->name('admin.actividad.editar');
     Route::put('admin/actividad/{acti_codigo}/editar', [BitacoraController::class, 'ActualizarActividad'])->name('admin.actividad.actualizar');
     Route::delete('admin/actividad/{acti_codigo}/eliminar', [BitacoraController::class, 'EliminarActividad'])->name('admin.actividad.eliminar');
@@ -483,7 +484,7 @@ Route::middleware('verificar.observador')->group(function () {
     // fin rutas perfil de usuario
 });
 
-
+//
 Route::middleware('verificar.superadmin')->group(function () {
     // inicio rutas para gestionar usuarios
     Route::get('superadmin/crear-usuario', [SuperadminController::class, 'crearUsuario'])->name('superadmin.crear.usuario');
