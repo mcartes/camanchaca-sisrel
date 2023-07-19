@@ -205,7 +205,9 @@ class BitacoraController extends Controller
     public function EditarActividad($acti_codigo) {
         return view('admin.bitacora.crear', [
             'actividad' => Actividades::where('acti_codigo', $acti_codigo)->first(),
-            'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get()
+            'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get(),
+            'comunas' => Comunas::all(),
+            'tipos' => Entornos::all(),
         ]);
     }
 
