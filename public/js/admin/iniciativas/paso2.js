@@ -17,7 +17,7 @@ function listarComunas() {
             url: window.location.origin+'/admin/crear-iniciativa/listar-comunas',
             data: {
                 iniciativa: inic_codigo,
-                region: regi_codigo            
+                region: regi_codigo
             },
             success: function(resListar) {
                 respuesta = JSON.parse(resListar);
@@ -30,7 +30,7 @@ function listarComunas() {
                     }
                     $('#comuna').append(new Option('No existen registros', '-1'));
                     return;
-                }                
+                }
                 aComunas = respuesta.resultado;
                 aComunas.forEach(comuna => {
                     $('#comuna').append(new Option(comuna.comu_nombre, comuna.comu_codigo));
@@ -49,19 +49,19 @@ function guardarUbicacion() {
     let comu_codigo = $('#comuna').val();
     let alertError, alertExito, respuesta;
     $('#div-alert-territorio').html('');
-    
+
     if (regi_codigo == '' || regi_codigo == null) {
         alertError = `<div class="alert alert-warning alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>Debe seleccionar una región.</strong></div></div>`;
         $('#div-alert-territorio').html(alertError);
         return;
     }
-    
+
     if (comu_codigo == '' || comu_codigo == null || comu_codigo == '-1') {
         alertError = `<div class="alert alert-warning alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>Debe seleccionar una comuna.</strong></div></div>`;
         $('#div-alert-territorio').html(alertError);
         return;
     }
-    
+
     // petición para guardar ubicación o ubicaciones asociada(s) a la iniciativa
     $.ajax({
         type: 'POST',
@@ -106,17 +106,17 @@ function listarUbicacion() {
         success: function(resConsultar) {
             respuesta = JSON.parse(resConsultar);
             $('#body-tabla-ubicaciones').empty();
-            
+
             if (!respuesta.estado) {
                 $('#row-tabla-ubicaciones').hide();
                 return;
             }
-            
+
             datosUbicaciones = respuesta.resultado;
             datosUbicaciones.forEach(registro => {
                 fila =  '<tr>'+
                             '<td>'+registro.regi_nombre+'</td>'+
-                            '<td>'+registro.comu_nombre+'</td>'+                   
+                            '<td>'+registro.comu_nombre+'</td>'+
                             '<td>'+
                                 '<button type="button" class="btn btn-icon btn-danger" onclick="eliminarUbicacion('+registro.inic_codigo+', `'+registro.comu_codigo+'`)"><i class="fas fa-trash"></i></button>'+
                             '</td>'+
@@ -134,7 +134,7 @@ function listarUbicacion() {
 function eliminarUbicacion(inic_codigo, comu_codigo) {
     let alertError, alertExito;
     $('#div-alert-territorio').html('');
-    
+
     // petición para eliminar un subentorno-participante asociado a la iniciativa
     $.ajax({
         type: 'POST',
@@ -209,7 +209,7 @@ function agregarSubentorno() {
     let part_cantidad_inicial = $('#cantidad').val();
     let alertError, alertExito;
     $('#div-alert-subentorno').html('');
-    
+
     // petición para guardar un subentorno-participante asociado a la iniciativa
     $.ajax({
         type: 'POST',
@@ -258,7 +258,7 @@ function listarSubentornos() {
         success: function(resListar) {
             respuesta = JSON.parse(resListar);
             $('#body-tabla-subentornos').empty();
-            
+
             if (!respuesta.estado) {
                 if (respuesta.resultado != '') {
                     alertError = `<div class="alert alert-danger alert-dismissible show fade mb-3"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>${respuesta.resultado}</strong></div></div>`;
@@ -267,7 +267,7 @@ function listarSubentornos() {
                 $('#row-tabla-subentornos').hide();
                 return;
             }
-            
+
             datosSubentornos = respuesta.resultado;
             datosSubentornos.forEach(registro => {
                 fila =  '<tr>'+
@@ -327,7 +327,7 @@ function agregarResultado() {
     let resu_nombre = $('#resultado').val();
     let alertError, alertExito;
     $('#div-alert-resultado').html('');
-   
+
     // petición para guardar un resultado asociado a la iniciativa
     $.ajax({
         type: 'POST',
@@ -383,7 +383,7 @@ function listarResultados() {
                 $('#card-tabla-resultados').hide();
                 return;
             }
-            
+
             datosResultados = respuesta.resultado;
             datosResultados.forEach(registro => {
                 fila =  '<tr>'+
