@@ -72,7 +72,7 @@
                                     @endif
                                 </div>
                                 <div class="form-group">
-                                    <label>Nombre</label> <label for="" style="color: red; display:inline-block;">*</label>
+                                    <label>Tipo de actividad</label> <label for="" style="color: red; display:inline-block;">*</label>
                                     {{-- <input type="text" class="form-control" id="nombre" name="nombre" value="{{ old('nombre') ?? @$actividad->acti_nombre }}" autocomplete="off"> --}}
                                     @if (isset($actividad))
                                     <select name="nombre" id="nombre" class="form-control select2" style="width: 100%">
