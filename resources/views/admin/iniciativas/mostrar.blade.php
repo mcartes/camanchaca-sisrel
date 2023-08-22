@@ -248,12 +248,14 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Total recursos</strong></td>
+                                        <td><strong>Total de dinero</strong></td>
                                         <td>
-                                            <?php
-                                                $recursos = $dinero->codi_valorizacion+$especies->coes_valorizacion+$infraestructura->coin_valorizacion+$rrhh->corh_valorizacion;
-                                                echo '$'.number_format($recursos, 0, ',', '.');
-                                            ?>
+                                            <td>
+                                                <?php
+                                                    $recursos = $dinero->codi_valorizacion+$infraestructura->coin_valorizacion+$rrhh->corh_valorizacion;
+                                                    echo '$'.number_format($recursos, 0, ',', '.');
+                                                ?>
+                                            </td>
                                         </td>
                                     </tr>
                                     <tr>
