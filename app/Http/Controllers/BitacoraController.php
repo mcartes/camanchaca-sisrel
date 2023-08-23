@@ -154,7 +154,7 @@ class BitacoraController extends Controller
         ]);
 
         if ($organizacion) {
-            return redirect()->route('admin.actividad.crear')->with('exitoOrganizacion', 'La organización se registró correctamente.');
+            return redirect()->back()->with('exitoOrganizacion', 'La organización se registró correctamente.');
         }
 
         return redirect()->back()->with('errorOrganizacion', 'Ocurrió un error durante la actualización.');

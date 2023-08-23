@@ -22,9 +22,8 @@
                         <div class="card-header">
                             <h4>Agregar donación</h4>
                             <div class="card-header-action">
-                                <input onchange="MostrarDirigentes()" class="form-check-input" type="checkbox"
-                                    name="esdirigente" id="esdirigente">
-                                <small class="form-check-label"><strong>El receptor es dirigente</strong></small>
+                                <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    data-target="#modalCrearOrga"><i class="fas fa-plus"></i> Nueva Organización</button>
                             </div>
                         </div>
                         <div class="card-body">
@@ -44,6 +43,9 @@
                                                 <option value="-1">No existen registros</option>
                                             @endforelse
                                         </select>
+                                        <input onchange="MostrarDirigentes()" class="form-check-input" type="checkbox"
+                                            name="esdirigente" id="esdirigente">
+                                        <small class="form-check-label"><strong>El receptor es dirigente</strong></small>
                                     </div>
                                 </div>
 
@@ -67,9 +69,11 @@
 
                                 <input type="text" class="form-control " id="dirigente" name="dirigente" value="">
                                 @if (isset($donacion))
-                                    <input type="text" class="form-control " id="organizacion" name="organizacion" value="{{ $donacion->orga_codigo }}">
+                                    <input type="text" class="form-control " id="organizacion" name="organizacion"
+                                        value="{{ $donacion->orga_codigo }}">
                                 @else
-                                    <input type="text" class="form-control " id="organizacion" name="organizacion" value="">
+                                    <input type="text" class="form-control " id="organizacion" name="organizacion"
+                                        value="">
                                 @endif
                                 <div class="row">
                                     <div class="col-1"></div>
@@ -406,6 +410,98 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="modalCrearOrga" tabindex="-1" role="dialog" aria-labelledby="formModal"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="formModal">Nueva Organización</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="{{ route('admin.actividad.orga.crear') }}" method="POST">
+                        @csrf
+
+                        <div class="form-group">
+                            <label for="nombre">Nombre de la organización</label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">
+                                        <i class="fas fa-hotel"></i>
+                                    </div>
+                                </div>
+                                <input type="text" class="form-control" id="nombre" name="nombre"
+                                    value="{{ old('nombre') }}" autocomplete="off" min="0">
+                            </div>
+                            @if ($errors->has('nombre'))
+                                <div class="alert alert-warning alert-dismissible show fade mt-2 text-center">
+                                    <div class="alert-body">
+                                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                        <strong>{{ $errors->first('nombre') }}</strong>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="form-group ">
+                            <label for="comuna">Comuna</label>
+                            <div class="input-group">
+                                <select class="form-control" name="comuna" id="comuna">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    @foreach ($comunas as $comuna)
+                                        <option value="{{ $comuna->comu_codigo }}"
+                                            {{ old('comuna') == $comuna->comu_codigo ? 'selected' : '' }}>
+                                            {{ $comuna->comu_nombre }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @if ($errors->has('comuna'))
+                                <div class="alert alert-warning alert-dismissible show fade mt-2 text-center">
+                                    <div class="alert-body">
+                                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                        <strong>{{ $errors->first('comuna') }}</strong>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+                        <div class="form-group">
+                            <label for="tiporg">Tipo de organización</label>
+                            <div class="input-group">
+
+                                <select class="form-control form-control-sm" name="tiporg" id="tiporg">
+                                    <option value="" selected disabled>Seleccione...</option>
+                                    @foreach ($tipos as $tipo)
+                                        <option value="{{ $tipo->ento_codigo }}"
+                                            {{ old('tiporg') == $tipo->ento_codigo ? 'selected' : '' }}>
+                                            {{ $tipo->ento_nombre }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            @if ($errors->has('tiporg'))
+                                <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                    <div class="alert-body">
+                                        <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                        <strong>{{ $errors->first('tiporg') }}</strong>
+                                    </div>
+                                </div>
+                            @endif
+                        </div>
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary waves-effect"><i class="fas fa-save"></i>
+                                Registrar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="{{ asset('public/js/admin/donaciones/donaciones.js') }}"></script>
 @endsection

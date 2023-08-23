@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comunas;
 use App\Models\Dirigentes;
 use App\Models\DirigentesOrganizaciones;
+use App\Models\Entornos;
 use Illuminate\Support\Facades\Session;
 use App\Models\Organizaciones;
 use Illuminate\Http\Request;
@@ -18,36 +20,26 @@ class DonacionesController extends Controller
     {
         $donaciones = null;
         $organizaciones = DB::table('donaciones')
-        ->join('organizaciones','organizaciones.orga_codigo','=','donaciones.orga_codigo')
-        ->select('organizaciones.orga_nombre','organizaciones.orga_codigo')
-        ->distinct()
-        ->get();
+            ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
+            ->select('organizaciones.orga_nombre', 'organizaciones.orga_codigo')
+            ->distinct()
+            ->get();
         if (count($request->all()) > 0) {
-            if ($request->orga_codigo != "" && $request -> fecha_inicio != "" && $request -> fecha_termino != "") {
+            if ($request->orga_codigo != "" && $request->fecha_inicio != "" && $request->fecha_termino != "") {
                 $donaciones = DB::table('donaciones')
                     ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
                     ->where('donaciones.orga_codigo', '=', $request->orga_codigo)
-                    ->whereBetween('donaciones.dona_fecha_entrega', [$request ->fecha_inicio, $request->fecha_termino])
+                    ->whereBetween('donaciones.dona_fecha_entrega', [$request->fecha_inicio, $request->fecha_termino])
                     ->get();
 
-            }
-            elseif ($request->orga_codigo == "" && $request -> fecha_inicio != "" && $request -> fecha_termino != "") {
+            } elseif ($request->orga_codigo == "" && $request->fecha_inicio != "" && $request->fecha_termino != "") {
                 $donaciones = DB::table('donaciones')
                     ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
                     // ->where('donaciones.orga_codigo', '=', $request->orga_codigo)
-                    ->whereBetween('donaciones.dona_fecha_entrega', [$request ->fecha_inicio, $request->fecha_termino])
+                    ->whereBetween('donaciones.dona_fecha_entrega', [$request->fecha_inicio, $request->fecha_termino])
                     ->get();
 
-            }
-            elseif ($request->orga_codigo == "" && $request -> fecha_inicio == "" && $request -> fecha_termino == "") {
-                $donaciones = DB::table('donaciones')
-                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
-                    ->where('dona_fecha_entrega', '>', Carbon::now()->subMonth())
-                    // ->whereBetween('donaciones.dona_fecha_entrega', [$request ->fecha_inicio, $request->fecha_termino])
-                    ->get();
-
-            }
-            elseif ($request->orga_codigo != "" && $request -> fecha_inicio == "" && $request -> fecha_termino == "") {
+            } elseif ($request->orga_codigo == "" && $request->fecha_inicio == "" && $request->fecha_termino == "") {
                 $donaciones = DB::table('donaciones')
                     ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
                     ->where('donaciones.orga_codigo', '=', $request->orga_codigo)
@@ -67,10 +59,10 @@ class DonacionesController extends Controller
     public function MoreInfo($dona_codigo)
     {
         $donacion = DB::table('donaciones')
-            ->join('pilares','pilares.pila_codigo', '=', 'donaciones.pila_codigo')
-            ->join('organizaciones','organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
-            ->select('pilares.*','organizaciones.*','donaciones.*')
-            ->where('donaciones.dona_codigo','=', $dona_codigo)
+            ->join('pilares', 'pilares.pila_codigo', '=', 'donaciones.pila_codigo')
+            ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
+            ->select('pilares.*', 'organizaciones.*', 'donaciones.*')
+            ->where('donaciones.dona_codigo', '=', $dona_codigo)
             ->first();
 
         return view('admin.donaciones.info', compact('donacion'));
@@ -80,7 +72,9 @@ class DonacionesController extends Controller
     {
         return view('admin.donaciones.crear', [
             'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get(),
-            'pilares' => Pilares::where('pila_vigente', 'S')->get()
+            'pilares' => Pilares::where('pila_vigente', 'S')->get(),
+            'comunas' => Comunas::all(),
+            'tipos' => Entornos::all(),
         ]);
     }
 
@@ -165,7 +159,9 @@ class DonacionesController extends Controller
         return view('admin.donaciones.editar', [
             'donacion' => Donaciones::all()->where('dona_codigo', $dona_codigo)->first(),
             'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get(),
-            'pilares' => Pilares::where('pila_vigente', 'S')->get()
+            'pilares' => Pilares::where('pila_vigente', 'S')->get(),
+            'comunas' => Comunas::all(),
+            'tipos' => Entornos::all(),
         ]);
     }
 
