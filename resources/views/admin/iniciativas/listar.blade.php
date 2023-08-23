@@ -66,7 +66,7 @@
                                 <div class="col-2 col-md-2 col-lg-2" id="select-region">
                                     <div class="form-group">
                                         <label>Región</label>
-                                        <select class="form-control select2" id="region" name="region" onchange="consultarComunas()">
+                                        <select class="form-control select2" id="region" name="region" style="width: 100%" onchange="consultarComunas()">
                                             <option value="" selected disabled>Seleccione...</option>
                                             @forelse ($regiones as $region)
                                                 <option value="{{ $region->regi_codigo }}" {{ Request::get('region') == $region->regi_codigo ? 'selected' : '' }}>{{ $region->regi_nombre }}</option>
@@ -79,7 +79,7 @@
                                 <div class="col-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Comuna</label>
-                                        <select class="form-control select2" id="comuna" name="comuna" onchange="consultarUnidades()">
+                                        <select class="form-control select2" id="comuna" name="comuna" style="width: 100%" onchange="consultarUnidades()">
                                             <option value="" selected disabled>Seleccione...</option>
                                             @forelse ($comunas as $comuna)
                                                 <option value="{{ $comuna->comu_codigo }}" {{ Request::get('comuna') == $comuna->comu_codigo ? 'selected' : '' }}>{{ $comuna->comu_nombre }}</option>
@@ -92,7 +92,7 @@
                                 <div class="col-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Unidad</label>
-                                        <select class="form-control select2" id="unidad" name="unidad">
+                                        <select class="form-control select2" id="unidad" name="unidad" style="width: 100%">
                                             <option value="" selected disabled>Seleccione...</option>
                                             @forelse ($unidades as $unidad)
                                                 <option value="{{ $unidad->unid_codigo }}" {{ Request::get('unidad') == $unidad->unid_codigo ? 'selected' : '' }}>{{ $unidad->unid_nombre }}</option>
@@ -105,13 +105,13 @@
                                 <div class="col-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Fecha de inicio</label>
-                                        <input type="date" class="form-control datepicker" id="fecha_inicio" name="fecha_inicio">
+                                        <input type="date" class="form-control datepicker" style="width: 100%" id="fecha_inicio" name="fecha_inicio">
                                     </div>
                                 </div>
                                 <div class="col-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Fecha de termino</label>
-                                        <input type="date" class="form-control datepicker" id="fecha_termino" name="fecha_termino">
+                                        <input type="date" class="form-control datepicker" style="width: 100%" id="fecha_termino" name="fecha_termino">
                                     </div>
                                 </div>
                                 <div class="col-12 col-md-12 col-lg-12 text-right mb-4">
