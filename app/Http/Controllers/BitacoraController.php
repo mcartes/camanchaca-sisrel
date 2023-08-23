@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Asistentes;
 use App\Models\AsistentesActividades;
+use App\Models\Unidades;
 use Illuminate\Http\Request;
 use App\Models\Organizaciones;
 use App\Models\Actividades;
@@ -106,7 +107,8 @@ class BitacoraController extends Controller
         return view('admin.bitacora.crear', [
             'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get(),
             'tipos' => Entornos::all(),
-            'comunas' => Comunas::all()
+            'comunas' => Comunas::all(),
+            'unidades' => Unidades::all()
         ]);
     }
     public function guardarOrganizacion(Request $request)
@@ -186,6 +188,7 @@ class BitacoraController extends Controller
 
         $actiCrear = Actividades::insertGetId([
             'orga_codigo' => $request->organizacion,
+            'unid_codigo' => $request->unidad,
             'acti_nombre' => $request->nombre,
             'acti_fecha' => $request->realizacion,
             'acti_acuerdos' => $request->acuerdos,
@@ -208,6 +211,7 @@ class BitacoraController extends Controller
             'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get(),
             'comunas' => Comunas::all(),
             'tipos' => Entornos::all(),
+            'unidades' => Unidades::all()
         ]);
     }
 
@@ -238,6 +242,7 @@ class BitacoraController extends Controller
 
         $actiActualizar = Actividades::where('acti_codigo', $acti_codigo)->update([
             'orga_codigo' => $request->organizacion,
+            'unid_codigo' => $request->unidad,
             'acti_nombre' => $request->nombre,
             'acti_fecha' => $request->realizacion,
             'acti_acuerdos' => $request->acuerdos,

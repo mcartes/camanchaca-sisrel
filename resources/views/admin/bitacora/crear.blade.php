@@ -88,6 +88,36 @@
                                     @endif
                                 </div>
                                 <div class="form-group">
+                                    <label>Unidad</label> <label for="" style="color: red;">*</label>
+                                    @if (isset($actividad))
+                                        <select class="form-control select2" style="width: 100%" id="unidad" name="unidad">
+                                            <option value="" selected disabled>Seleccione...</option>
+                                            @forelse ($unidades as $unid)
+                                                <option value="{{ $unid->unid_codigo }}" {{ $actividad->unid_codigo==$unid->unid_codigo ? 'selected' : '' }}>{{ $unid->unid_nombre }}</option>
+                                            @empty
+                                                <option value="-1">No existen registros</option>
+                                            @endforelse
+                                        </select>
+                                    @else
+                                        <select class="form-control select2" style="width: 100%" id="unidad" name="unidad">
+                                            <option value="" selected disabled>Seleccione...</option>
+                                            @forelse ($unidades as $unid)
+                                                <option value="{{ $unid->unid_codigo }}" {{ old('unidad')==$unid->unid_codigo ? 'selected' : '' }}>{{ $unid->unid_nombre }}</option>
+                                            @empty
+                                                <option value="-1">No existen registros</option>
+                                            @endforelse
+                                        </select>
+                                    @endif
+                                    @if($errors->has('unidad'))
+                                        <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                            <div class="alert-body">
+                                                <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                                <strong>{{ $errors->first('unidad') }}</strong>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="form-group">
                                     <label>Tipo de actividad</label> <label for="" style="color: red; display:inline-block;">*</label>
                                     {{-- <input type="text" class="form-control" id="nombre" name="nombre" value="{{ old('nombre') ?? @$actividad->acti_nombre }}" autocomplete="off"> --}}
                                     @if (isset($actividad))
