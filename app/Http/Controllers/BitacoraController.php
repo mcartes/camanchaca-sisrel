@@ -23,50 +23,110 @@ use function PHPSTORM_META\type;
 class BitacoraController extends Controller
 {
 
-    public function ListarActividad(Request $request) {
+    public function ListarActividad(Request $request)
+    {
+        //TODO: Filtro modificado para comunas.
         if (count($request->all()) > 0) {
-            if ($request->orga_codigo != '' && $request->orga_codigo != '-1' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+            if ($request->comu_codigo != "" && $request->orga_codigo != '' && $request->orga_codigo != '-1' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+                return view('admin.bitacora.listar', [
+                    'actividades' => DB::table('actividades')
+                        ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+                        ->join('comunas','comunas.comu_codigo','organizaciones.comu_codigo')
+                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                        ->where(['organizaciones.orga_codigo'=>$request->orga_codigo,'comunas.comu_codigo'=>$request->comu_codigo])
+                        ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
+                        ->get(),
+                    'organizaciones' => DB::table('organizaciones')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('organizaciones.orga_codigo', 'orga_nombre')
+                        ->distinct()
+                        ->get(),
+                    'comunas' => DB::table('comunas')
+                        ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('comunas.comu_codigo', 'comu_nombre')
+                        ->distinct()
+                        ->get()
+                ]);
+            } elseif ($request->comu_codigo != "" && $request->fecha_inicio == "" && $request->fecha_termino == "") {
+                return view('admin.bitacora.listar', [
+                    'actividades' => DB::table('actividades')
+                        ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+                        ->join('comunas','comunas.comu_codigo','organizaciones.comu_codigo')
+                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                        ->where('comunas.comu_codigo',$request->comu_codigo)
+                        // ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
+                        ->get(),
+                    'organizaciones' => DB::table('organizaciones')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('organizaciones.orga_codigo', 'orga_nombre')
+                        ->distinct()
+                        ->get(),
+                    'comunas' => DB::table('comunas')
+                        ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('comunas.comu_codigo', 'comu_nombre')
+                        ->distinct()
+                        ->get()
+                ]);
+            } elseif ($request->comu_codigo != "" && $request->fecha_inicio != "" && $request->fecha_termino != ""){
+                return view('admin.bitacora.listar', [
+                    'actividades' => DB::table('actividades')
+                        ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+                        ->join('comunas','comunas.comu_codigo','organizaciones.comu_codigo')
+                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                        ->where('comunas.comu_codigo',$request->comu_codigo)
+                        ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
+                        ->get(),
+                    'organizaciones' => DB::table('organizaciones')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('organizaciones.orga_codigo', 'orga_nombre')
+                        ->distinct()
+                        ->get(),
+                    'comunas' => DB::table('comunas')
+                        ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('comunas.comu_codigo', 'comu_nombre')
+                        ->distinct()
+                        ->get()
+                ]);
+            }elseif ($request->orga_codigo != '' && $request->orga_codigo != '-1' && $request->fecha_inicio == "" && $request->fecha_termino == "") {
                 return view('admin.bitacora.listar', [
                     'actividades' => DB::table('actividades')
                         ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
                         ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
                         ->where('organizaciones.orga_codigo', $request->orga_codigo)
-                        ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
-                        ->get(),
-                    'organizaciones' => DB::table('organizaciones')
-                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
-                        ->select('organizaciones.orga_codigo', 'orga_nombre')
-                        ->distinct()
-                        ->get()
-                ]);
-            }
-            elseif($request->orga_codigo == '' && $request->orga_codigo != '-1' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
-                return view('admin.bitacora.listar', [
-                    'actividades' => DB::table('actividades')
-                        ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
-                        // ->where('organizaciones.orga_codigo', $request->orga_codigo)
-                        ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
-                        ->get(),
-                    'organizaciones' => DB::table('organizaciones')
-                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
-                        ->select('organizaciones.orga_codigo', 'orga_nombre')
-                        ->distinct()
-                        ->get()
-                ]);
-            }
-            elseif($request->orga_codigo == '' && $request->orga_codigo != '-1' && $request->fecha_inicio == "" && $request->fecha_termino == "") {
-                return view('admin.bitacora.listar', [
-                    'actividades' => DB::table('actividades')
-                        ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
-                        ->where('acti_creado', '>', Carbon::now()->subMonth())
-                        // ->where('organizaciones.orga_codigo', $request->orga_codigo)
                         // ->whereBetween('actividades.acti_fecha_cumplimiento', [$request->fecha_inicio, $request->fecha_termino])
                         ->get(),
                     'organizaciones' => DB::table('organizaciones')
                         ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
                         ->select('organizaciones.orga_codigo', 'orga_nombre')
+                        ->distinct()
+                        ->get(),
+                    'comunas' => DB::table('comunas')
+                        ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('comunas.comu_codigo', 'comu_nombre')
+                        ->distinct()
+                        ->get()
+                ]);
+            }elseif ($request->comu_codigo=='' &&  $request->orga_codigo != '' && $request->orga_codigo != '-1' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+                return view('admin.bitacora.listar', [
+                    'actividades' => DB::table('actividades')
+                        ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                        ->where('organizaciones.orga_codigo', $request->orga_codigo)
+                        ->whereBetween('actividades.acti_fecha_cumplimiento', [$request->fecha_inicio, $request->fecha_termino])
+                        ->get(),
+                    'organizaciones' => DB::table('organizaciones')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('organizaciones.orga_codigo', 'orga_nombre')
+                        ->distinct()
+                        ->get(),
+                    'comunas' => DB::table('comunas')
+                        ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('comunas.comu_codigo', 'comu_nombre')
                         ->distinct()
                         ->get()
                 ]);
@@ -82,19 +142,27 @@ class BitacoraController extends Controller
                 ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
                 ->select('organizaciones.orga_codigo', 'orga_nombre')
                 ->distinct()
+                ->get(),
+            'comunas' => DB::table('comunas')
+                ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+                ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                ->select('comunas.comu_codigo', 'comu_nombre')
+                ->distinct()
                 ->get()
         ]);
     }
 
-    public function MostrarActividad($acti_codigo) {
+    public function MostrarActividad($acti_codigo)
+    {
         $actividad = Actividades::where('acti_codigo', $acti_codigo)->first();
-        if (!$actividad) return redirect()->route('admin.actividad.listar')->with('errorActividad', 'La actividad seleccionada no se encuentra registrada en el sistema.');
+        if (!$actividad)
+            return redirect()->route('admin.actividad.listar')->with('errorActividad', 'La actividad seleccionada no se encuentra registrada en el sistema.');
 
         return view('admin.bitacora.mostrar', [
-            'actividad' => Actividades::select('*', 'organizaciones.orga_nombre','comunas.comu_nombre','unidades.unid_nombre')
+            'actividad' => Actividades::select('*', 'organizaciones.orga_nombre', 'comunas.comu_nombre', 'unidades.unid_nombre')
                 ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
-                ->join('comunas','comunas.comu_codigo','actividades.comu_codigo')
-                ->join('unidades','unidades.unid_codigo','actividades.unid_codigo')
+                ->join('comunas', 'comunas.comu_codigo', 'actividades.comu_codigo')
+                ->join('unidades', 'unidades.unid_codigo', 'actividades.unid_codigo')
                 ->where('acti_codigo', $acti_codigo)
                 ->first(),
             'participantes' => DB::table('asistentes')
@@ -105,7 +173,8 @@ class BitacoraController extends Controller
     }
 
 
-    public function CrearActividad() {
+    public function CrearActividad()
+    {
         return view('admin.bitacora.crear', [
             'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get(),
             'tipos' => Entornos::all(),
@@ -163,7 +232,8 @@ class BitacoraController extends Controller
 
         return redirect()->back()->with('errorOrganizacion', 'Ocurrió un error durante la actualización.');
     }
-    public function GuardarActividad(Request $request) {
+    public function GuardarActividad(Request $request)
+    {
         $request->validate(
             [
                 'organizacion' => 'required|exists:organizaciones,orga_codigo',
@@ -185,7 +255,7 @@ class BitacoraController extends Controller
                 'realizacion.required' => 'La fecha de realización es requerida.',
                 'realizacion.date' => 'La fecha de realización debe estar en un formato válido.',
                 'acuerdos.required' => 'Los acuerdos de la actividad son requeridos.',
-                'acuerdos.max'=> 'Los acuerdos excede el máximo de caracteres permitidos (65535).',
+                'acuerdos.max' => 'Los acuerdos excede el máximo de caracteres permitidos (65535).',
                 'cumplimiento.required' => 'La fecha de cumplimiento es requerida.',
                 'cumplimiento.date' => 'La fecha de cumplimiento debe estar en un formato válido.',
                 'avance.required' => 'El avance de la actividad es requerido.'
@@ -207,12 +277,14 @@ class BitacoraController extends Controller
             'acti_rut_mod' => Session::get('admin')->usua_rut,
             'acti_rol_mod' => Session::get('admin')->rous_codigo,
         ]);
-        if (!$actiCrear) return redirect()->back()->with('errorActividad', 'Ocurrió un error al registrar la actividad, intente más tarde.');
+        if (!$actiCrear)
+            return redirect()->back()->with('errorActividad', 'Ocurrió un error al registrar la actividad, intente más tarde.');
         return redirect()->route('admin.actividad.participantes.editar', $actiCrear)->with('exitoActividad', 'Los datos de la actividad fueron registrados correctamente.');
     }
 
 
-    public function EditarActividad($acti_codigo) {
+    public function EditarActividad($acti_codigo)
+    {
         return view('admin.bitacora.crear', [
             'actividad' => Actividades::where('acti_codigo', $acti_codigo)->first(),
             'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get(),
@@ -222,7 +294,8 @@ class BitacoraController extends Controller
         ]);
     }
 
-    public function ActualizarActividad(Request $request, $acti_codigo) {
+    public function ActualizarActividad(Request $request, $acti_codigo)
+    {
         $request->validate(
             [
                 'organizacion' => 'required|exists:organizaciones,orga_codigo',
@@ -244,7 +317,7 @@ class BitacoraController extends Controller
                 'realizacion.required' => 'La fecha de realización es requerida.',
                 'realizacion.date' => 'La fecha de realización debe estar en un formato válido.',
                 'acuerdos.required' => 'Los acuerdos de la actividad son requeridos.',
-                'acuerdos.max'=> 'Los acuerdos excede el máximo de caracteres permitidos (65535).',
+                'acuerdos.max' => 'Los acuerdos excede el máximo de caracteres permitidos (65535).',
                 'cumplimiento.required' => 'La fecha de cumplimiento es requerida.',
                 'cumplimiento.date' => 'La fecha de cumplimiento debe estar en un formato válido.',
                 'avance.required' => 'El avance de la actividad es requerido.'
@@ -264,11 +337,13 @@ class BitacoraController extends Controller
             'acti_rut_mod' => Session::get('admin')->usua_rut,
             'acti_rol_mod' => Session::get('admin')->rous_codigo
         ]);
-        if (!$actiActualizar) return redirect()->back()->with('errorActividad', 'Ocurrió un error al actualizar los datos de la actividad, intente más tarde.');
+        if (!$actiActualizar)
+            return redirect()->back()->with('errorActividad', 'Ocurrió un error al actualizar los datos de la actividad, intente más tarde.');
         return redirect()->route('admin.actividad.participantes.editar', $acti_codigo)->with('exitoActividad', 'Los datos de la actividad fueron actualizados correctamente.');
     }
 
-    public function EliminarActividad($acti_codigo) {
+    public function EliminarActividad($acti_codigo)
+    {
         $asisConsultar = DB::table('asistentes')
             ->join('asistentes_actividades', 'asistentes_actividades.asis_codigo', '=', 'asistentes.asis_codigo')
             ->select('asistentes.asis_codigo')
@@ -282,11 +357,13 @@ class BitacoraController extends Controller
         $asacEliminar = AsistentesActividades::where('acti_codigo', $acti_codigo)->delete();
         $asisEliminar = Asistentes::whereIn('asis_codigo', $asisCodigos)->delete();
         $actiEliminar = Actividades::where('acti_codigo', $acti_codigo)->delete();
-        if (!$asacEliminar || !$asisEliminar || !$actiEliminar) return redirect()->back()->with('errorActividad', 'Ocurrió un error al eliminar la actividad o algunos de los datos asociados, por favor informar al encargado de registrar y monitorear datos.');
+        if (!$asacEliminar || !$asisEliminar || !$actiEliminar)
+            return redirect()->back()->with('errorActividad', 'Ocurrió un error al eliminar la actividad o algunos de los datos asociados, por favor informar al encargado de registrar y monitorear datos.');
         return redirect()->route('admin.actividad.listar')->with('exitoActividad', 'La actividad fue eliminada correctamente.');
     }
 
-    public function EditarParticipantes($acti_codigo) {
+    public function EditarParticipantes($acti_codigo)
+    {
         return view('admin.bitacora.participantes', [
             'dirigentes' => DB::table('dirigentes')
                 ->join('dirigentes_organizaciones', 'dirigentes_organizaciones.diri_codigo', '=', 'dirigentes.diri_codigo')
@@ -303,25 +380,29 @@ class BitacoraController extends Controller
         ]);
     }
 
-    public function ListarParticipantes(Request $request) {
+    public function ListarParticipantes(Request $request)
+    {
         $validacion = Validator::make($request->all(), [
             ['actividad' => 'exists:actividades,acti_codigo'],
             ['actividad.exists' => 'La actividad no se encuentra registrada.']
         ]);
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $asistentes = DB::table('asistentes_actividades')
             ->join('asistentes', 'asistentes_actividades.asis_codigo', '=', 'asistentes.asis_codigo')
             ->join('actividades', 'asistentes_actividades.acti_codigo', '=', 'actividades.acti_codigo')
-            ->select('asistentes.asis_codigo','asistentes.asis_nombre', 'asistentes.asis_apellido', 'actividades.acti_codigo')
+            ->select('asistentes.asis_codigo', 'asistentes.asis_nombre', 'asistentes.asis_apellido', 'actividades.acti_codigo')
             ->where('actividades.acti_codigo', $request->actividad)
             ->get();
 
-        if (sizeof($asistentes) == 0) return json_encode(['estado' => false, 'resultado' => '']);
+        if (sizeof($asistentes) == 0)
+            return json_encode(['estado' => false, 'resultado' => '']);
         return json_encode(['estado' => true, 'resultado' => $asistentes]);
     }
 
-    public function AgregarParticipante(Request $request) {
+    public function AgregarParticipante(Request $request)
+    {
         if ($request->dirigente == 0 && $request->diricodigo == 0) {
             $validacion = Validator::make(
                 $request->all(),
@@ -372,22 +453,27 @@ class BitacoraController extends Controller
             'asac_rol_mod' => Session::get('admin')->rous_codigo,
         ]);
 
-        if (!$asisActGuardar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al ingresar el participante, intente más tarde.']);
+        if (!$asisActGuardar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al ingresar el participante, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'El participante fue ingresado correctamente.']);
     }
 
-    public function ObtenerDirigente(Request $request) {
+    public function ObtenerDirigente(Request $request)
+    {
         $dirigente = Dirigentes::select('diri_nombre', 'diri_apellido')->where('diri_codigo', $request->codigo)->first();
         return json_encode($dirigente);
     }
 
-    public function EliminarParticipante(Request $request) {
+    public function EliminarParticipante(Request $request)
+    {
         $verificar = Asistentes::where('asis_codigo', $request->codigo)->first();
-        if(!$verificar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error, el participante no existe en la actividad.']);
+        if (!$verificar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error, el participante no existe en la actividad.']);
 
         $eliminarAsisActivida = AsistentesActividades::where('asis_codigo', $request->codigo)->delete();
         $eliminarAsistente = Asistentes::where('asis_codigo', $request->codigo)->delete();
-        if(!$eliminarAsisActivida && !$eliminarAsistente) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar el participante de la actividad.']);
+        if (!$eliminarAsisActivida && !$eliminarAsistente)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar el participante de la actividad.']);
         return json_encode(['estado' => true, 'resultado' => 'El participante fue eliminado correctamente de la actividad.']);
     }
 }
