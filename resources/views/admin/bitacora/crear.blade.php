@@ -58,6 +58,37 @@
                             @endif
                                 @csrf
                                 <div class="form-group">
+                                    <label>Comuna</label> <label for="" style="color: red;">*</label>
+                                    @if (isset($actividad))
+                                        <select class="form-control select2" style="width: 100%" id="comuna" name="comuna">
+                                            <option value="" selected disabled>Seleccione...</option>
+                                            @forelse ($comunas as $comu)
+                                                <option value="{{ $comu->comu_codigo }}" {{ $actividad->comu_codigo==$comu->comu_codigo ? 'selected' : '' }}>{{ $comu->comu_nombre }}</option>
+                                            @empty
+                                                <option value="-1">No existen registros</option>
+                                            @endforelse
+                                        </select>
+                                    @else
+                                        <select class="form-control select2" style="width: 100%" id="comuna" name="comuna">
+                                            <option value="" selected disabled>Seleccione...</option>
+                                            @forelse ($comunas as $comun)
+                                                <option value="{{ $comun->comu_codigo }}" {{ old('comuna')==$comun->comu_codigo ? 'selected' : '' }}>{{ $comun->comu_nombre }}</option>
+                                            @empty
+                                                <option value="-1">No existen registros</option>
+                                            @endforelse
+                                        </select>
+                                    @endif
+                                    @if($errors->has('comuna'))
+                                        <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                            <div class="alert-body">
+                                                <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                                <strong>{{ $errors->first('comuna') }}</strong>
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <div class="form-group">
                                     <label>Organización</label> <label for="" style="color: red;">*</label>
                                     @if (isset($actividad))
                                         <select class="form-control select2" style="width: 100%" id="organizacion" name="organizacion">

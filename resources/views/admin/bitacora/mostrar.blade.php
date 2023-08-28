@@ -47,8 +47,16 @@
                                     <table class="table table-striped table-md">
                                         <tbody>
                                             <tr>
+                                                <td width="20%"><strong>Comuna</strong></td>
+                                                <td>{{ $actividad->comu_nombre }}</td>
+                                            </tr>
+                                            <tr>
                                                 <td width="20%"><strong>Nombre organización</strong></td>
                                                 <td>{{ $actividad->orga_nombre }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td width="20%"><strong>Nombre unidad</strong></td>
+                                                <td>{{ $actividad->unid_nombre }}</td>
                                             </tr>
                                             <tr>
                                                 <td><strong>Nombre actividad</strong></td>

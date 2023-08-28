@@ -91,8 +91,10 @@ class BitacoraController extends Controller
         if (!$actividad) return redirect()->route('admin.actividad.listar')->with('errorActividad', 'La actividad seleccionada no se encuentra registrada en el sistema.');
 
         return view('admin.bitacora.mostrar', [
-            'actividad' => Actividades::select('*', 'organizaciones.orga_nombre')
+            'actividad' => Actividades::select('*', 'organizaciones.orga_nombre','comunas.comu_nombre','unidades.unid_nombre')
                 ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+                ->join('comunas','comunas.comu_codigo','actividades.comu_codigo')
+                ->join('unidades','unidades.unid_codigo','actividades.unid_codigo')
                 ->where('acti_codigo', $acti_codigo)
                 ->first(),
             'participantes' => DB::table('asistentes')
@@ -108,7 +110,7 @@ class BitacoraController extends Controller
             'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get(),
             'tipos' => Entornos::all(),
             'comunas' => Comunas::all(),
-            'unidades' => Unidades::all()
+            'unidades' => Unidades::all(),
         ]);
     }
     public function guardarOrganizacion(Request $request)
@@ -165,6 +167,8 @@ class BitacoraController extends Controller
         $request->validate(
             [
                 'organizacion' => 'required|exists:organizaciones,orga_codigo',
+                'unidad' => 'required',
+                'comuna' => 'required',
                 'nombre' => 'required|max:255',
                 'realizacion' => 'required|date',
                 'acuerdos' => 'required|max:65535',
@@ -174,7 +178,9 @@ class BitacoraController extends Controller
             [
                 'organizacion.required' => 'La organización es requerida.',
                 'organizacion.exists' => 'La organización no se encuentra registrada.',
-                'nombre.required' => 'El nombre de la actividad es requerido.',
+                'unidad.required' => 'La unidad es un párametro requerido.',
+                'comuna.required' => 'La comuna es un párametro requerido.',
+                'nombre.required' => 'El tipo de actividad es requerido.',
                 'nombre.max' => 'El nombre de la actividad excede el máximo de caracteres permitidos (255).',
                 'realizacion.required' => 'La fecha de realización es requerida.',
                 'realizacion.date' => 'La fecha de realización debe estar en un formato válido.',
@@ -189,6 +195,7 @@ class BitacoraController extends Controller
         $actiCrear = Actividades::insertGetId([
             'orga_codigo' => $request->organizacion,
             'unid_codigo' => $request->unidad,
+            'comu_codigo' => $request->comuna,
             'acti_nombre' => $request->nombre,
             'acti_fecha' => $request->realizacion,
             'acti_acuerdos' => $request->acuerdos,
@@ -219,7 +226,9 @@ class BitacoraController extends Controller
         $request->validate(
             [
                 'organizacion' => 'required|exists:organizaciones,orga_codigo',
+                'unidad' => 'required',
                 'nombre' => 'required|max:255',
+                'comuna' => 'required',
                 'realizacion' => 'required|date',
                 'acuerdos' => 'required|max:65535',
                 'cumplimiento' => 'required|date',
@@ -228,7 +237,9 @@ class BitacoraController extends Controller
             [
                 'organizacion.required' => 'La organización es requerida.',
                 'organizacion.exists' => 'La organización no se encuentra registrada.',
-                'nombre.required' => 'El nombre de la actividad es requerido.',
+                'unidad.required' => 'La unidad es un párametro requerido.',
+                'comuna.required' => 'La comuna es un párametro requerido.',
+                'nombre.required' => 'El tipo de actividad es requerido.',
                 'nombre.max' => 'El nombre de la actividad excede el máximo de caracteres permitidos (255).',
                 'realizacion.required' => 'La fecha de realización es requerida.',
                 'realizacion.date' => 'La fecha de realización debe estar en un formato válido.',
@@ -243,6 +254,7 @@ class BitacoraController extends Controller
         $actiActualizar = Actividades::where('acti_codigo', $acti_codigo)->update([
             'orga_codigo' => $request->organizacion,
             'unid_codigo' => $request->unidad,
+            'comu_codigo' => $request->comuna,
             'acti_nombre' => $request->nombre,
             'acti_fecha' => $request->realizacion,
             'acti_acuerdos' => $request->acuerdos,
