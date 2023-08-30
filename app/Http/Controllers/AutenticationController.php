@@ -68,7 +68,7 @@ class AutenticationController extends Controller {
     {
         $request->validate(
             [
-                'run' => 'required',
+                'run' => 'required|regex:/(^[0-9]{7,8}-[0-9kK]{1}$)/i',
                 'nombre' => 'required|max:100',
                 'apellido' => 'required|max:100',
                 'email' => 'max:100',
@@ -86,6 +86,7 @@ class AutenticationController extends Controller {
                 'nombre.max' => 'El nombre ingresado excede el máximo de caracteres permitidos (100).',
                 'apellido.required' => 'El apellido del usuario es requerido.',
                 'apellido.max' => 'El apellido ingresado excede el máximo de caracteres permitidos (100).',
+                'run.regex' => 'El formato del RUN debe ser 12345678-9',
                 // 'email.required' => 'El email del usuario es requerido.',
                 'email.max' => 'El email ingresado excede el máximo de caracteres permitidos (100).',
                 'email_alt.max' => 'El email alternativo ingresado excede el máximo de caracteres permitidos (100).',
