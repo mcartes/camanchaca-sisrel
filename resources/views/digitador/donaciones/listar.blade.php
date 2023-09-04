@@ -31,6 +31,23 @@
                         <div class="card-body">
                             <form action="{{ route('digitador.donaciones.listar') }}" method="GET">
                                 <div class="row">
+                                    <div class="col-2 col-md-2 col-lg-2">
+                                        <div class="form-group">
+                                            <label>Comuna</label>
+                                            <select class="form-control select2" id="comu_codigo" name="comu_codigo"
+                                                style="width: 100%">
+                                                <option value="" selected disabled>Seleccione...</option>
+                                                @forelse ($comunas as $comuna)
+                                                    <option value="{{ $comuna->comu_codigo }}"
+                                                        {{ Request::get('comu_codigo') == $comuna->comu_codigo ? 'selected' : '' }}>
+                                                        {{ $comuna->comu_nombre }}
+                                                    </option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="col-3"></div>
                                     <div class="col-4 col-md-4 col-lg-4">
                                         <div class="form-group">
@@ -126,7 +143,7 @@
             display: none;
         }
     </style>
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script src="{{ asset('public/bundles/datatables/datatables.min.js') }}"></script>
     <script src="{{ asset('public/bundles/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js') }}"></script>
