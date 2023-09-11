@@ -53,10 +53,46 @@
                                         <input onchange="MostrarDirigentes()" class="form-check-input" type="checkbox"
                                             name="esdirigente" id="esdirigente">
                                         <small class="form-check-label"><strong>El receptor es dirigente</strong></small>
+
+                                        @if ($errors->has('orga_codigo'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2 ">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('orga_codigo') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
                                     </div>
                                 </div>
 
-                                <div class="col-4 col-md-4 col-lg-4" id="div-select-dirigentes"
+                                <div class="col-2 col-md-2 col-lg-2">
+                                    <div class="form-group">
+                                        <label>Comuna</label>
+                                        <select class="form-control select2" id="comu_codigo" name="comu_codigo">
+                                            <option value="" selected disabled>Seleccione...</option>
+                                            @forelse ($comunas as $comuna)
+                                                <option value="{{ $comuna->comu_codigo }}"
+                                                    {{ Request::get('comu_codigo') == $comuna->comu_codigo ? 'selected' : '' }}>
+                                                    {{ $comuna->comu_nombre }}
+                                                </option>
+                                            @empty
+                                                <option value="-1">No existen registros</option>
+                                            @endforelse
+                                        </select>
+                                        @if ($errors->has('comu_codigo'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2 ">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('comu_codigo') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-2 col-md-2 col-lg-2" id="div-select-dirigentes"
                                     name="div-select-dirigentes">
                                     <div class="form-group">
                                         <label>Dirigente</label>

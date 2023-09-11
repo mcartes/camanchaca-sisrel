@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use App\Models\Asistentes;
 use App\Models\AsistentesActividades;
+use App\Models\Comunas;
+use App\Models\Entornos;
+use App\Models\Unidades;
 use Illuminate\Http\Request;
 use App\Models\Organizaciones;
 use App\Models\Actividades;
@@ -15,7 +18,7 @@ use App\Models\Dirigentes;
 use Illuminate\Support\Facades\Validator;
 
 class Digi_Bitacora extends Controller {
-    
+
     public function ListarActividad(Request $request) {
         if (count($request->all()) > 0) {
             if ($request->orga_codigo!='' && $request->orga_codigo!='-1') {
@@ -66,7 +69,10 @@ class Digi_Bitacora extends Controller {
 
     public function CrearActividad() {
         return view('digitador.bitacora.crear', [
-            'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get()
+            'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get(),
+            'tipos' => Entornos::all(),
+            'comunas' => Comunas::all(),
+            'unidades' => Unidades::all(),
         ]);
     }
 
@@ -74,6 +80,8 @@ class Digi_Bitacora extends Controller {
         $request->validate(
             [
                 'organizacion' => 'required|exists:organizaciones,orga_codigo',
+                'unidad' => 'required',
+                'comuna' => 'required',
                 'nombre' => 'required|max:255',
                 'realizacion' => 'required|date',
                 'acuerdos' => 'required|max:65535',
@@ -83,12 +91,14 @@ class Digi_Bitacora extends Controller {
             [
                 'organizacion.required' => 'La organización es requerida.',
                 'organizacion.exists' => 'La organización no se encuentra registrada.',
-                'nombre.required' => 'El nombre de la actividad es requerido.',
+                'unidad.required' => 'La unidad es un párametro requerido.',
+                'comuna.required' => 'La comuna es un párametro requerido.',
+                'nombre.required' => 'El tipo de actividad es requerido.',
                 'nombre.max' => 'El nombre de la actividad excede el máximo de caracteres permitidos (255).',
                 'realizacion.required' => 'La fecha de realización es requerida.',
                 'realizacion.date' => 'La fecha de realización debe estar en un formato válido.',
                 'acuerdos.required' => 'Los acuerdos de la actividad son requeridos.',
-                'acuerdos.max'=> 'Los acuerdos excede el máximo de caracteres permitidos (65535).',
+                'acuerdos.max' => 'Los acuerdos excede el máximo de caracteres permitidos (65535).',
                 'cumplimiento.required' => 'La fecha de cumplimiento es requerida.',
                 'cumplimiento.date' => 'La fecha de cumplimiento debe estar en un formato válido.',
                 'avance.required' => 'El avance de la actividad es requerido.'
@@ -97,6 +107,8 @@ class Digi_Bitacora extends Controller {
 
         $actiCrear = Actividades::insertGetId([
             'orga_codigo' => $request->organizacion,
+            'unid_codigo' => $request->unidad,
+            'comu_codigo' => $request->comuna,
             'acti_nombre' => $request->nombre,
             'acti_fecha' => $request->realizacion,
             'acti_acuerdos' => $request->acuerdos,
@@ -116,7 +128,10 @@ class Digi_Bitacora extends Controller {
     public function EditarActividad($acti_codigo) {
         return view('digitador.bitacora.crear', [
             'actividad' => Actividades::where('acti_codigo', $acti_codigo)->first(),
-            'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get()
+            'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get(),
+            'comunas' => Comunas::all(),
+            'tipos' => Entornos::all(),
+            'unidades' => Unidades::all()
         ]);
     }
 
@@ -124,7 +139,9 @@ class Digi_Bitacora extends Controller {
         $request->validate(
             [
                 'organizacion' => 'required|exists:organizaciones,orga_codigo',
+                'unidad' => 'required',
                 'nombre' => 'required|max:255',
+                'comuna' => 'required',
                 'realizacion' => 'required|date',
                 'acuerdos' => 'required|max:65535',
                 'cumplimiento' => 'required|date',
@@ -133,12 +150,14 @@ class Digi_Bitacora extends Controller {
             [
                 'organizacion.required' => 'La organización es requerida.',
                 'organizacion.exists' => 'La organización no se encuentra registrada.',
-                'nombre.required' => 'El nombre de la actividad es requerido.',
+                'unidad.required' => 'La unidad es un párametro requerido.',
+                'comuna.required' => 'La comuna es un párametro requerido.',
+                'nombre.required' => 'El tipo de actividad es requerido.',
                 'nombre.max' => 'El nombre de la actividad excede el máximo de caracteres permitidos (255).',
                 'realizacion.required' => 'La fecha de realización es requerida.',
                 'realizacion.date' => 'La fecha de realización debe estar en un formato válido.',
                 'acuerdos.required' => 'Los acuerdos de la actividad son requeridos.',
-                'acuerdos.max'=> 'Los acuerdos excede el máximo de caracteres permitidos (65535).',
+                'acuerdos.max' => 'Los acuerdos excede el máximo de caracteres permitidos (65535).',
                 'cumplimiento.required' => 'La fecha de cumplimiento es requerida.',
                 'cumplimiento.date' => 'La fecha de cumplimiento debe estar en un formato válido.',
                 'avance.required' => 'El avance de la actividad es requerido.'
@@ -147,6 +166,8 @@ class Digi_Bitacora extends Controller {
 
         $actiActualizar = Actividades::where('acti_codigo', $acti_codigo)->update([
             'orga_codigo' => $request->organizacion,
+            'unid_codigo' => $request->unidad,
+            'comu_codigo' => $request->comuna,
             'acti_nombre' => $request->nombre,
             'acti_fecha' => $request->realizacion,
             'acti_acuerdos' => $request->acuerdos,
@@ -201,7 +222,7 @@ class Digi_Bitacora extends Controller {
             ['actividad.exists' => 'La actividad no se encuentra registrada.']
         ]);
         if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
-        
+
         $asistentes = DB::table('asistentes_actividades')
             ->join('asistentes', 'asistentes_actividades.asis_codigo', '=', 'asistentes.asis_codigo')
             ->join('actividades', 'asistentes_actividades.acti_codigo', '=', 'actividades.acti_codigo')

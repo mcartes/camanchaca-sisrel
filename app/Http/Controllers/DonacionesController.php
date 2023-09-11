@@ -96,6 +96,7 @@ class DonacionesController extends Controller
     {
         return view('admin.donaciones.crear', [
             'organizaciones' => Organizaciones::where('orga_vigente', 'S')->get(),
+            'comunas' => Comunas::all(),
             'pilares' => Pilares::where('pila_vigente', 'S')->get(),
             'comunas' => Comunas::all(),
             'tipos' => Entornos::all(),
@@ -117,7 +118,9 @@ class DonacionesController extends Controller
                 'dona_declaracion_jurada' => 'required',
                 'dona_tipo_aporte' => 'required',
                 'dona_descripcion' => 'max:400',
-                'pila_codigo' => 'required'
+                'pila_codigo' => 'required',
+                'orga_codigo' => 'required',
+                'comu_codigo' => 'required'
 
             ],
             [
@@ -137,7 +140,9 @@ class DonacionesController extends Controller
                 'dona_declaracion_jurada.required' => 'El estado de la declaración jurada es requerido.',
                 'dona_tipo_aporte.required' => 'El tipo de aporte es requerido.',
                 'dona_descripcion.required' => 'La descripción supera el máximo de carácteres permitidos.',
-                'pila_codigo' => 'Es necesario que seleccione un pilar para la donación.'
+                'pila_codigo.required' => 'Es necesario que seleccione un pilar para la donación.',
+                'comu_codigo.required' => 'Es necesario que seleccione una comuna para la donación.',
+                'orga_codigo.required' => 'Es necesario que seleccione una organización para la donación.'
 
             ]
         );
@@ -148,6 +153,7 @@ class DonacionesController extends Controller
 
         $donacion = Donaciones::create([
             'orga_codigo' => $request->organizacion,
+            'comu_codigo' => $request->comu_codigo,
             'pila_codigo' => $request->pila_codigo,
             'dona_motivo' => $request->dona_motivo,
             'diri_codigo' => $request->dirigente,
