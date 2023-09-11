@@ -15,19 +15,58 @@ class Digi_Donaciones extends Controller
 {
     public function ListarDonaciones(Request $request)
     {
+        //TODO: Filtro de comunas en donaciones
         $donaciones = null;
+        $comunas = DB::table('comunas')->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+            ->join('donaciones', 'donaciones.orga_codigo', 'organizaciones.orga_codigo')
+            ->distinct()
+            ->get();
+        ;
         $organizaciones = DB::table('donaciones')
-        ->join('organizaciones','organizaciones.orga_codigo','=','donaciones.orga_codigo')
-        ->select('organizaciones.orga_nombre','organizaciones.orga_codigo')
-        ->distinct()
-        ->get();
+            ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
+            ->select('organizaciones.orga_nombre', 'organizaciones.orga_codigo')
+            ->distinct()
+            ->get();
         if (count($request->all()) > 0) {
-            if ($request->orga_codigo != "") {
+            if ($request->comu_codigo != '' && $request->orga_codigo != "" && $request->fecha_inicio != "" && $request->fecha_termino != "") {
                 $donaciones = DB::table('donaciones')
                     ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
-                    ->where('donaciones.orga_codigo', '=', $request->orga_codigo)
+                    ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
+                    ->where(['donaciones.orga_codigo' => $request->orga_codigo, 'comunas.comu_codigo' => $request->comu_codigo])
+                    ->whereBetween('donaciones.dona_fecha_entrega', [$request->fecha_inicio, $request->fecha_termino])
                     ->get();
 
+            } elseif ($request->comu_codigo != '' && $request->orga_codigo == "" && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+                $donaciones = DB::table('donaciones')
+                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
+                    ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
+                    ->where('comunas.comu_codigo', $request->comu_codigo)
+                    ->whereBetween('donaciones.dona_fecha_entrega', [$request->fecha_inicio, $request->fecha_termino])
+                    ->get();
+
+            } elseif ($request->comu_codigo != '' && $request->orga_codigo == "" && $request->fecha_inicio == "" && $request->fecha_termino == "") {
+                $donaciones = DB::table('donaciones')
+                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
+                    ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
+                    ->where('comunas.comu_codigo', $request->comu_codigo)
+                    ->get();
+            } elseif ($request->comu_codigo != '' && $request->orga_codigo != "" && $request->fecha_inicio == "" && $request->fecha_termino == "") {
+                $donaciones = DB::table('donaciones')
+                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
+                    ->join('comunas', 'comunas.comu_codigo', 'organizaciones.comu_codigo')
+                    ->where(['donaciones.orga_codigo' => $request->orga_codigo, 'comunas.comu_codigo' => $request->comu_codigo])
+                    ->get();
+            } elseif ($request->comu_codigo == '' && $request->orga_codigo != "" && $request->fecha_inicio == "" && $request->fecha_termino == "") {
+                $donaciones = DB::table('donaciones')
+                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
+                    ->where('organizaciones.orga_codigo', $request->orga_codigo)
+                    ->get();
+            } elseif ($request->comu_codigo == '' && $request->orga_codigo != "" && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+                $donaciones = DB::table('donaciones')
+                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
+                    ->where('organizaciones.orga_codigo', $request->orga_codigo)
+                    ->whereBetween('donaciones.dona_fecha_entrega', [$request->fecha_inicio, $request->fecha_termino])
+                    ->get();
             }
         } else {
             $donaciones = DB::table('donaciones')
@@ -35,7 +74,7 @@ class Digi_Donaciones extends Controller
                 ->select('donaciones.*', 'organizaciones.orga_nombre')
                 ->get();
         }
-        return view('digitador.donaciones.listar', ['donaciones' => $donaciones, 'organizaciones' => $organizaciones]);
+        return view('digitador.donaciones.listar', ['donaciones' => $donaciones, 'organizaciones' => $organizaciones, 'comunas' => $comunas]);
     }
 
     public function MoreInfo($dona_codigo)

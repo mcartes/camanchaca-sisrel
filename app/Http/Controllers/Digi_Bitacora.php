@@ -19,18 +19,110 @@ use Illuminate\Support\Facades\Validator;
 
 class Digi_Bitacora extends Controller {
 
-    public function ListarActividad(Request $request) {
+    public function ListarActividad(Request $request)
+    {
+        //TODO: Filtro modificado para comunas.
         if (count($request->all()) > 0) {
-            if ($request->orga_codigo!='' && $request->orga_codigo!='-1') {
+            if ($request->comu_codigo != "" && $request->orga_codigo != '' && $request->orga_codigo != '-1' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+                return view('digitador.bitacora.listar', [
+                    'actividades' => DB::table('actividades')
+                        ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+                        ->join('comunas','comunas.comu_codigo','organizaciones.comu_codigo')
+                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                        ->where(['organizaciones.orga_codigo'=>$request->orga_codigo,'comunas.comu_codigo'=>$request->comu_codigo])
+                        ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
+                        ->get(),
+                    'organizaciones' => DB::table('organizaciones')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('organizaciones.orga_codigo', 'orga_nombre')
+                        ->distinct()
+                        ->get(),
+                    'comunas' => DB::table('comunas')
+                        ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('comunas.comu_codigo', 'comu_nombre')
+                        ->distinct()
+                        ->get()
+                ]);
+            } elseif ($request->comu_codigo != "" && $request->fecha_inicio == "" && $request->fecha_termino == "") {
+                return view('digitador.bitacora.listar', [
+                    'actividades' => DB::table('actividades')
+                        ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+                        ->join('comunas','comunas.comu_codigo','organizaciones.comu_codigo')
+                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                        ->where('comunas.comu_codigo',$request->comu_codigo)
+                        // ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
+                        ->get(),
+                    'organizaciones' => DB::table('organizaciones')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('organizaciones.orga_codigo', 'orga_nombre')
+                        ->distinct()
+                        ->get(),
+                    'comunas' => DB::table('comunas')
+                        ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('comunas.comu_codigo', 'comu_nombre')
+                        ->distinct()
+                        ->get()
+                ]);
+            } elseif ($request->comu_codigo != "" && $request->fecha_inicio != "" && $request->fecha_termino != ""){
+                return view('digitador.bitacora.listar', [
+                    'actividades' => DB::table('actividades')
+                        ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+                        ->join('comunas','comunas.comu_codigo','organizaciones.comu_codigo')
+                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                        ->where('comunas.comu_codigo',$request->comu_codigo)
+                        ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
+                        ->get(),
+                    'organizaciones' => DB::table('organizaciones')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('organizaciones.orga_codigo', 'orga_nombre')
+                        ->distinct()
+                        ->get(),
+                    'comunas' => DB::table('comunas')
+                        ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('comunas.comu_codigo', 'comu_nombre')
+                        ->distinct()
+                        ->get()
+                ]);
+            }elseif ($request->orga_codigo != '' && $request->orga_codigo != '-1' && $request->fecha_inicio == "" && $request->fecha_termino == "") {
                 return view('digitador.bitacora.listar', [
                     'actividades' => DB::table('actividades')
                         ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
                         ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
                         ->where('organizaciones.orga_codigo', $request->orga_codigo)
+                        // ->whereBetween('actividades.acti_fecha_cumplimiento', [$request->fecha_inicio, $request->fecha_termino])
                         ->get(),
                     'organizaciones' => DB::table('organizaciones')
                         ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
                         ->select('organizaciones.orga_codigo', 'orga_nombre')
+                        ->distinct()
+                        ->get(),
+                    'comunas' => DB::table('comunas')
+                        ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('comunas.comu_codigo', 'comu_nombre')
+                        ->distinct()
+                        ->get()
+                ]);
+            }elseif ($request->comu_codigo=='' &&  $request->orga_codigo != '' && $request->orga_codigo != '-1' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+                return view('digitador.bitacora.listar', [
+                    'actividades' => DB::table('actividades')
+                        ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+                        ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                        ->where('organizaciones.orga_codigo', $request->orga_codigo)
+                        ->whereBetween('actividades.acti_fecha_cumplimiento', [$request->fecha_inicio, $request->fecha_termino])
+                        ->get(),
+                    'organizaciones' => DB::table('organizaciones')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('organizaciones.orga_codigo', 'orga_nombre')
+                        ->distinct()
+                        ->get(),
+                    'comunas' => DB::table('comunas')
+                        ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+                        ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                        ->select('comunas.comu_codigo', 'comu_nombre')
                         ->distinct()
                         ->get()
                 ]);
@@ -45,6 +137,12 @@ class Digi_Bitacora extends Controller {
             'organizaciones' => DB::table('organizaciones')
                 ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
                 ->select('organizaciones.orga_codigo', 'orga_nombre')
+                ->distinct()
+                ->get(),
+            'comunas' => DB::table('comunas')
+                ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+                ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                ->select('comunas.comu_codigo', 'comu_nombre')
                 ->distinct()
                 ->get()
         ]);
