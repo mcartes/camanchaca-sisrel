@@ -12,6 +12,8 @@ use App\Models\Organizaciones;
 
 use App\Models\Asistentes;
 use App\Models\AsistentesActividades;
+use App\Models\Comunas;
+use App\Models\Unidades;
 
 class BitacoraController {
     private $jwt;
@@ -43,13 +45,48 @@ class BitacoraController {
         
         $this->jwt->protectRoute($request, 1);
 
-        $data = [
-            'actividades' => DB::table('actividades')
+        if ($request->comu_codigo != "" && $request->orga_codigo != '' && $request->orga_codigo != '-1' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+            $actividades = DB::table('actividades')
+                ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+                ->join('comunas','comunas.comu_codigo','organizaciones.comu_codigo')
+                ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                ->where(['organizaciones.orga_codigo'=>$request->orga_codigo,'comunas.comu_codigo'=>$request->comu_codigo])
+                ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
+                ->get();
+        } elseif ($request->comu_codigo != "" && $request->fecha_inicio == "" && $request->fecha_termino == "") {
+            $actividades = DB::table('actividades')
+                ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+                ->join('comunas','comunas.comu_codigo','organizaciones.comu_codigo')
+                ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                ->where('comunas.comu_codigo',$request->comu_codigo)
+                ->get();
+        } elseif ($request->comu_codigo != "" && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+            $actividades = DB::table('actividades')
+                ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+                ->join('comunas','comunas.comu_codigo','organizaciones.comu_codigo')
+                ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                ->where('comunas.comu_codigo',$request->comu_codigo)
+                ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
+                ->get();
+        } elseif ($request->orga_codigo != '' && $request->orga_codigo != '-1' && $request->fecha_inicio == "" && $request->fecha_termino == "") {
+            $actividades = DB::table('actividades')
                 ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
                 ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
                 ->where('organizaciones.orga_codigo', $request->orga_codigo)
-                ->whereBetween('actividades.acti_creado', [$request->fecha_inicio, $request->fecha_termino])
-                ->get(),
+                ->get();
+        } else if ($request->comu_codigo=='' &&  $request->orga_codigo != '' && $request->orga_codigo != '-1' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
+            $actividades = DB::table('actividades')
+                ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+                ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                ->where('organizaciones.orga_codigo', $request->orga_codigo)
+                ->whereBetween('actividades.acti_fecha_cumplimiento', [$request->fecha_inicio, $request->fecha_termino])
+                ->get();
+        } else {
+            $actividades = [];
+        }
+
+        $data = [
+            'actividades' => $actividades,
             'organizaciones' => DB::table('organizaciones')
                 ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
                 ->select('organizaciones.orga_codigo', 'orga_nombre')
@@ -68,6 +105,8 @@ class BitacoraController {
         $request->validate(
             [
                 'organizacion' => 'required|exists:organizaciones,orga_codigo',
+                'unidad' => 'required',
+                'comuna' => 'required',
                 'nombre' => 'required|max:255',
                 'realizacion' => 'required|date',
                 'acuerdos' => 'required|max:65535',
@@ -77,6 +116,8 @@ class BitacoraController {
             [
                 'organizacion.required' => 'La organización es requerida.',
                 'organizacion.exists' => 'La organización no se encuentra registrada.',
+                'unidad.required' => 'La unidad es un párametro requerido.',
+                'comuna.required' => 'La comuna es un párametro requerido.',
                 'nombre.required' => 'El nombre de la actividad es requerido.',
                 'nombre.max' => 'El nombre de la actividad excede el máximo de caracteres permitidos (255).',
                 'realizacion.required' => 'La fecha de realización es requerida.',
@@ -91,6 +132,8 @@ class BitacoraController {
 
         $actiCrear = Actividades::insertGetId([
             'orga_codigo' => $request->organizacion,
+            'unid_codigo' => $request->unidad,
+            'comu_codigo' => $request->comuna,
             'acti_nombre' => $request->nombre,
             'acti_fecha' => $request->realizacion,
             'acti_acuerdos' => $request->acuerdos,
@@ -116,6 +159,8 @@ class BitacoraController {
         $request->validate(
             [
                 'organizacion' => 'required|exists:organizaciones,orga_codigo',
+                'unidad' => 'required',
+                'comuna' => 'required',
                 'nombre' => 'required|max:255',
                 'realizacion' => 'required|date',
                 'acuerdos' => 'required|max:65535',
@@ -126,6 +171,8 @@ class BitacoraController {
             [
                 'organizacion.required' => 'La organización es requerida.',
                 'organizacion.exists' => 'La organización no se encuentra registrada.',
+                'unidad.required' => 'La unidad es un párametro requerido.',
+                'comuna.required' => 'La comuna es un párametro requerido.',
                 'nombre.required' => 'El nombre de la actividad es requerido.',
                 'nombre.max' => 'El nombre de la actividad excede el máximo de caracteres permitidos (255).',
                 'realizacion.required' => 'La fecha de realización es requerida.',
@@ -141,6 +188,8 @@ class BitacoraController {
 
         $actiActualizar = Actividades::where('acti_codigo', $request->actividad_code)->update([
             'orga_codigo' => $request->organizacion,
+            'unid_codigo' => $request->unidad,
+            'comu_codigo' => $request->comuna,
             'acti_nombre' => $request->nombre,
             'acti_fecha' => $request->realizacion,
             'acti_acuerdos' => $request->acuerdos,
@@ -174,8 +223,19 @@ class BitacoraController {
         
         $this->jwt->protectRoute($request, 1);
 
+        $actividades = DB::table('actividades')
+                ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'actividades.orga_codigo')
+                ->select('orga_nombre', 'acti_codigo', 'acti_nombre', 'acti_fecha', 'acti_fecha_cumplimiento', 'acti_avance', 'acti_vigente')
+                ->get();
+        $comunas = Comunas::all();
         $organizaciones = Organizaciones::where('orga_vigente', 'S')->get();
-        return response(["organizaciones" => $organizaciones], 200);
+        $unidades = Unidades::all();
+        return response([
+            "actividades" => $actividades,
+            "comunas" => $comunas,
+            "organizaciones" => $organizaciones,
+            "unidades" => $unidades
+        ], 200);
         
     }
 
