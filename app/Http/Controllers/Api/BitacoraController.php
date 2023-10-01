@@ -34,7 +34,13 @@ class BitacoraController {
                 ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
                 ->select('organizaciones.orga_codigo', 'orga_nombre')
                 ->distinct()
-                ->get()
+                ->get(),
+            'comunas' => DB::table('comunas')
+                ->join('organizaciones', 'organizaciones.comu_codigo', 'comunas.comu_codigo')
+                ->join('actividades', 'actividades.orga_codigo', '=', 'organizaciones.orga_codigo')
+                ->select('comunas.comu_codigo', 'comu_nombre')
+                ->distinct()
+                ->get(),
         ];
 
         return response($data, 200);
