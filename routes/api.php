@@ -21,4 +21,4 @@ Route::post("mobile/activity_date", [BitacoraController::class, 'getActivityByDa
 Route::post("mobile/digitador/actividad/listar-participantes", [DigitadorBitacoraController::class, 'listarParticipantes']);
 Route::post("mobile/digitador/actividad/obtener-dirigente", [DigitadorBitacoraController::class, 'obtenerDirigente']);
 Route::post("mobile/digitador/actividad/agregar-participante", [DigitadorBitacoraController::class, 'agregarParticipante']);
-Route::put("mobile/digitador/actividad/eliminar-participante", [DigitadorBitacoraController::class, 'eliminarParticipante']);
+Route::delete("mobile/digitador/actividad/eliminar-participante", [DigitadorBitacoraController::class, 'eliminarParticipante']);
