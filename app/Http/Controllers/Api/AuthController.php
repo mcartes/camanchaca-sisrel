@@ -10,6 +10,8 @@ use App\Models\Usuarios;
 
 use App\Http\Controllers\Controller;
 
+use Carbon\Carbon;
+
 class AuthController extends Controller {
 
     private $jwt;
@@ -20,6 +22,17 @@ class AuthController extends Controller {
 
     public function getRole() {
         return RolesUsuarios::select('rous_codigo', 'rous_nombre')->orderBy('rous_codigo', 'asc')->get();
+    }
+
+    public function checkToken(Request $request) {
+        $token = $request->header("auth-token");
+        $check = $this->jwt->checkToken($token);
+        
+        if (!$check) {
+            return ["response" => "no"];
+        } else {
+            return ["response" => "yes"];
+        }
     }
 
     public function logIn(Request $request) {
@@ -49,5 +62,41 @@ class AuthController extends Controller {
         // Generar JSON Web Token del usuario y enviarlo al cliente
         return response(["token" => $this->jwt->createToken($usuario->usua_rut, $usuario->rous_codigo), "run" => $usuario->usua_rut, "role" => $usuario->rous_codigo], 200);
 
+    }
+
+    public function changePassword(Request $request) {
+        $check = $this->jwt->checkToken($request->header("auth-token"));
+        if (!$check) return response(["message" => "Usted no está autorizado."], 403);
+        
+        $run = $check["run"];
+        $role = $check["role"];
+        $user = Usuarios::where(['usua_rut' => $run, 'rous_codigo' => $role])->first();
+        if (!$user) return response(["message" => "Usuario no encontrado.", 404]);
+
+        if ($user->usua_vigente == 'N') return response(['message' => 'El usuario no se encuentra habilitado para ingresar al sistema. Por favor verifique si su rol es el correcto, de lo contrario, notifique al administrador.']);
+
+        $request->validate(['current_password' => 'required', 'new_password' => 'required', 'repeat_new_password' => 'required']);
+
+        $verify_password = Hash::check($request->current_password,$user->usua_clave);
+
+        if (!$verify_password) return response(['message' => 'La contraseña actual es incorrecta.', 404]);
+
+        $new_password = $request->new_password;
+        $repeat_new_password = $request->repeat_new_password;
+
+        if ($new_password != $repeat_new_password) return response(['message' => 'Las nuevas contraseñas no coinciden']);
+
+        $update = Usuarios::where(['usua_rut' => $run, 'rous_codigo' => $role])->update([
+            'usua_clave' => Hash::make($new_password),
+            'usua_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+            'usua_rut_mod' => $run,
+            'usua_rol_mod' => $role
+        ]);
+
+        if (!$update) {
+            return response(["message" => "Ha ocurrido un error al actualizar su contraseña"]);
+        } else {
+            return response(["message" => "Contraseña actualizada satisfactoriamente."], 200);
+        }
     }
 }

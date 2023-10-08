@@ -8,6 +8,8 @@ use App\Http\Controllers\Api\DigitadorBitacoraController;
 
 Route::get("mobile/role", [AuthController::class, 'getRole']);
 Route::post("mobile/login", [AuthController::class, 'logIn']);
+Route::post("mobile/check-token", [AuthController::class, 'checkToken']);
+Route::put("mobile/change-password", [AuthController::class, 'changePassword']);
 Route::get("mobile/activities", [BitacoraController::class, 'getActivities']);
 Route::post("mobile/filter-activities", [BitacoraController::class,'filterActivities']);
 Route::post("mobile/new-activity", [BitacoraController::class, 'createActivity']);
