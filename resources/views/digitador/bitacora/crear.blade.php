@@ -207,7 +207,7 @@
                                         <option value="Puertas Abiertas"
                                             {{ $actividad->acti_nombre == 'Puertas Abiertas' ? 'selected' : '' }}>Puertas
                                             Abiertas</option>
-                                        <option value="Reunión (Inverisón Social)"
+                                        <option value="Reunión (Inversión Social)"
                                             {{ $actividad->acti_nombre == 'Reunión (Inverisón Social)' ? 'selected' : '' }}>
                                             Reunión (Inverisón Social)</option>
                                         <option value="Reunión Alcaldes"

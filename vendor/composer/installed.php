@@ -1,15 +1,24 @@
 <?php return array(
     'root' => array(
         'name' => 'laravel/laravel',
-        'pretty_version' => 'v8.6.12',
-        'version' => '8.6.12.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-develop',
+        'version' => 'dev-develop',
+        'reference' => '5918ea0091178965b6cee8d8e6aff6a973521eb7',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
+        'adhocore/jwt' => array(
+            'pretty_version' => '1.1.2',
+            'version' => '1.1.2.0',
+            'reference' => '6c434af7170090bb7a8880d2bc220a2254ba7899',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../adhocore/jwt',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'asm89/stack-cors' => array(
             'pretty_version' => 'v2.1.1',
             'version' => '2.1.1.0',
@@ -395,9 +404,9 @@
             'dev_requirement' => false,
         ),
         'laravel/laravel' => array(
-            'pretty_version' => 'v8.6.12',
-            'version' => '8.6.12.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-develop',
+            'version' => 'dev-develop',
+            'reference' => '5918ea0091178965b6cee8d8e6aff6a973521eb7',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -730,8 +739,8 @@
         'psr/log-implementation' => array(
             'dev_requirement' => false,
             'provided' => array(
-                0 => '1.0|2.0',
-                1 => '1.0.0 || 2.0.0 || 3.0.0',
+                0 => '1.0.0 || 2.0.0 || 3.0.0',
+                1 => '1.0|2.0',
             ),
         ),
         'psr/simple-cache' => array(
