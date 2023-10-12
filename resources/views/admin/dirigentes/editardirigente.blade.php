@@ -5,8 +5,8 @@
             <div class="row">
                 <div class="col-12">
                     <div class="row">
-                        <div class="col-3"></div>
-                        <div class="col-6">
+                        <div class="col-xl-3"></div>
+                        <div class="col-xl-6">
                             @if (Session::has('errorDirigente'))
                                 <div class="alert alert-danger alert-dismissible show fade mb-4">
                                     <div class="alert-body">
@@ -18,12 +18,12 @@
 
 
                         </div>
-                        <div class="col-3"></div>
+                        <div class="col-xl-3"></div>
                     </div>
                     <div class="row">
-                        <div class="col-2 col-md-2 col-lg-2"></div>
+                        <div class="col-xl-2 col-md-2 col-lg-2"></div>
 
-                        <div class="col-8 col-md-8 col-lg-8">
+                        <div class="col-xl-8 col-md-8 col-lg-8">
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Editar dirigente</h4>
@@ -35,7 +35,7 @@
                                         @csrf
 
                                         <div class="row">
-                                            <div class="col-4 col-md-4 col-lg-4">
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Nombre</label>
                                                     <div class="input-group">
@@ -62,7 +62,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-4 col-md-4 col-lg-4">
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Apellido</label>
                                                     <div class="input-group">
@@ -89,7 +89,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-4 col-md-4 col-lg-4">
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Teléfono</label>
                                                     <div class="input-group">
@@ -116,7 +116,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="col-4 col-md-4 col-lg-4">
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Correo electrónico</label>
                                                     <div class="input-group">
@@ -144,7 +144,7 @@
                                             </div>
 
 
-                                            <div class="col-4 col-md-4 col-lg-4">
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Cargo del dirigente</label>
                                                     <div class="input-group">
@@ -171,7 +171,7 @@
                                             </div>
 
 
-                                            <div class="col-4 col-md-4 col-lg-4">
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Seleccione el estado del dirigente </label>
                                                     <div class="input-group">
@@ -187,7 +187,7 @@
                                                             <option value="N" {{ $diri->diri_vigente == 'N' ? 'selected' : '' }}>Inactivo
                                                             </option>
                                                         </select>
-    
+
                                                     </div>
                                                     @if ($errors->has('diri_vigente'))
                                                         <div
@@ -203,13 +203,13 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-4 col-md-4 col-lg-4">
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Organización</label>
                                                     <div class="input-group">
                                                         <div class="input-group-prepend">
                                                         </div>
-                                                        <select class="form-control select2" id="orga_codigo"
+                                                        <select class="form-control select2" id="orga_codigo" style="width: 100%"
                                                             name="orga_codigo">
                                                             @foreach ($organizaciones as $orga)
                                                                 <option value="{{ $orga->orga_codigo }}" {{$diri->orga_codigo == $orga->orga_codigo ? 'selected':''}}>

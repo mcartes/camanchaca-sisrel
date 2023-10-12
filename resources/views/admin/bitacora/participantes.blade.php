@@ -3,10 +3,10 @@
     <section class="section">
         <div class="section-body">
             <div class="row">
-                <div class="col-12">
+                <div class="col-xl-12">
                     <div class="row">
-                        <div class="col-3"></div>
-                        <div class="col-6">
+                        <div class="col-xl-3"></div>
+                        <div class="col-xl-6">
                             @if (Session::has('exitoActividad'))
                                 <div class="alert alert-success alert-dismissible show fade mb-4 text-center">
                                     <div class="alert-body">
@@ -16,11 +16,11 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-3"></div>
+                        <div class="col-xl-3"></div>
                     </div>
                     <div class="row">
-                        <div class="col-3 col-md-3 col-lg-3"></div>
-                        <div class="col-6 col-md-6 col-lg-6">
+                        <div class="col-xl-3 col-md-3 col-lg-3"></div>
+                        <div class="col-xl-6 col-md-6 col-lg-6">
                             <div class="card">
                                 <div class="card-header">
                                     <h4>{{ $actividad->orga_nombre }} - {{ $actividad->acti_nombre }}</h4>
@@ -35,7 +35,7 @@
                                     <div class="card-body">
                                         <div class="form-group">
                                             <label>Dirigentes</label> <i data-toggle="tooltip" data-placement="right" title="Seleccione un dirigente para agregar al listado de participantes" class="fas fa-info-circle"></i>
-                                            <select class="form-control select2" id="diri_codigo" name="diri_codigo" onchange="agregarDirigente()">
+                                            <select class="form-control select2" id="diri_codigo" name="diri_codigo" onchange="agregarDirigente()" style="width: 100%">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @foreach ($dirigentes as $diri)
                                                     <option value="{{ $diri->diri_codigo }}">{{ $diri->diri_nombre }} {{ $diri->diri_apellido }}</option>
@@ -49,12 +49,12 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-3 col-md-3 col-lg-3"></div>
-                        <div class="col-6 col-md-6 col-lg-6 text-center" id="div-alert-participantes"></div>
-                        <div class="col-3 col-md-3 col-lg-3"></div>
+                        <div class="col-xl-3 col-md-3 col-lg-3"></div>
+                        <div class="col-xl-6 col-md-6 col-lg-6 text-center" id="div-alert-participantes"></div>
+                        <div class="col-xl-3 col-md-3 col-lg-3"></div>
 
-                        <div class="col-3 col-md-3 col-lg-3"></div>
-                        <div class="col-6 col-md-6 col-lg-6">
+                        <div class="col-xl-3 col-md-3 col-lg-3"></div>
+                        <div class="col-xl-6 col-md-6 col-lg-6">
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Participantes</h4>
@@ -72,7 +72,7 @@
                                         </table>
                                     </div>
                                     <div class="row mt-2">
-                                        <div class="col-12 col-md-12 col-lg-12 text-right">
+                                        <div class="col-xl-12 col-md-12 col-lg-12 text-right">
                                             <a href="{{ route('admin.actividad.editar', $actividad->acti_codigo) }}" type="button" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-chevron-left"></i> Volver al paso anterior</a>
                                             <a href="{{ route('admin.actividad.listar') }}" type="button" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-check"></i> Finalizar</a>
                                         </div>

@@ -4,7 +4,7 @@
 
 <section class="section">
     <div class="section-body">
-        <div class="row">            
+        <div class="row">
             <div class="col-12">
                 <div class="row">
                     <div class="col-3"></div>
@@ -28,11 +28,11 @@
                         @endif
                     </div>
                     <div class="col-3"></div>
-                </div>                
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h4>{{ $iniciativa->inic_nombre }} - Cobertura</h4>
-                    </div>                    
+                    </div>
                     <div class="card-body">
                         <h6>Registro de participantes finales</h6>
                         <form action="{{ route('admin.cobertura.update', $iniciativa->inic_codigo) }}" method="POST">
@@ -69,47 +69,47 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-12 col-md-12 col-lg-12 text-right">
+                                <div class="col-xl-12 col-md-12 col-lg-12 text-right">
                                     <input type="hidden" id="inic_codigo" name="inic_codigo" value="{{ $iniciativa->inic_codigo }}">
                                     <a href="{{ route('admin.iniciativas.index') }}" type="button" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-angle-left"></i> Volver al listado</a>
                                     <button type="submit" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-save"></i> Guardar participantes</button>
                                 </div>
                             </div>
                         </form>
-                        
+
                         <hr>
 
                         <h6>Desagregación de participantes</h6>
                         <div class="row mt-3">
-                            <div class="col-3 col-md-3 col-lg-3"></div>
-                            <div class="col-3 col-md-3 col-lg-3">
+                            <div class="col-xl-3 col-md-3 col-lg-3"></div>
+                            <div class="col-xl-3 col-md-3 col-lg-3">
                                 <div class="form-group">
                                     <label>Subentorno</label>
-                                    <select class="form-control select2" id="participante" name="participante" onchange="cargarCantidad()">
-                                        <option value="" selected disabled>Seleccione...</option> 
+                                    <select class="form-control select2" style="width: 100%" id="participante" name="participante" onchange="cargarCantidad()">
+                                        <option value="" selected disabled>Seleccione...</option>
                                         @forelse ($participantes as $participante)
                                             <option value="{{ $participante->inic_codigo }}-{{ $participante->sube_codigo }}">{{ $participante->sube_nombre }}</option>
                                         @empty
                                             <option value="-1">No existen registros</option>
-                                        @endforelse                                            
+                                        @endforelse
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-2 col-md-2 col-lg-2">
+                            <div class="col-xl-2 col-md-2 col-lg-2">
                                 <div class="form-group">
                                     <label>Participantes finales</label>
                                     <input type="text" class="form-control" id="cantidadfinal" name="cantidadfinal" disabled>
                                     <input type="hidden" id="codigo" name="codigo" value="{{ $iniciativa->inic_codigo }}">
                                 </div>
                             </div>
-                            <div class="col-4 col-md-4 col-lg-4">
-                                <button style="position: absolute; top: 50%; transform: translateY(-50%);" type="button" class="btn btn-primary waves-effect" onclick="actualizarParticipante()" id="button-agregar-participantes"><i class="fas fa-plus"></i> Agregar</button>
+                            <div class="col-xl-4 col-md-4 col-lg-4">
+                                <button type="button" class="btn btn-primary waves-effect" onclick="actualizarParticipante()" id="button-agregar-participantes"><i class="fas fa-plus"></i> Agregar</button>
                             </div>
-                            <div class="col-3 col-md-3 col-lg-3"></div>
-                            <div class="col-6 col-md-6 col-lg-6 text-center" id="div-alert-participante"></div>
-                            <div class="col-3 col-md-3 col-lg-3"></div>
-                            <div class="col-1 col-md-1 col-lg-1"></div>
-                            <div class="col-2 col-md-2 col-lg-2">
+                            <div class="col-xl-3 col-md-3 col-lg-3"></div>
+                            <div class="col-xl-6 col-md-6 col-lg-6 text-center" id="div-alert-participante"></div>
+                            <div class="col-xl-3 col-md-3 col-lg-3"></div>
+                            <div class="col-xl-1 col-md-1 col-lg-1"></div>
+                            <div class="col-xl-2 col-md-2 col-lg-2">
                                 <div class="form-group mb-0">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="checkgenero">
@@ -122,7 +122,7 @@
                                     <input type="number" class="form-control" id="generootro" name="generootro" placeholder="Otro" autocomplete="off" min="0" disabled>
                                 </div>
                             </div>
-                            <div class="col-2 col-md-2 col-lg-2">
+                            <div class="col-xl-2 col-md-2 col-lg-2">
                                 <div class="form-group mb-0">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="checketario">
@@ -136,7 +136,7 @@
                                     <input type="number" class="form-control" id="etariomayores" name="etariomayores" placeholder="Adultos Mayores" autocomplete="off" min="0" disabled>
                                 </div>
                             </div>
-                            <div class="col-2 col-md-2 col-lg-2">
+                            <div class="col-xl-2 col-md-2 col-lg-2">
                                 <div class="form-group mb-0">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="checkprocedencia">
@@ -148,7 +148,7 @@
                                     <input type="number" class="form-control" id="procedenciaurbano" name="procedenciaurbano" placeholder="Urbano" autocomplete="off" min="0" disabled>
                                 </div>
                             </div>
-                            <div class="col-2 col-md-2 col-lg-2">
+                            <div class="col-xl-2 col-md-2 col-lg-2">
                                 <div class="form-group mb-0">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="checknacion">
@@ -160,7 +160,7 @@
                                     <input type="number" class="form-control" id="nacionmigrante" name="nacionmigrante" placeholder="Migrante" autocomplete="off" min="0" disabled>
                                 </div>
                             </div>
-                            <div class="col-2 col-md-2 col-lg-2">
+                            <div class="col-xl-2 col-md-2 col-lg-2">
                                 <div class="form-group mb-0">
                                     <div class="custom-control custom-checkbox">
                                         <input type="checkbox" class="custom-control-input" id="checkpueblo">
@@ -174,12 +174,12 @@
                             </div>
                         </div>
                         <div class="row mt-3" id="row-tabla-participantes" style="display: none;">
-                            <div class="col-12">
+                            <div class="col-xl-12">
                                 <div class="card">
                                     <div class="card-body p-0">
                                         <div class="table-responsive">
                                             <table class="table table-bordered small table-sm">
-                                                
+
                                                     <tr >
                                                         <th colspan="1"></th>
                                                         <th colspan="2" style="border-right: thin solid black;"></th>
@@ -216,7 +216,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-12 col-md-12 col-lg-12 text-right">
+                                    <div class="col-xl-12 col-md-12 col-lg-12 text-right">
                                         <a href="{{ route('admin.iniciativas.index') }}" type="button" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-angle-left"></i> Volver al listado</a>
                                     </div>
                                 </div>

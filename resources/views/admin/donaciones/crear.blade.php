@@ -3,11 +3,11 @@
     <div class="section">
         <div class="section-body">
             <div class="row">
-                <div class="col-12">
+                <div class="col-xl-12">
                     <div class="row">
 
-                        <div class="col-3"></div>
-                        <div class="col-6">
+                        <div class="colxl-3"></div>
+                        <div class="col-xl-6">
                             @if (Session::has('errorDonacion'))
                                 <div class="alert alert-danger alert-dismissible show fade mb-4 text-center">
                                     <div class="alert-body">
@@ -17,7 +17,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-3"></div>
+                        <div class="col-xl-3"></div>
                     </div>
 
                     <div class="card">
@@ -34,11 +34,11 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-1"></div>
-                                <div class="col-4 col-md-4 col-lg-4">
+                                <div class="col-xl-1"></div>
+                                <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Organización</label>
-                                        <select class="form-control select2" id="orga_codigo" name="orga_codigo"
+                                        <select class="form-control select2" id="orga_codigo" name="orga_codigo" style="width: 100%"
                                             onchange="cargarDirigentes()">
                                             <option value="" selected disabled>Seleccione...</option>
                                             @forelse ($organizaciones as $organizacion)
@@ -66,10 +66,10 @@
                                     </div>
                                 </div>
 
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Comuna</label>
-                                        <select class="form-control select2" id="comu_codigo" name="comu_codigo">
+                                        <select class="form-control select2" id="comu_codigo" name="comu_codigo" style="width: 100%">
                                             <option value="" selected disabled>Seleccione...</option>
                                             @forelse ($comunas as $comuna)
                                                 <option value="{{ $comuna->comu_codigo }}"
@@ -92,7 +92,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-2 col-md-2 col-lg-2" id="div-select-dirigentes"
+                                <div class="col-xl-2 col-md-2 col-lg-2" id="div-select-dirigentes"
                                     name="div-select-dirigentes">
                                     <div class="form-group">
                                         <label>Dirigente</label>
@@ -129,8 +129,8 @@
                                     </div>
                                 @endif
                                 <div class="row">
-                                    <div class="col-1"></div>
-                                    <div class="col-3 col-md-3 col-lg-3">
+                                    <div class="col-xl-1"></div>
+                                    <div class="col-xl-3 col-md-3 col-lg-3">
                                         <div class="form-group">
                                             <label for="dona_motivo">Motivo de la donación</label>
                                             <div class="input-group">
@@ -150,7 +150,7 @@
 
                                     </div>
 
-                                    <div class="col-4 col-md-4 col-lg-4">
+                                    <div class="col-xl-4 col-md-4 col-lg-4">
                                         <div class="form-group">
                                             <label for="dona_nombre_solicitante">Nombre del solicitante</label>
                                             <div class="input-group">
@@ -175,7 +175,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-3 col-md-3 col-lg-3">
+                                    <div class="col-xl-3 col-md-3 col-lg-3">
                                         <div class="form-group">
                                             <label for="dona_cargo_solicitante">Cargo del solicitante</label>
                                             <div class="input-group">
@@ -201,8 +201,8 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-1"></div>
-                                    <div class="col-3 col-md-3 col-lg-3">
+                                    <div class="col-xl-1"></div>
+                                    <div class="col-xl-3 col-md-3 col-lg-3">
                                         <div class="form-group">
                                             <label for="dona_persona_aprueba">Aprobado por</label>
                                             <div class="input-group">
@@ -227,7 +227,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-2 col-md-2 col-lg-2">
+                                    <div class="col-xl-2 col-md-2 col-lg-2">
                                         <div class="form-group">
                                             <label for="dona_monto">Monto donado</label>
                                             <div class="input-group">
@@ -252,7 +252,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-3 col-md-3 col-lg-3">
+                                    <div class="col-xl-3 col-md-3 col-lg-3">
                                         <div class="form-group">
                                             <label for="dona_persona_recepciona">Recepcionista de donación</label>
                                             <div class="input-group">
@@ -276,11 +276,11 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="col-2 col-md-2 col-lg-2">
+                                    <div class="col-xl-2 col-md-2 col-lg-2">
                                         <div class="form-group">
                                             <label for="pila_codigo">Pilar asociado</label>
                                             <div class="input-group">
-                                                <select name="pila_codigo" id="pila_codigo" class="form-control">
+                                                <select name="pila_codigo" id="pila_codigo" class="form-control" style="width: 100%">
                                                     <option value="" disabled selected>Seleccione...</option>
                                                     @foreach ($pilares as $pila)
                                                         <option value="{{ $pila->pila_codigo }}"
@@ -302,8 +302,8 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-1"></div>
-                                    <div class="col-2 col-md-2 col-lg-2">
+                                    <div class="col-xl-1"></div>
+                                    <div class="col-xl-2 col-md-2 col-lg-2">
                                         <div class="form-group">
                                             <label for="dona_fecha_entrega">Fecha de entrega</label>
                                             <div class="input-group">
@@ -318,7 +318,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-2 col-md-2 col-lg-2">
+                                    <div class="col-xl-2 col-md-2 col-lg-2">
                                         <div class="form-group">
                                             <label for="dona_estado">Estado de la donación</label>
                                             <div class="input-group">
@@ -346,7 +346,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-2 col-md-2 col-lg-2">
+                                    <div class="col-xl-2 col-md-2 col-lg-2">
                                         <div class="form-group">
                                             <label for="dona_form_autorizacion">Estado del formulario de
                                                 autorización</label>
@@ -365,7 +365,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-2 col-md-2 col-lg-2">
+                                    <div class="col-xl-2 col-md-2 col-lg-2">
                                         <div class="form-group">
                                             <label for="dona_declaracion_jurada">Estado de declaración jurada</label>
                                             <div class="input-group">
@@ -383,7 +383,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-2 col-md-2 col-lg-2">
+                                    <div class="col-xl-2 col-md-2 col-lg-2">
                                         <div class="form-group">
                                             <label for="dona_tipo_aporte">Tipo de aporte</label>
                                             <div class="input-group">
@@ -411,9 +411,9 @@
                                 </div>
 
                                 <div class="row">
-                                    <div class="col-1"></div>
+                                    <div class="col-xl-1"></div>
 
-                                    <div class="col-4 col-md-4 col-lg-4">
+                                    <div class="col-xl-4 col-md-4 col-lg-4">
                                         <div class="form-group">
                                             <label for="dona_descripcion">Descripción</label>
                                             <div class="input-group">
@@ -422,7 +422,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="text-right">
+                                <div class="col-xl-12 text-right">
                                     <a href="{{ route('admin.dbgeneral.index') }}" type="button"
                                         class="btn btn-warning" title="Ir a inicio"><i class="fas fa-home"></i>
                                         Volver</a>

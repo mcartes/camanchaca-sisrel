@@ -32,11 +32,11 @@
                         <div class="card-body">
                             <form action="{{ route('admin.dirigente.listar') }}" method="GET">
                                 <div class="row">
-                                    <div class="col-3"></div>
-                                    <div class="col-4 col-md-4 col-lg-4">
+                                    <div class="col-xl-3"></div>
+                                    <div class="col-xl-4 col-md-4 col-lg-4">
                                         <div class="form-group">
                                             <label>Organización</label>
-                                            <select class="form-control select2" id="orga_codigo" name="orga_codigo">
+                                            <select class="form-control select2" style="width: 100%" id="orga_codigo" name="orga_codigo">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @forelse ($organizaciones as $organizacion)
                                                     <option value="{{ $organizacion->orga_codigo }}"
@@ -48,14 +48,12 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-4 col-md-4 col-lg-4">
-                                        <div style="position: absolute; top: 50%; transform: translateY(-50%);">
+                                    <div class="col-xl-4 col-md-4 col-lg-4 text-right mb-4">
                                             <button type="submit" class="btn btn-primary mr-1 waves-effect"><i
                                                     class="fas fa-search"></i> Filtrar</button>
                                             <a href="{{ route('admin.dirigente.listar') }}" type="button"
                                                 class="btn btn-primary mr-1 waves-effect"><i class="fas fa-broom"></i>
                                                 Limpiar</a>
-                                        </div>
                                     </div>
                                 </div>
                             </form>
@@ -136,7 +134,7 @@
             </div>
         </div>
     </div>
-    
+
 
     <link rel="stylesheet" href="{{ asset('public/bundles/datatables/datatables.min.css') }}">
     <link rel="stylesheet"

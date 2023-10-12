@@ -39,7 +39,7 @@
                         <form action="{{ route('admin.actividad.listar') }}" method="GET">
                             <div class="row">
                                 <!-- <div class="col-3"></div> -->
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         <label>Comunas</label>
                                         <select class="form-control select2" style="width: 100%" id="comu_codigo" name="comu_codigo">
@@ -54,7 +54,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         <label>Organización</label>
                                         <select class="form-control select2" style="width: 100%" id="orga_codigo" name="orga_codigo">
@@ -69,23 +69,21 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Fecha de inicio</label>
                                         <input type="date" class="form-control datepicker" id="fecha_inicio" name="fecha_inicio">
                                     </div>
                                 </div>
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Fecha de termino</label>
                                         <input type="date" class="form-control datepicker" id="fecha_termino" name="fecha_termino">
                                     </div>
                                 </div>
-                                <div class="col-4 col-md-4 col-lg-4">
-                                    <div style="position: absolute; top: 50%; transform: translateY(-50%);">
+                                <div class="col-xl-12 col-md-12 col-lg-12 text-right mb-12">
                                         <button type="submit" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-search"></i> Filtrar</button>
                                         <a href="{{ route('admin.actividad.listar') }}" type="button" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-broom"></i>Limpiar</a>
-                                    </div>
                                 </div>
                             </div>
                         </form>

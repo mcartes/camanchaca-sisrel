@@ -3,10 +3,10 @@
     <section class="section">
         <div class="section-body">
             <div class="row">
-                <div class="col-12">
+                <div class="col-xl-12">
                     <div class="row">
-                        <div class="col-3"></div>
-                        <div class="col-6">
+                        <div class="col-xl-3"></div>
+                        <div class="col-xl-6">
                             @if(Session::has('errorUsuario'))
                                 <div class="alert alert-danger alert-dismissible show fade mb-4 text-center">
                                     <div class="alert-body">
@@ -24,10 +24,10 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-3"></div>
+                        <div class="col-xl-3"></div>
                     </div>
                 </div>
-                <div class="col-12 col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-8 offset-lg-2 col-xl-8 offset-xl-2">
+                <div class="col-xl-12">
                     <div class="card">
                         <div class="card-header">
                             <h4>Editar usuario</h4>
@@ -42,7 +42,7 @@
                                 @csrf
 
                                 <div class="row">
-                                    <div class="col-4">
+                                    <div class="col-xl-4">
                                         <div class="form-group">
                                             <label for="nombre">Nombre</label>
                                             <div class="input-group">
@@ -65,7 +65,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-4">
+                                    <div class="col-xl-4">
                                         <div class="form-group">
                                             <label for="apellido">Apellido</label>
                                             <div class="input-group">
@@ -88,7 +88,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-4">
+                                    <div class="col-xl-4">
                                         <div class="form-group">
                                             <label for="profesion">Profesión</label>
                                             <div class="input-group">
@@ -104,7 +104,7 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-4">
+                                    <div class="col-xl-4">
                                         <div class="form-group">
                                             <label for="email">Correo electrónico</label>
                                             <div class="input-group">
@@ -126,7 +126,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-4">
+                                    <div class="col-xl-4">
                                         <div class="form-group">
                                             <label for="email_alt">Correo electrónico alternativo</label>
                                             <div class="input-group">
@@ -140,7 +140,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-4">
+                                    <div class="col-xl-4">
                                         <div class="form-group">
                                             <label for="cargo">Cargo del usuario</label>
                                             <input value="{{ old('cargo') ?? @$usuario->usua_cargo }}" type="text"
@@ -151,10 +151,10 @@
 
 
                                 <div class="row">
-                                    <div class="form-group col-4">
+                                    <div class="form-group col-xl-4">
                                         <label for="">Unidad</label>
                                         <div class="input-group">
-                                            <select name="unidad" id="unidad" class="form-control select2">
+                                            <select name="unidad" id="unidad" class="form-control select2" style="width: 100%">
                                                 <option value="" disabled selected>Seleccione...</option>
                                                 @foreach ($unidades as $unidad)
                                                     <option value="{{ $unidad->unid_codigo }}" {{ $unidad->unid_codigo==$usuario->unid_codigo ? 'selected' : '' }}>{{ $unidad->unid_nombre }}</option>
@@ -171,10 +171,10 @@
                                             </div>
                                         @endif
                                     </div>
-                                    <div class="form-group col-4">
+                                    <div class="form-group col-xl-4">
                                         <label for="">Rol</label>
                                         <div class="input-group">
-                                            <select name="rol" id="rol" class="form-control select2">
+                                            <select name="rol" id="rol" class="form-control select2" style="width: 100%">
                                                 <option value="" disabled selected>Seleccione...</option>
                                                 @foreach ($roles as $rol)
                                                     <option value="{{ $rol->rous_codigo }}" {{ $rol->rous_codigo==$rol->rous_codigo ? 'selected' : '' }}>{{ $rol->rous_nombre }}</option>
@@ -191,7 +191,7 @@
                                             </div>
                                         @endif
                                     </div>
-                                    <div class="form-group col-3">
+                                    <div class="form-group col-xl-3">
                                         <label for="vigente" class="d-block">Estado</label>
                                         <div class="input-group">
                                             <div class="input-group-prepend">

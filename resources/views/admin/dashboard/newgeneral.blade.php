@@ -182,7 +182,7 @@
                         </div>
 
                         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                            <div class="card h-100">
+                            <div class="card">
                                 <div class="card-body">
                                     <div id="sidebar" class="sidebar collapsed">
                                         <div class="sidebar-content">
@@ -195,7 +195,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="map" class="w-auto p-3 sidebar-map" style="height: 100%;"></div>
+                                    <div id="map" class="w-auto p-3 sidebar-map" style="height: 15cm;"></div>
                                 </div>
                             </div>
                         </div>

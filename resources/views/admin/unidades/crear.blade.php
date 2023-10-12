@@ -3,10 +3,10 @@
     <section class="section">
         <div class="section-body">
             <div class="row">
-                <div class="col-12">
+                <div class="col-xl-12">
                     <div class="row">
-                        <div class="col-3"></div>
-                        <div class="col-6">
+                        <div class="col-xl-3"></div>
+                        <div class="col-xl-6">
                             @if (Session::has('errorUnidad'))
                                 <div class="alert alert-danger alert-dismissible show fade">
                                     <div class="alert-body">
@@ -17,11 +17,11 @@
                             @endif
 
                         </div>
-                        <div class="col-3"></div>
+                        <div class="col-xl-3"></div>
                     </div>
                     <div class="row">
-                        <div class="col-2 col-md-2 col-lg-2"></div>
-                        <div class="col-8 col-md-8 col-lg-8">
+                        <div class="col-xl-2 col-md-2 col-lg-2"></div>
+                        <div class="col-xl-8 col-md-8 col-lg-8">
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Registro de unidades</h4>
@@ -31,7 +31,7 @@
                                         @csrf
 
                                         <div class="row">
-                                            <div class="form-group col-6">
+                                            <div class="form-group col-xl-6">
                                                 <label for="unid_nombre">Nombre de la unidad</label> <label for=""
                                                     style="color: red;">*</label>
                                                 <div class="input-group">
@@ -56,11 +56,11 @@
                                                 @endif
 
                                             </div>
-                                            <div class="form-group col-6">
+                                            <div class="form-group col-xl-6">
                                                 <label class="label" for="">Tipo de unidad</label> <label
                                                     for="" style="color: red;">*</label>
                                                 <div class="form-group">
-                                                    <select class="form-control" id="tuni_codigo" name="tuni_codigo">
+                                                    <select class="form-control select2" id="tuni_codigo" name="tuni_codigo" style="width: 100%">
                                                         <option value="" selected disabled>Seleccione...</option>
                                                         @foreach ($tipounidades as $tuni)
                                                             <option value="{{ $tuni->tuni_codigo }}"
@@ -81,11 +81,11 @@
                                                 </div>
                                             </div>
 
-                                            <div class="form-group col-6">
+                                            <div class="form-group col-xl-6">
                                                 <label class="label" for="comu_codigo">Comuna asociada</label> <label
                                                     for="" style="color: red;">*</label>
                                                 <div class="form-group">
-                                                    <select class="form-control select2" id="comu_codigo" name="comu_codigo"
+                                                    <select class="form-control select2" id="comu_codigo" name="comu_codigo" style="width: 100%"
                                                         onchange="cargarCoordenadas()">
                                                         <option value="" selected disabled>Seleccione...</option>
                                                         @foreach ($comunas as $comu)
@@ -136,7 +136,7 @@
                                         <div id="miDiv">
 
                                             <div class="row">
-                                                <div class="col-6 col-md-6 col-lg-6">
+                                                <div class="col-xl-6 col-md-6 col-lg-6">
                                                     <div class="form-group">
                                                         <label>Geolocalización</label>
                                                         <div class="form-group">
@@ -219,6 +219,7 @@
 
                                         </div>
                                         <div class="text-right">
+                                            <a href="{{route('admin.unidades.listar')}}" class="btn btn-warning waves-effect"><i class="fas fa-backward"></i> Volver al listado</a>
                                             <button type="submit" class="btn btn-primary waves-effect">
                                                 <i class="fas fa-save"></i> Registrar
                                             </button>
@@ -229,9 +230,9 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-2 col-md-2 col-lg-2"></div>
+                        <div class="col-xl-2 col-md-2 col-lg-2"></div>
 
-                        <div class="col-8 col-md-8 col-lg-8">
+                        <div class="col-xl-8 col-md-8 col-lg-8">
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Seleccione la ubicación de la unidad</h4>
@@ -253,9 +254,9 @@
     <script src="https://unpkg.com/leaflet@latest/dist/leaflet-src.js"></script>
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
     <script>
-        // $(document).ready(function() {
-        //     $("#miDiv").hide();
-        // });
+        $(document).ready(function() {
+            $("#miDiv").hide();
+        });
         const csrftoken = document.head.querySelector(
             "[name~=csrf-token][content]"
 

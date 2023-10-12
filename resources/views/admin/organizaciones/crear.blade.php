@@ -3,10 +3,10 @@
     <section class="section">
         <div class="section-body">
             <div class="row">
-                <div class="col-12">
+                <div class="col-xl-12">
                     <div class="row">
-                        <div class="col-3"></div>
-                        <div class="col-6">
+                        <div class="col-xl-3"></div>
+                        <div class="col-xl-6">
                             @if (Session::has('errorOrganizacion'))
                                 <div class="alert alert-danger alert-dismissible show fade mb-4 text-center">
                                     <div class="alert-body">
@@ -16,12 +16,12 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-3"></div>
+                        <div class="col-xl-3"></div>
                     </div>
                     <div class="row">
-                        <div class="col-2 col-md-2 col-lg-2"></div>
+                        <div class="col-xl-2 col-md-2 col-lg-2"></div>
 
-                        <div class="col-8 col-md-8 col-lg-8">
+                        <div class="col-xl-8 col-md-8 col-lg-8">
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Nueva organización</h4>
@@ -31,7 +31,7 @@
                                         @csrf
 
                                         <div class="row">
-                                            <div class="col-4 col-md-4 col-lg-4">
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Nombre</label> <label for=""
                                                         style="color: red;">*</label>
@@ -56,12 +56,12 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <div class="col-4 col-md-4 col-lg-4">
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Tipo</label> <label for="" style="color: red;">*</label>
                                                     <div class="input-group">
 
-                                                        <select class="form-control form-control-sm" name="tiporg"
+                                                        <select class="form-control form-control-sm select2" name="tiporg" style="width: 100%"
                                                             id="tiporg">
                                                             <option value="" selected disabled>Seleccione...</option>
                                                             @foreach ($tipos as $tipo)
@@ -84,13 +84,13 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                            <div class="col-4 col-md-4 col-lg-4">
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Comuna</label> <label for=""
                                                         style="color: red;">*</label>
                                                     <div class="input-group">
 
-                                                        <select class="form-control form-control-sm select2" name="comuna"
+                                                        <select class="form-control form-control-sm select2" name="comuna" style="width: 100%"
                                                             id="comuna" onchange="cargarCoordenadas()">
                                                             <option value="" disabled selected>Seleccione...
                                                             </option>
@@ -118,7 +118,7 @@
                                         </div>
                                         <div id="miDiv">
                                             <div class="row">
-                                                <div class="col-6 col-md-6 col-lg-6">
+                                                <div class="col-xl-6 col-md-6 col-lg-6">
                                                     <div class="form-group">
                                                         <label>Geolocalización</label>
                                                         <div class="form-group">
@@ -198,7 +198,7 @@
 
 
                                         <div class="row">
-                                            <div class="col-4 col-md-4 col-lg-4">
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Cantidad de socios registrados</label>
                                                     <div class="input-group">
@@ -224,7 +224,7 @@
                                                 </div>
                                             </div>
                                             <!-- nuevo campo -->
-                                            <div class="col-4 col-md-4 col-lg-4">
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Domicilio (dirección de la sede)</label>
                                                     <div class="input-group">
@@ -240,7 +240,7 @@
                                                 </div>
                                             </div>
                                             <!-- nuevo campo -->
-                                            {{-- <div class="col-4 col-md-4 col-lg-4">
+                                            {{-- <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Fecha de vinculación</label>
                                                     <div class="input-group">
@@ -273,9 +273,9 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-2 col-md-2 col-lg-2"></div>
+                        <div class="col-xl-2 col-md-2 col-lg-2"></div>
 
-                        <div class="col-8 col-md-8 col-lg-8">
+                        <div class="col-xl-8 col-md-8 col-lg-8">
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Seleccione la ubicación de la organización</h4>

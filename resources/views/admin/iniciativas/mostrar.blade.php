@@ -68,7 +68,7 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <table class="table table-striped table-md" id="tabla-info-iniciativa">
+                            <table class="table table-striped table-responsive table-md" id="tabla-info-iniciativa">
                                 <tbody>
                                     <tr>
                                         <td width="20%"><strong>Nombre de la iniciativa</strong></td>

@@ -36,7 +36,7 @@
                         @endif
 
                             <div class="row">
-                                <div class="col-12 col-md-12 col-lg-12">
+                                <div class="col-xl-12 col-md-12 col-lg-12">
                                     <div class="form-group">
                                         <label>Nombre de actividad</label> <label for="" style="color: red;">*</label>
                                         <input type="text" class="form-control" id="nombre" name="nombre" value="{{ old('nombre') ?? @$iniciativa->inic_nombre }}">
@@ -66,7 +66,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-3 col-md-3 col-lg-3">
+                                <div class="col-xl-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         <label>Fecha de inicio</label> <label for="" style="color: red;">*</label>
                                         <input type="date" class="form-control" id="fechainicio" name="fechainicio" value="{{ old('fechainicio') ?? @\Carbon\Carbon::parse($iniciativa->inic_fecha_inicio)->format('Y-m-d') }}">
@@ -80,17 +80,17 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-3 col-md-3 col-lg-3">
+                                <div class="col-xl-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         <label>Fecha de finalización</label>
                                         <input type="date" class="form-control" id="fechafin" name="fechafin" value="{{ old('fechafin') ?? @\Carbon\Carbon::parse($iniciativa->inic_fecha_fin)->format('Y-m-d') }}">
                                     </div>
                                 </div>
-                                <div class="col-3 col-md-3 col-lg-3">
+                                <div class="col-xl-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         <label>Frecuencia</label> <label for="" style="color: red;">*</label>
                                         @if (isset($iniciativa))
-                                            <select class="form-control select2" id="frecuencia" name="frecuencia">
+                                            <select class="form-control select2" id="frecuencia" name="frecuencia" style="width: 100%">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @forelse ($frecuencias as $frecuencia)
                                                     <option value="{{ $frecuencia->frec_codigo }}" {{ $iniciativa->frec_codigo==$frecuencia->frec_codigo ? 'selected' : '' }}>{{ $frecuencia->frec_nombre }}</option>
@@ -99,7 +99,7 @@
                                                 @endforelse
                                             </select>
                                         @else
-                                            <select class="form-control select2" id="frecuencia" name="frecuencia">
+                                            <select class="form-control select2" id="frecuencia" name="frecuencia" style="width: 100%">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @forelse ($frecuencias as $frecuencia)
                                                     <option value="{{ $frecuencia->frec_codigo }}" {{ old('frecuencia')==$frecuencia->frec_codigo ? 'selected' : '' }}>{{ $frecuencia->frec_nombre }}</option>
@@ -118,11 +118,11 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-3 col-md-3 col-lg-3">
+                                <div class="col-xl-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         <label>Pilar</label> <label for="" style="color: red;">*</label><i data-toggle="tooltip" data-placement="right" title="Pilar programa Camanchaca Amiga" class="fas fa-info-circle"></i>
                                         @if (isset($iniciativa))
-                                            <select class="form-control select2" id="pilar" name="pilar">
+                                            <select class="form-control select2" id="pilar" name="pilar" style="width: 100%">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @forelse ($pilares as $pilar)
                                                     <option value="{{ $pilar->pila_codigo }}" {{ $iniciativa->pila_codigo==$pilar->pila_codigo ? 'selected' : '' }}>{{ $pilar->pila_nombre }}</option>
@@ -131,7 +131,7 @@
                                                 @endforelse
                                             </select>
                                         @else
-                                            <select class="form-control select2" id="pilar" name="pilar">
+                                            <select class="form-control select2" id="pilar" name="pilar" style="width: 100%">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @forelse ($pilares as $pilar)
                                                     <option value="{{ $pilar->pila_codigo }}" {{ old('pilar')==$pilar->pila_codigo ? 'selected' : '' }}>{{ $pilar->pila_nombre }}</option>
@@ -152,11 +152,11 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-4 col-md-4 col-lg-4">
+                                <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Unidad</label> <label for="" style="color: red;">*</label>
                                         @if (isset($iniciativa))
-                                            <select class="form-control select2" multiple="" id="unidad" name="unidad[]">
+                                            <select class="form-control select2" multiple="" id="unidad" name="unidad[]" style="width: 100%">
                                                 @forelse ($unidades as $unidad)
                                                     <option value="{{ $unidad->unid_codigo }}" {{ in_array($unidad->unid_codigo, $iniciativasUnidades) ? 'selected' : '' }}>{{ $unidad->unid_nombre }} ({{ $unidad->comu_nombre }})</option>
                                                 @empty
@@ -164,7 +164,7 @@
                                                 @endforelse
                                             </select>
                                         @else
-                                            <select class="form-control select2" multiple="" id="unidad" name="unidad[]">
+                                            <select class="form-control select2" multiple="" id="unidad" name="unidad[]" style="width: 100%">
                                                 @forelse ($unidades as $unidad)
                                                     <option value="{{ $unidad->unid_codigo }}" {{ (collect(old('unidad'))->contains($unidad->unid_codigo)) ? 'selected' : '' }}>{{ $unidad->unid_nombre }} ({{ $unidad->comu_nombre }})</option>
                                                 @empty
@@ -214,11 +214,11 @@
                                         @endif
                                     </div>
                                 </div> --}}
-                                <div class="col-4 col-md-4 col-lg-4">
+                                <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Mecanismo</label> <label for="" style="color: red;">*</label>
                                         @if (isset($iniciativa))
-                                            <select class="form-control select2" id="submecanismo" name="submecanismo">
+                                            <select class="form-control select2" id="submecanismo" name="submecanismo" style="width: 100%">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @forelse ($mecanismos as $mecanismo)
                                                     <option value="{{ $mecanismo->subm_codigo }}" {{ $iniciativa->subm_codigo==$mecanismo->subm_codigo ? 'selected' : '' }}>{{ $mecanismo->subm_nombre }} ({{ $mecanismo->meca_nombre }})</option>
@@ -227,7 +227,7 @@
                                                 @endforelse
                                             </select>
                                         @else
-                                            <select class="form-control select2" id="submecanismo" name="submecanismo">
+                                            <select class="form-control select2" id="submecanismo" name="submecanismo" style="width: 100%">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @forelse ($mecanismos as $mecanismo)
                                                     <option value="{{ $mecanismo->subm_codigo }}" {{ old('submecanismo')==$mecanismo->subm_codigo ? 'selected' : '' }}>{{ $mecanismo->subm_nombre }} ({{ $mecanismo->meca_nombre }})</option>
@@ -248,11 +248,11 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-4 col-md-4 col-lg-4">
+                                <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Formato de implementación</label> <label for="" style="color: red;">*</label>
                                         @if (isset($iniciativa))
-                                            <select class="form-control select2" id="implementacion" name="implementacion">
+                                            <select class="form-control select2" id="implementacion" name="implementacion" style="width: 100%">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @forelse ($formatos as $formato)
                                                     <option value="{{ $formato->foim_codigo }}" {{ $iniciativa->foim_codigo==$formato->foim_codigo ? 'selected' : '' }}>{{ $formato->foim_nombre }}</option>
@@ -261,7 +261,7 @@
                                                 @endforelse
                                             </select>
                                         @else
-                                            <select class="form-control select2" id="implementacion" name="implementacion">
+                                            <select class="form-control select2" id="implementacion" name="implementacion" style="width: 100%">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @forelse ($formatos as $formato)
                                                     <option value="{{ $formato->foim_codigo }}" {{ old('implementacion')==$formato->foim_codigo ? 'selected' : '' }}>{{ $formato->foim_nombre }}</option>
@@ -280,7 +280,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-4 col-md-4 col-lg-4">
+                                <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Nombre encargado responsable</label>
                                         <input type="text" class="form-control" id="nombreresponsable" name="nombreresponsable" value="{{ old('nombreresponsable') ?? @$iniciativa->inic_nombre_responsable }}">
@@ -294,7 +294,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-4 col-md-4 col-lg-4">
+                                <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Cargo encargado responsable</label>
                                         <input type="text" class="form-control" id="cargoresponsable" name="cargoresponsable" value="{{ old('cargoresponsable') ?? @$iniciativa->inic_cargo_responsable }}">
@@ -310,7 +310,7 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-12 col-md-12 col-lg-12">
+                                <div class="col-xl-12 col-md-12 col-lg-12">
                                     <div class="text-right">
                                         <a href="{{route('admin.dbgeneral.index')}}" type="button" class="btn btn-warning" title="Ir a inicio"><i class="fas fa-home"></i> Volver</a>
                                         <a href="{{route('admin.iniciativas.index')}}" type="button" class="btn btn-success" title="Ir a iniciativas"><i class="fas fa-backward"></i></a>

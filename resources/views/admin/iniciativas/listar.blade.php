@@ -63,7 +63,7 @@
                         </div>
                         <form action="{{ route('admin.iniciativas.index') }}" method="GET">
                             <div class="row">
-                                <div class="col-2 col-md-2 col-lg-2" id="select-region">
+                                <div class="col-xl-2 col-md-2 col-lg-2" id="select-region">
                                     <div class="form-group">
                                         <label>Región</label>
                                         <select class="form-control select2" id="region" name="region" style="width: 100%" onchange="consultarComunas()">
@@ -76,7 +76,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Comuna</label>
                                         <select class="form-control select2" id="comuna" name="comuna" style="width: 100%" onchange="consultarUnidades()">
@@ -89,7 +89,7 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Unidad</label>
                                         <select class="form-control select2" id="unidad" name="unidad" style="width: 100%">
@@ -102,19 +102,19 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Fecha de inicio</label>
                                         <input type="date" class="form-control datepicker" style="width: 100%" id="fecha_inicio" name="fecha_inicio">
                                     </div>
                                 </div>
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Fecha de termino</label>
                                         <input type="date" class="form-control datepicker" style="width: 100%" id="fecha_termino" name="fecha_termino">
                                     </div>
                                 </div>
-                                <div class="col-12 col-md-12 col-lg-12 text-right mb-4">
+                                <div class="col-xl-12 col-md-12 col-lg-12 text-right mb-4">
                                     <button type="submit" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-search"></i> Filtrar</button>
                                     <a href="{{ route('admin.iniciativas.index') }}" type="button" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-broom"></i> Limpiar</a>
                                 </div>
