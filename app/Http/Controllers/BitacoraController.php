@@ -342,6 +342,19 @@ class BitacoraController extends Controller
         return redirect()->route('admin.actividad.participantes.editar', $acti_codigo)->with('exitoActividad', 'Los datos de la actividad fueron actualizados correctamente.');
     }
 
+    public function listarEvidencia($acti_codigo)
+    {
+        $actiVerificar = Actividades::where('acti_codigo', $acti_codigo)->first();
+        if (!$actiVerificar)
+            return redirect()->route('admin.actividad.listar')->with('errorIniciativa', 'La actividad no se encuentra registrada en el sistema.');
+
+        $acenListar = ActividadEvidencias::where(['acti_codigo' => $acti_codigo, 'acen_vigente' => 'S'])->get();
+        return view('admin.iniciativas.evidencias', [
+            'actividades' => $actiVerificar,
+            'evidencias' => $acenListar
+        ]);
+    }
+
     public function EliminarActividad($acti_codigo)
     {
         $asisConsultar = DB::table('asistentes')

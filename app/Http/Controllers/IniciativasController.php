@@ -314,6 +314,7 @@ class IniciativasController extends Controller
         Participantes::where('inic_codigo', $request->inic_codigo)->delete();
         Resultados::where('inic_codigo', $request->inic_codigo)->delete();
         Evaluaciones::where('inic_codigo', $request->inic_codigo)->delete();
+        DB::table('iniciativas_submecanismo')->where('inic_codigo',$request->inic_codigo)->delete();
         $inicEliminar = Iniciativas::where('inic_codigo', $request->inic_codigo)->delete();
         if (!$inicEliminar)
             return json_encode(['estado' => false, 'resultado' => 'Ocurrió un problema al eliminar la iniciativa, contáctese con el soporte del sistema.']);
@@ -1020,6 +1021,7 @@ class IniciativasController extends Controller
         $listarConvenios = Convenios::select('conv_codigo', 'conv_nombre')->where('conv_vigente', 'S')->orderBy('conv_codigo', 'asc')->get();
         $listarFormatos = FormatoImplementacion::select('foim_codigo', 'foim_nombre')->where('foim_vigente', 'S')->orderBy('foim_codigo', 'asc')->get();
         $listarCargos = Usuarios::select('usua_cargo')->distinct()->where('usua_cargo', '<>', '')->WhereNotNull('usua_cargo')->get();
+        $listarMecanismo = DB::table('mecanismo')->get();
         $listarSubmecanismos = DB::table('submecanismo')
             ->select('subm_codigo', 'meca_nombre', 'subm_nombre')
             ->leftJoin('mecanismo', 'mecanismo.meca_codigo', '=', 'submecanismo.meca_codigo')
@@ -1033,7 +1035,8 @@ class IniciativasController extends Controller
             'convenios' => $listarConvenios,
             'formatos' => $listarFormatos,
             'cargos' => $listarCargos,
-            'mecanismos' => $listarSubmecanismos,
+            'mecanismos' => $listarMecanismo,
+            'actividades' => $listarSubmecanismos,
             'frecuencias' => $listarFrecuencias
         ]);
     }
@@ -1049,6 +1052,7 @@ class IniciativasController extends Controller
                 'pilar' => 'required',
                 'implementacion' => 'required',
                 'nombreresponsable' => 'max:100',
+                'mecanismo' => 'required',
                 'submecanismo' => 'required',
                 'frecuencia' => 'required'
             ],
@@ -1063,6 +1067,7 @@ class IniciativasController extends Controller
                 'pilar.required' => 'El pilar es requerido.',
                 'implementacion.required' => 'El formato de implementación es requerido.',
                 'nombreresponsable.max' => 'El nombre del encargado responsable excede el máximo de caracteres permitidos (100).',
+                'mecanismo.required' => 'El mecanismo asociada es requerida.',
                 'submecanismo.required' => 'La actividad asociada es requerida.',
                 'frecuencia.required' => 'La frecuencia es requerida.'
             ]
@@ -1144,6 +1149,12 @@ class IniciativasController extends Controller
             //throw $th;
         }
 
+        $insuCrar = DB::table('iniciativas_submecanismo')->insert([
+            'inic_codigo' => $inicCodigo,
+            'subm_codigo' => $request->submecanismo,
+            'meca_codigo' => $request->mecanismo,
+        ]);
+
         return redirect()->route('admin.paso2.editar', $inicCodigo)->with('exitoPaso1', 'Los datos de la iniciativa fueron registrados correctamente.');
     }
 
@@ -1165,7 +1176,8 @@ class IniciativasController extends Controller
         $listarConvenios = Convenios::select('conv_codigo', 'conv_nombre')->where('conv_vigente', 'S')->orderBy('conv_codigo', 'asc')->get();
         $listarFormatos = FormatoImplementacion::select('foim_codigo', 'foim_nombre')->where('foim_vigente', 'S')->orderBy('foim_codigo', 'asc')->get();
         $listarCargos = Usuarios::select('usua_cargo')->distinct()->where('usua_cargo', '<>', '')->WhereNotNull('usua_cargo')->get();
-        $listarMecanismos = DB::table('submecanismo')
+        $listarMecanismo = DB::table('mecanismo')->get();
+        $listarSubmecanismos = DB::table('submecanismo')
             ->select('mecanismo.meca_codigo', 'subm_codigo', 'meca_nombre', 'subm_nombre')
             ->join('mecanismo', 'mecanismo.meca_codigo', '=', 'submecanismo.meca_codigo')
             ->where(['meca_vigente' => 'S', 'subm_vigente' => 'S'])
@@ -1180,7 +1192,8 @@ class IniciativasController extends Controller
             'convenios' => $listarConvenios,
             'formatos' => $listarFormatos,
             'cargos' => $listarCargos,
-            'mecanismos' => $listarMecanismos,
+            'mecanismos' => $listarMecanismo,
+            'actividades' => $listarSubmecanismos,
             'frecuencias' => $listarFrecuencias
         ]);
     }
@@ -1289,6 +1302,25 @@ class IniciativasController extends Controller
         } catch (\Throwable $th) {
             //throw $th;
         }
+
+        $insuVerificar = DB::table('iniciativas_submecanismo')->where('inic_codigo',$inic_codigo)->get();
+
+        if(count($insuVerificar) > 0){
+            DB::table('iniciativas_submecanismo')->where('inic_codigo',$inic_codigo)->delete();
+            $insuCrear = DB::table('iniciativas_submecanismo')->insert([
+                'inic_codigo' => $inic_codigo,
+                'subm_codigo' => $request->submecanismo,
+                'meca_codigo' => $request->mecanismo,
+            ]);
+        }else{
+            $insuCrear = DB::table('iniciativas_submecanismo')->insert([
+                'inic_codigo' => $inic_codigo,
+                'subm_codigo' => $request->submecanismo,
+                'meca_codigo' => $request->mecanismo,
+            ]);
+        }
+
+
 
         return redirect()->route('admin.paso2.editar', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa fueron actualizados correctamente.');
     }

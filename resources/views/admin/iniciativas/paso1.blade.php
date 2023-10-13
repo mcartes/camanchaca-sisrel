@@ -218,10 +218,44 @@
                                     <div class="form-group">
                                         <label>Mecanismo</label> <label for="" style="color: red;">*</label>
                                         @if (isset($iniciativa))
-                                            <select class="form-control select2" id="submecanismo" name="submecanismo" style="width: 100%">
+                                            <select class="form-control select2" id="mecanismo" name="mecanismo" style="width: 100%">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @forelse ($mecanismos as $mecanismo)
-                                                    <option value="{{ $mecanismo->subm_codigo }}" {{ $iniciativa->subm_codigo==$mecanismo->subm_codigo ? 'selected' : '' }}>{{ $mecanismo->subm_nombre }} ({{ $mecanismo->meca_nombre }})</option>
+                                                    <option value="{{ $mecanismo->meca_codigo }}">{{ $mecanismo->meca_nombre }}</option>
+                                                    {{-- <option value="{{ $mecanismo->meca_codigo }}" {{ $iniciativa->subm_codigo==$mecanismo->subm_codigo ? 'selected' : '' }}>{{ $mecanismo->subm_nombre }} ({{ $mecanismo->meca_nombre }})</option> --}}
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            </select>
+                                        @else
+                                            <select class="form-control select2" id="mecanismo" name="mecanismo" style="width: 100%">
+                                                <option value="" selected disabled>Seleccione...</option>
+                                                @forelse ($mecanismos as $mecanismo)
+                                                    <option value="{{ $mecanismo->meca_codigo }}" {{ old('mecanismo')==$mecanismo->meca_codigo ? 'selected' : '' }}>{{ $mecanismo->meca_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            </select>
+                                        @endif
+                                        @if($errors->has('mecanismo'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close" data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('mecanismo') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-xl-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        <label>Actividad</label> <label for="" style="color: red;">*</label>
+                                        @if (isset($iniciativa))
+                                            <select class="form-control select2" id="submecanismo" name="submecanismo" style="width: 100%">
+                                                <option value="" selected disabled>Seleccione...</option>
+                                                @forelse ($actividades as $actividad)
+                                                    <option value="{{ $actividad->subm_codigo }}" {{ $iniciativa->subm_codigo==$actividad->subm_codigo ? 'selected' : '' }}>{{ $actividad->subm_nombre }} ({{ $actividad->meca_nombre }})</option>
                                                 @empty
                                                     <option value="-1">No existen registros</option>
                                                 @endforelse
@@ -229,8 +263,8 @@
                                         @else
                                             <select class="form-control select2" id="submecanismo" name="submecanismo" style="width: 100%">
                                                 <option value="" selected disabled>Seleccione...</option>
-                                                @forelse ($mecanismos as $mecanismo)
-                                                    <option value="{{ $mecanismo->subm_codigo }}" {{ old('submecanismo')==$mecanismo->subm_codigo ? 'selected' : '' }}>{{ $mecanismo->subm_nombre }} ({{ $mecanismo->meca_nombre }})</option>
+                                                @forelse ($actividades as $actividad)
+                                                    <option value="{{ $actividad->subm_codigo }}" {{ old('submecanismo')==$actividad->subm_codigo ? 'selected' : '' }}>{{ $actividad->subm_nombre }} ({{ $actividad->meca_nombre }})</option>
                                                 @empty
                                                     <option value="-1">No existen registros</option>
                                                 @endforelse
