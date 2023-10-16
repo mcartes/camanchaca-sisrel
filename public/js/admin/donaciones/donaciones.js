@@ -3,11 +3,14 @@ const csrftoken = document.head.querySelector('[name~=csrf-token][content]').con
 $(document).ready(function(){
    $("#dirigente").hide();
    $("#organizacion").hide();
+   $("#comu_dona").hide();
+   $("#orga_dona").hide();
    $("#div-select-dirigentes").hide();
 });
 
 function cargarDirigentes(){
     let selectOrganizacion = $('#orga_codigo').val();
+    cargarOrga();
     $("#organizacion").val(null)
     fetch(window.location.origin+"/admin/donaciones/obtener-dirigentes",{
         method:'POST',
@@ -40,6 +43,13 @@ function MostrarDirigentes(){
         $("#dona_nombre_solicitante").val(null);
         $("#dona_cargo_solicitante").val(null);
     }
+}
+
+function cargarComuna(){
+    $('#comu_dona').val($("#comu_codigo").val())
+}
+function cargarOrga(){
+    $('#orga_dona').val($("#orga_codigo").val())
 }
 
 function CargarDatosDirigente(){

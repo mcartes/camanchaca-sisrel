@@ -69,11 +69,12 @@
                                 <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label>Comuna</label>
-                                        <select class="form-control select2" id="comu_codigo" name="comu_codigo" style="width: 100%">
+                                        <select class="form-control select2" id="comu_codigo" name="comu_codigo" style="width: 100%" onchange="cargarComuna()">
                                             <option value="" selected disabled>Seleccione...</option>
                                             @forelse ($comunas as $comuna)
                                                 <option value="{{ $comuna->comu_codigo }}"
-                                                    {{ Request::get('comu_codigo') == $comuna->comu_codigo ? 'selected' : '' }}>
+                                                    {{ Request::get('comu_codigo') == $comuna->comu_codigo ? 'selected' : '' }}
+                                                    >
                                                     {{ $comuna->comu_nombre }}
                                                 </option>
                                             @empty
@@ -119,6 +120,10 @@
                                     </div>
                                 @endif
                                 <input type="text" class="form-control " id="organizacion" name="organizacion"
+                                    value="">
+                                <input type="text" class="form-control " id="orga_dona" name="orga_dona"
+                                    value="">
+                                <input type="text" class="form-control " id="comu_dona" name="comu_dona"
                                     value="">
                                 @if ($errors->has('organizacion'))
                                     <div class="alert alert-warning alert-dismissible show fade mt-2 ">

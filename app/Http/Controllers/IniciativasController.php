@@ -321,6 +321,13 @@ class IniciativasController extends Controller
         return redirect()->route('admin.iniciativas.index')->with('exitoEliminar', 'La iniciativa fue eliminada correctamente.');
     }
 
+    public function obternerSubmecanismos(Request $request){
+        $submecanismo = Submecanismos::where('meca_codigo',$request->meca_codigo)->get();
+        if (sizeof($submecanismo) == 0)
+            return json_encode(['status' => false, 'resultado' => 'El mecanismo no posee submecanimos asosiados.']);
+        return json_encode(['status' => true, 'resultado' => $submecanismo]);
+    }
+
     public function aprobar($inic_codigo)
     {
         $inicVerificar = Iniciativas::where('inic_codigo', $inic_codigo)->first();
@@ -880,7 +887,7 @@ class IniciativasController extends Controller
                 [
                     'inev_nombre' => 'required|max:50',
                     'inev_descripcion' => 'required|max:500',
-                    'inev_archivo' => 'required|mimes:png,jpg,jpeg,pdf,xls,xlsx,ppt,pptx,doc,docx,csv,mp3,mp4,avi|max:10000',
+                    'inev_archivo' => 'required|max:10000',
                 ],
                 [
                     'inev_nombre.required' => 'El nombre de la evidencia es requerido.',
@@ -888,7 +895,7 @@ class IniciativasController extends Controller
                     'inev_descripcion.required' => 'La descripción de la evidencia es requerida.',
                     'inev_descripcion.max' => 'La descripción de la evidencia excede el máximo de caracteres permitidos (500).',
                     'inev_archivo.required' => 'El archivo de la evidencia es requerido.',
-                    'inev_archivo.mimes' => 'El tipo de archivo no está permitido, intente con un formato de archivo tradicional.',
+                    // 'inev_archivo.mimes' => 'El tipo de archivo no está permitido, intente con un formato de archivo tradicional.',
                     'inev_archivo.max' => 'El archivo excede el tamaño máximo permitido (10 MB).'
                 ]
             );

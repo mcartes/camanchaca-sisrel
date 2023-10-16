@@ -21,7 +21,7 @@
                     </div>
                     <div class="row">
                         <div class="col-xl-2 col-md-2 col-lg-2"></div>
-                        <div class="col-xl-2 col-md-8 col-lg-8">
+                        <div class="col-xl-8 col-md-8 col-lg-8">
                             <div class="card">
                                 <div class="card-header">
                                     <h4>Editar organización</h4>
