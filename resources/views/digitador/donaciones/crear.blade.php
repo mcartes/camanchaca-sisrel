@@ -3,11 +3,11 @@
 <div class="section">
     <div class="section-body">
         <div class="row">
-            <div class="col-12">
+            <div class="col-xl-12">
                 <div class="row">
 
-                    <div class="col-3"></div>
-                    <div class="col-6">
+                    <div class="col-xl-3"></div>
+                    <div class="col-xl-6">
                         @if (Session::has('errorDonacion'))
                         <div class="alert alert-danger alert-dismissible show fade mb-4 text-center">
                             <div class="alert-body">
@@ -17,7 +17,7 @@
                         </div>
                         @endif
                     </div>
-                    <div class="col-3"></div>
+                    <div class="col-xl-3"></div>
                 </div>
 
                 <div class="card">
@@ -30,8 +30,8 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-1"></div>
-                            <div class="col-4 col-md-4 col-lg-4">
+                            <div class="col-xl-1"></div>
+                            <div class="col-xl-4 col-md-4 col-lg-4">
                                 <div class="form-group">
                                     <label>Organización</label>
                                     <select class="form-control select2" id="orga_codigo" name="orga_codigo" onchange="cargarDirigentes()">
@@ -47,7 +47,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-4 col-md-4 col-lg-4" id="div-select-dirigentes" name="div-select-dirigentes">
+                            <div class="col-xl-4 col-md-4 col-lg-4" id="div-select-dirigentes" name="div-select-dirigentes">
                                 <div class="form-group">
                                     <label>Dirigente</label>
                                     <select class="form-control" id="diri_codigo" name="diri_codigo" onchange="CargarDatosDirigente()">
@@ -100,7 +100,7 @@
 
                                 </div>
 
-                                <div class="col-4 col-md-4 col-lg-4">
+                                <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label for="dona_nombre_solicitante">Nombre del solicitante</label>
                                         <div class="input-group">
@@ -122,7 +122,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-3 col-md-3 col-lg-3">
+                                <div class="col-xl-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         <label for="dona_cargo_solicitante">Cargo del solicitante</label>
                                         <div class="input-group">
@@ -145,8 +145,8 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-1"></div>
-                                <div class="col-3 col-md-3 col-lg-3">
+                                <div class="col-xl-1"></div>
+                                <div class="col-xl-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         <label for="dona_persona_aprueba">Aprobado por</label>
                                         <div class="input-group">
@@ -168,7 +168,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label for="dona_monto">Monto donado</label>
                                         <div class="input-group">
@@ -190,7 +190,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-3 col-md-3 col-lg-3">
+                                <div class="col-xl-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         <label for="dona_persona_recepciona">Recepcionista de donación</label>
                                         <div class="input-group">
@@ -211,7 +211,7 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label for="pila_codigo">Pilar asociado</label>
                                         <div class="input-group">
@@ -234,8 +234,8 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-1"></div>
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-1"></div>
+                                <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label for="dona_fecha_entrega">Fecha de entrega</label>
                                         <div class="input-group">
@@ -249,7 +249,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label for="dona_estado">Estado de la donación</label>
                                         <div class="input-group">
@@ -265,7 +265,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label for="dona_form_autorizacion">Estado del formulario de
                                             autorización</label>
@@ -279,7 +279,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label for="dona_declaracion_jurada">Estado de declaración jurada</label>
                                         <div class="input-group">
@@ -292,7 +292,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-2 col-md-2 col-lg-2">
+                                <div class="col-xl-2 col-md-2 col-lg-2">
                                     <div class="form-group">
                                         <label for="dona_tipo_aporte">Tipo de aporte</label>
                                         <div class="input-group">
@@ -311,9 +311,9 @@
                             </div>
 
                             <div class="row">
-                                <div class="col-1"></div>
+                                <div class="col-xl-1"></div>
 
-                                <div class="col-4 col-md-4 col-lg-4">
+                                <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label for="dona_descripcion">Descripción</label>
                                         <div class="input-group">

@@ -4,10 +4,10 @@
     <section class="section">
         <div class="section-body">
             <div class="row">
-                <div class="col-12">
+                <div class="col-xl-12">
                     <div class="row">
-                        <div class="col-3"></div>
-                        <div class="col-6">
+                        <div class="col-xl-3"></div>
+                        <div class="col-xl-6">
                             @if (Session::has('errorIniciativa'))
                                 <div class="alert alert-danger alert-dismissible show fade mb-4 text-center">
                                     <div class="alert-body">
@@ -44,7 +44,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-3"></div>
+                        <div class="col-xl-3"></div>
                     </div>
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
@@ -125,7 +125,7 @@
 
 
                         <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
-                            <div class="card h-100">
+                            <div class="card">
                                 <div class="card-body">
                                     <div id="sidebar" class="sidebar collapsed">
                                         <div class="sidebar-content">
@@ -137,7 +137,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="map" class="w-auto p-3 sidebar-map" style="height: 100%"></div>
+                                    <div id="map" class="w-auto p-3 sidebar-map" style="height: 15cm"></div>
                                 </div>
                             </div>
                         </div>

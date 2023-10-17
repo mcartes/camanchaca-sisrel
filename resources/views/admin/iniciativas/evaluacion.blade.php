@@ -4,7 +4,7 @@
 
 <section class="section">
     <div class="section-body">
-        <div class="row">            
+        <div class="row">
             <div class="col-12">
                 <div class="row">
                     <div class="col-3"></div>
@@ -19,11 +19,24 @@
                         @endif
                     </div>
                     <div class="col-3"></div>
-                </div>                
+                </div>
                 <div class="card">
                     <div class="card-header">
                         <h4>{{ $iniciativa->inic_nombre }} - Evaluación</h4>
-                    </div>                    
+                        <div class="card-header-action">
+                            <div class="dropdown d-inline">
+                                <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Iniciativa</button>
+                                <div class="dropdown-menu dropright">
+                                    <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i class="fas fa-users"></i>Ingresar cobertura</a>
+                                    <a href="{{ route('admin.resultados.index', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i class="fas fa-flag"></i>Ingresar resultados</a>
+                                    <a href="{{ route('admin.evaluacion.index', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i class="fas fa-file-signature"></i>Ingresar evaluación</a>
+                                    <a href="{{ route('admin.evidencia.listar', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i class="fas fa-paperclip"></i> Adjuntar evidencia</a>
+                                </div>
+                                <a href="{{ route('admin.dbgeneral.index') }}" type="button" class="btn btn-warning mr-1 waves-effect"><i class="fas fa-home"></i> Volver a inicio</a>
+                                <a href="{{ route('admin.iniciativas.index') }}" type="button" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-angle-left"></i> Volver al listado</a>
+                            </div>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <h6>Calidad de la ejecución</h6>
                         <p>
@@ -486,8 +499,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-12 col-md-12 col-lg-12 text-right">
-                                            <a href="{{ route('admin.iniciativas.index') }}" type="button" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-angle-left"></i> Volver al listado</a>
-                                            <button type="submit" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-save"></i> Guardar evaluación</button>                                            
+                                            <button type="submit" class="btn btn-primary mr-1 waves-effect"><i class="fas fa-save"></i> Guardar evaluación</button>
                                         </form>
                                             @if (!empty($evaluacion))
                                                 <form action="{{ route('admin.evaluacion.destroy', $evaluacion->eval_codigo) }}" method="POST" id="form-eliminar-evaluacion" style="display: inline-block;">

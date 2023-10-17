@@ -1074,7 +1074,7 @@ class IniciativasController extends Controller
                 'pilar.required' => 'El pilar es requerido.',
                 'implementacion.required' => 'El formato de implementación es requerido.',
                 'nombreresponsable.max' => 'El nombre del encargado responsable excede el máximo de caracteres permitidos (100).',
-                'mecanismo.required' => 'El mecanismo asociada es requerida.',
+                'mecanismo.required' => 'El mecanismo asociado es requerido.',
                 'submecanismo.required' => 'La actividad asociada es requerida.',
                 'frecuencia.required' => 'La frecuencia es requerida.'
             ]

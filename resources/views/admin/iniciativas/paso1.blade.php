@@ -24,6 +24,34 @@
                     <div class="card">
                         <div class="card-header">
                             <h4>{{ isset($iniciativa) ? $iniciativa->inic_nombre : 'Crear iniciativa' }} - Paso 1 de 3</h4>
+                            <div class="card-header-action">
+                                @if (isset($iniciativa))
+                                    <div class="dropdown d-inline">
+                                        <button class="btn btn-primary dropdown-toggle" type="button"
+                                            id="dropdownMenuButton2" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false">Iniciativa</button>
+                                        <div class="dropdown-menu dropright">
+                                            <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}"
+                                                class="dropdown-item has-icon"><i class="fas fa-users"></i>Ingresar
+                                                cobertura</a>
+                                            <a href="{{ route('admin.resultados.index', $iniciativa->inic_codigo) }}"
+                                                class="dropdown-item has-icon"><i class="fas fa-flag"></i>Ingresar
+                                                resultados</a>
+                                            <a href="{{ route('admin.evaluacion.index', $iniciativa->inic_codigo) }}"
+                                                class="dropdown-item has-icon"><i class="fas fa-file-signature"></i>Ingresar
+                                                evaluación</a>
+                                            <a href="{{ route('admin.evidencia.listar', $iniciativa->inic_codigo) }}"
+                                                class="dropdown-item has-icon"><i class="fas fa-paperclip"></i> Adjuntar
+                                                evidencia</a>
+                                        </div>
+                                    </div>
+                                @endif
+                                <a href="{{ route('admin.dbgeneral.index') }}" type="button" class="btn btn-primary"
+                                    title="Ir a inicio"><i class="fas fa-home"></i>
+                                    Volver a inicio</a>
+                                <a href="{{ route('admin.iniciativas.index') }}" type="button" class="btn btn-primary"
+                                    title="Ir a iniciativas"><i class="fas fa-backward"></i> Volver a iniciativas</a>
+                            </div>
                         </div>
                         <div class="card-body">
                             @if (isset($iniciativa))
@@ -407,12 +435,7 @@
                             <div class="row">
                                 <div class="col-xl-12 col-md-12 col-lg-12">
                                     <div class="text-right">
-                                        <a href="{{ route('admin.dbgeneral.index') }}" type="button"
-                                            class="btn btn-warning" title="Ir a inicio"><i class="fas fa-home"></i>
-                                            Volver</a>
-                                        <a href="{{ route('admin.iniciativas.index') }}" type="button"
-                                            class="btn btn-success" title="Ir a iniciativas"><i
-                                                class="fas fa-backward"></i></a>
+
                                         <button type="submit" class="btn btn-primary mr-1 waves-effect">Siguiente <i
                                                 class="fas fa-chevron-right"></i></button>
                                         @if (isset($iniciativa))

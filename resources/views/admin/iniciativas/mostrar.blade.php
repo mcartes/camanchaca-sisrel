@@ -5,10 +5,10 @@
 <section class="section">
     <div class="section-body">
         <div class="row">
-            <div class="col-12">
+            <div class="col-xl-12">
                 <div class="row">
-                    <div class="col-3"></div>
-                    <div class="col-6">
+                    <div class="col-xl-3"></div>
+                    <div class="col-xl-6">
                         @if(Session::has('errorIniciativa'))
                             <div class="alert alert-danger alert-dismissible show fade mb-4 text-center">
                                 <div class="alert-body">
@@ -27,7 +27,7 @@
                             </div>
                         @endif
                     </div>
-                    <div class="col-3"></div>
+                    <div class="col-xl-3"></div>
                 </div>
                 <div class="card">
                     <div class="card-header">
@@ -46,6 +46,7 @@
                                     <a href="{{ route('admin.cobertura.index', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i class="fas fa-users"></i>Ingresar cobertura</a>
                                     <a href="{{ route('admin.resultados.index', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i class="fas fa-flag"></i>Ingresar resultados</a>
                                     <a href="{{ route('admin.evaluacion.index', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i class="fas fa-file-signature"></i>Ingresar evaluación</a>
+                                    <a href="{{ route('admin.evidencia.listar', $iniciativa->inic_codigo) }}" class="dropdown-item has-icon"><i class="fas fa-paperclip"></i> Adjuntar evidencia</a>
                                 </div>
                             </div>
                             @if (Session::has('admin'))
@@ -57,10 +58,10 @@
                                     </div>
                                 </div>
                             @endif
-                            <a href="{{route('admin.dbgeneral.index')}}" type="button" class="btn btn-primary" title="Ir a inicio"><i class="fas fa-home"></i> Volver</a>
-                            <a href="{{route('admin.iniciativas.index')}}" type="button" class="btn btn-primary" title="Ir a iniciativas"><i class="fas fa-backward"></i></a>
+                            <a href="{{route('admin.dbgeneral.index')}}" type="button" class="btn btn-primary" title="Ir a inicio"><i class="fas fa-home"></i> Volver a inicio</a>
+                            <a href="{{route('admin.iniciativas.index')}}" type="button" class="btn btn-primary" title="Ir a iniciativas"><i class="fas fa-backward"></i> Volver a iniciativas</a>
                             <a href="javascript:void(0)" class="btn btn-icon btn-primary" onclick="calcularIndice({{ $iniciativa->inic_codigo }})" data-toggle="tooltip" data-placement="top" title="Calcular INVI"><i class="fas fa-tachometer-alt"></i></a>
-                            <a href="{{ route('admin.evidencia.listar', $iniciativa->inic_codigo) }}" class="btn btn-icon btn-primary" data-toggle="tooltip" data-placement="top" title="Adjuntar evidencia"><i class="fas fa-paperclip"></i></a>
+                            {{-- <a href="{{ route('admin.evidencia.listar', $iniciativa->inic_codigo) }}" class="btn btn-icon btn-primary" data-toggle="tooltip" data-placement="top" title="Adjuntar evidencia"><i class="fas fa-paperclip"></i></a> --}}
                             <a href="javascript:void(0);" class="btn btn-icon btn-primary" onclick="imprimirIniciativa()" data-toggle="tooltip" data-placement="top" title="Imprimir"><i class="fas fa-print"></i></a>
                             <a href="{{ route('admin.paso1.editar', $iniciativa->inic_codigo) }}" class="btn btn-icon btn-warning" data-toggle="tooltip" data-placement="top" title="Editar iniciativa"><i class="fas fa-edit"></i></a>
                             <a href="javascript:void(0)" class="btn btn-icon btn-danger" onclick="eliminarIniciativa({{ $iniciativa->inic_codigo }})" data-toggle="tooltip" data-placement="top" title="Eliminar iniciativa"><i class="fas fa-trash"></i></a>

@@ -4,10 +4,10 @@
     <section class="section">
         <div class="section-body">
             <div class="row">
-                <div class="col-12">
+                <div class="col-xl-12">
                     <div class="row">
-                        <div class="col-3"></div>
-                        <div class="col-6">
+                        <div class="col-xl-3"></div>
+                        <div class="col-xl-6">
                             @if (Session::has('exitoActividad'))
                                 <div class="alert alert-success alert-dismissible show fade mb-4 text-center">
                                     <div class="alert-body">
@@ -26,7 +26,7 @@
                                 </div>
                             @endif
                         </div>
-                        <div class="col-3"></div>
+                        <div class="col-xl-3"></div>
                     </div>
                     <div class="card">
                         <div class="card-header">

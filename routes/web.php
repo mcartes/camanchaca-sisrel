@@ -85,6 +85,7 @@ Route::middleware('verificar.admin')->group(function () {
     Route::get('admin/iniciativas/comuna', [IniciativasController::class, 'comunasByRegion']);
     Route::get('admin/iniciativas/unidad', [IniciativasController::class, 'unidadesByComuna']);
     Route::get('admin/iniciativa/crear/paso1', [IniciativasController::class, 'crearPaso1'])->name('admin.paso1.crear');
+    // TODO: RUTA PARA OBTENER SUBMECANISMO
     Route::post('admin/iniciativa/obtener/submecanismos', [IniciativasController::class, 'obternerSubmecanismos']);
     Route::get('admin/iniciativa/{inic_codigo}/editar/paso1', [IniciativasController::class, 'editarPaso1'])->name('admin.paso1.editar');
     Route::put('admin/iniciativa/{inic_codigo}/paso1', [IniciativasController::class, 'actualizarPaso1'])->name('admin.paso1.actualizar');
