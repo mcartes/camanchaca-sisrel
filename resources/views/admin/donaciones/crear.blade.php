@@ -120,11 +120,11 @@
                                     </div>
                                 @endif
                                 <input type="text" class="form-control " id="organizacion" name="organizacion"
-                                    value="">
+                                    value="" style="display: none;">
                                 <input type="text" class="form-control " id="orga_dona" name="orga_dona"
-                                    value="">
+                                    value="" style="display: none;">
                                 <input type="text" class="form-control " id="comu_dona" name="comu_dona"
-                                    value="">
+                                    value="" style="display: none;">
                                 @if ($errors->has('organizacion'))
                                     <div class="alert alert-warning alert-dismissible show fade mt-2 ">
                                         <div class="alert-body">
