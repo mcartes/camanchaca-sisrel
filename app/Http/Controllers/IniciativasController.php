@@ -1179,6 +1179,7 @@ class IniciativasController extends Controller
         foreach ($inunListar as $registro) {
             array_push($inunCodigos, $registro->unid_codigo);
         }
+        $insuListar = DB::table('iniciativas_submecanismo')->where('inic_codigo',$inic_codigo)->get();
         $listarPilares = Pilares::select('pila_codigo', 'pila_nombre')->where('pila_vigente', 'S')->orderBy('pila_codigo', 'asc')->get();
         $listarConvenios = Convenios::select('conv_codigo', 'conv_nombre')->where('conv_vigente', 'S')->orderBy('conv_codigo', 'asc')->get();
         $listarFormatos = FormatoImplementacion::select('foim_codigo', 'foim_nombre')->where('foim_vigente', 'S')->orderBy('foim_codigo', 'asc')->get();
@@ -1199,6 +1200,7 @@ class IniciativasController extends Controller
             'convenios' => $listarConvenios,
             'formatos' => $listarFormatos,
             'cargos' => $listarCargos,
+            'mecanismoSeleccionado' => $insuListar,
             'mecanismos' => $listarMecanismo,
             'actividades' => $listarSubmecanismos,
             'frecuencias' => $listarFrecuencias
@@ -1217,6 +1219,7 @@ class IniciativasController extends Controller
                 'implementacion' => 'required',
                 'nombreresponsable' => 'max:100',
                 'submecanismo' => 'required',
+                'mecanismo' => 'required',
                 'frecuencia' => 'required'
             ],
             [

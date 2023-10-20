@@ -332,6 +332,7 @@ Route::middleware('verificar.digitador')->group(function () {
     Route::get('digitador/iniciativas/comuna', [Digi_Iniciativas::class, 'comunasByRegion']);
     Route::get('digitador/iniciativas/unidad', [Digi_Iniciativas::class, 'unidadesByComuna']);
     Route::get('digitador/iniciativa/crear/paso1', [Digi_Iniciativas::class, 'crearPaso1'])->name('digitador.paso1.crear');
+    Route::post('digitador/iniciativa/obtener/submecanismos', [IniciativasController::class, 'obternerSubmecanismos']);
     Route::get('digitador/iniciativa/{inic_codigo}/editar/paso1', [Digi_Iniciativas::class, 'editarPaso1'])->name('digitador.paso1.editar');
     Route::put('digitador/iniciativa/{inic_codigo}/paso1', [Digi_Iniciativas::class, 'actualizarPaso1'])->name('digitador.paso1.actualizar');
     Route::post('digitador/iniciativa/crear/paso1', [Digi_Iniciativas::class, 'verificarPaso1'])->name('digitador.paso1.verificar');

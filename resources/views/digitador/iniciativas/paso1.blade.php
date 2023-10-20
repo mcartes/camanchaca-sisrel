@@ -18,7 +18,7 @@
                 @endif
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-12 col-md-12 col-lg-12">
                 <div class="card">
@@ -39,7 +39,7 @@
                                 <div class="col-12 col-md-12 col-lg-12">
                                     <div class="form-group">
                                         <label>Nombre de actividad</label> <label for="" style="color: red;">*</label>
-                                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ old('nombre') ?? @$iniciativa->inic_nombre }}">                                        
+                                        <input type="text" class="form-control" id="nombre" name="nombre" value="{{ old('nombre') ?? @$iniciativa->inic_nombre }}">
                                         @if($errors->has('nombre'))
                                             <div class="alert alert-warning alert-dismissible show fade mt-2">
                                                 <div class="alert-body">
@@ -117,7 +117,7 @@
                                             </div>
                                         @endif
                                     </div>
-                                </div> 
+                                </div>
                                 <div class="col-3 col-md-3 col-lg-3">
                                     <div class="form-group">
                                         <label>Pilar</label> <label for="" style="color: red;">*</label><i data-toggle="tooltip" data-placement="right" title="Pilar programa Camanchaca Amiga" class="fas fa-info-circle"></i>
@@ -214,9 +214,54 @@
                                         @endif
                                     </div>
                                 </div>
-                                <div class="col-4 col-md-4 col-lg-4">
+                                <div class="col-xl-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Mecanismo</label> <label for="" style="color: red;">*</label>
+                                        @if (isset($iniciativa))
+                                            <select class="form-control select2" id="mecanismo" name="mecanismo"
+                                                style="width: 100%">
+                                                <option value="" selected disabled>Seleccione...</option>
+                                                @forelse ($mecanismos as $mecanismo)
+                                                    @if (count($mecanismoSeleccionado) > 0)
+                                                        <option value="{{ $mecanismo->meca_codigo }}"
+                                                            {{ $mecanismoSeleccionado[0]->meca_codigo == $mecanismo->meca_codigo ? 'selected' : '' }}>
+                                                            {{ $mecanismo->meca_nombre }}</option>
+                                                    @else
+                                                        <option value="{{ $mecanismo->meca_codigo }}">
+                                                            {{ $mecanismo->meca_nombre }}</option>
+                                                    @endif
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            </select>
+                                        @else
+                                            <select class="form-control select2" id="mecanismo" name="mecanismo"
+                                                style="width: 100%">
+                                                <option value="" selected disabled>Seleccione...</option>
+                                                @forelse ($mecanismos as $mecanismo)
+                                                    <option value="{{ $mecanismo->meca_codigo }}"
+                                                        {{ old('mecanismo') == $mecanismo->meca_codigo ? 'selected' : '' }}>
+                                                        {{ $mecanismo->meca_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            </select>
+                                        @endif
+                                        @if ($errors->has('mecanismo'))
+                                            <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                <div class="alert-body">
+                                                    <button class="close"
+                                                        data-dismiss="alert"><span>&times;</span></button>
+                                                    <strong>{{ $errors->first('mecanismo') }}</strong>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="col-4 col-md-4 col-lg-4">
+                                    <div class="form-group">
+                                        <label>Actividad</label> <label for="" style="color: red;">*</label>
                                         @if (isset($iniciativa))
                                             <select class="form-control select2" id="submecanismo" name="submecanismo">
                                                 <option value="" selected disabled>Seleccione...</option>
@@ -245,7 +290,7 @@
                                             </div>
                                         @endif
                                     </div>
-                                </div>   
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-4 col-md-4 col-lg-4">
@@ -328,5 +373,45 @@
         </div>
     </div>
 </section>
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+        crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function() {
+            // TODO:Función para cargar dinamicamente las actividades de acuerdo al mecanismo al que pertenecen
+            $('#mecanismo').on('change', function() {
+                var mecanismo = $('#mecanismo').val();
+                $.ajax({
+                    type: 'POST',
+                    url: `${window.location.origin}/digitador/iniciativa/obtener/submecanismos`,
+                    data: {
+                        meca_codigo: mecanismo
+                    },
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(mecaListar) {
+                        respuesta = JSON.parse(mecaListar);
+                        $('#submecanismo').find('option').not(':first').remove();
+                        $('#submecanismo').prop('selectedIndex', 0);
+                        if (!respuesta.status) {
+
+                            $('#submecanismo').append(new Option('No exiten registros', '-1'))
+                            return
+                        }
+
+                        aSubmecanismo = respuesta.resultado;
+                        aSubmecanismo.forEach(submecanismo => {
+                            $('#submecanismo').append(new Option(submecanismo
+                                .subm_nombre, submecanismo.subm_codigo))
+                        });
+
+                    },
+                    error: function(error) {
+                        console.error(error);
+                    }
+                })
+            })
+        })
+    </script>
 
 @endsection

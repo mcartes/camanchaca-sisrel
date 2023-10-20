@@ -163,8 +163,9 @@
                                 <div class="input-group-prepend">
                                 </div>
                             </div>
-                            <input type="file" id="inev_archivo" name="inev_archivo"
-                                accept=".png,.jpg,.jpeg,.pdf,.xls,.xlsx,.ppt,.pptx,.doc,.docx,.csv,.mp3,.mp4,.avi"><br>
+                            {{-- <input type="file" id="inev_archivo" name="inev_archivo"
+                                accept=".png,.jpg,.jpeg,.pdf,.xls,.xlsx,.ppt,.pptx,.doc,.docx,.csv,.mp3,.mp4,.avi"><br> --}}
+                            <input type="file" id="inev_archivo" name="inev_archivo"><br>
                             <small>Tamaño máximo de archivo: 10 MB</small>
                         </div>
                         <div class="text-center">

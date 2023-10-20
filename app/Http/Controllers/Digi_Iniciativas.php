@@ -41,23 +41,25 @@ use Symfony\Component\Process\Process;
 
 
 
-class Digi_Iniciativas extends Controller {
+class Digi_Iniciativas extends Controller
+{
 
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         $filter = DB::table('usuarios')
-        ->join('unidades','unidades.unid_codigo','=','usuarios.unid_codigo')
-        ->join('comunas','comunas.comu_codigo','=','unidades.comu_codigo')
-        ->join('regiones','regiones.regi_codigo','=','comunas.regi_codigo')
-        ->select('regiones.*')
-        ->where('usuarios.usua_rut','=',Session::get('digitador')->usua_rut)
-        ->get();
+            ->join('unidades', 'unidades.unid_codigo', '=', 'usuarios.unid_codigo')
+            ->join('comunas', 'comunas.comu_codigo', '=', 'unidades.comu_codigo')
+            ->join('regiones', 'regiones.regi_codigo', '=', 'comunas.regi_codigo')
+            ->select('regiones.*')
+            ->where('usuarios.usua_rut', '=', Session::get('digitador')->usua_rut)
+            ->get();
         $regiListar = Regiones::select('regi_codigo', 'regi_nombre')->where('regi_vigente', 'S')->get();
-        $comuListar = Comunas::select('comu_codigo', 'comu_nombre')->where('comu_vigente', 'S')->where('regi_codigo',$filter[0]->regi_codigo)->get();
+        $comuListar = Comunas::select('comu_codigo', 'comu_nombre')->where('comu_vigente', 'S')->where('regi_codigo', $filter[0]->regi_codigo)->get();
         $unidListar = Unidades::select('unid_codigo', 'unid_nombre')->where('unid_vigente', 'S')->get();
         $inicListar = null;
 
         if (count($request->all()) > 0) {
-            if ($request->comuna!='') {
+            if ($request->comuna != '') {
                 $inicListar = DB::table('iniciativas')
                     ->select('iniciativas.inic_codigo', 'inic_nombre', 'inic_nombre_responsable', 'meca_nombre', 'inic_aprobada')
                     ->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')
@@ -65,23 +67,23 @@ class Digi_Iniciativas extends Controller {
                     ->join('iniciativas_ubicaciones', 'iniciativas_ubicaciones.inic_codigo', '=', 'iniciativas.inic_codigo')
                     ->join('comunas', 'comunas.comu_codigo', '=', 'iniciativas_ubicaciones.comu_codigo')
                     ->join('regiones', 'regiones.regi_codigo', '=', 'comunas.regi_codigo')
-                    ->where(['inic_vigente' => 'S', 'regiones.regi_codigo' => $filter[0]->regi_codigo,'comunas.comu_codigo'=>$request->comuna])
+                    ->where(['inic_vigente' => 'S', 'regiones.regi_codigo' => $filter[0]->regi_codigo, 'comunas.comu_codigo' => $request->comuna])
                     ->distinct()
                     ->orderBy('inic_creado', 'desc')
                     ->get();
             }
         } else {
             $inicListar = DB::table('iniciativas')
-            ->select('iniciativas.inic_codigo', 'inic_nombre', 'inic_nombre_responsable', 'meca_nombre', 'inic_aprobada')
-            ->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')
-            ->join('mecanismo', 'mecanismo.meca_codigo', '=', 'submecanismo.meca_codigo')
-            ->join('iniciativas_ubicaciones', 'iniciativas_ubicaciones.inic_codigo', '=', 'iniciativas.inic_codigo')
-            ->join('comunas', 'comunas.comu_codigo', '=', 'iniciativas_ubicaciones.comu_codigo')
-            ->join('regiones', 'regiones.regi_codigo', '=', 'comunas.regi_codigo')
-            ->where('inic_vigente', 'S')
-            ->where('regiones.regi_codigo',$filter[0]->regi_codigo)
-            ->orderBy('inic_creado', 'desc')
-            ->get();
+                ->select('iniciativas.inic_codigo', 'inic_nombre', 'inic_nombre_responsable', 'meca_nombre', 'inic_aprobada')
+                ->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')
+                ->join('mecanismo', 'mecanismo.meca_codigo', '=', 'submecanismo.meca_codigo')
+                ->join('iniciativas_ubicaciones', 'iniciativas_ubicaciones.inic_codigo', '=', 'iniciativas.inic_codigo')
+                ->join('comunas', 'comunas.comu_codigo', '=', 'iniciativas_ubicaciones.comu_codigo')
+                ->join('regiones', 'regiones.regi_codigo', '=', 'comunas.regi_codigo')
+                ->where('inic_vigente', 'S')
+                ->where('regiones.regi_codigo', $filter[0]->regi_codigo)
+                ->orderBy('inic_creado', 'desc')
+                ->get();
         }
 
         return view('digitador.iniciativas.listar', [
@@ -92,9 +94,11 @@ class Digi_Iniciativas extends Controller {
         ]);
     }
 
-    public function show($inic_codigo) {
+    public function show($inic_codigo)
+    {
         $iniciativa = Iniciativas::where('inic_codigo', $inic_codigo)->first();
-        if (!$iniciativa) return redirect()->route('digitador.iniciativas.index')->with('errorIniciativa', 'La iniciativa seleccionada no se encuentra registrada en el sistema.');
+        if (!$iniciativa)
+            return redirect()->route('digitador.iniciativas.index')->with('errorIniciativa', 'La iniciativa seleccionada no se encuentra registrada en el sistema.');
 
         $inodListar = DB::table('objetivos_desarrollo')
             ->join('iniciativas_ods', 'iniciativas_ods.obde_codigo', '=', 'objetivos_desarrollo.obde_codigo')
@@ -212,9 +216,11 @@ class Digi_Iniciativas extends Controller {
         ]);
     }
 
-    public function destroy(Request $request) {
+    public function destroy(Request $request)
+    {
         $inicVerificar = Iniciativas::where('inic_codigo', $request->inic_codigo)->first();
-        if (!$inicVerificar) return redirect()->back()->with('errorEliminar', 'La iniciativa no se encuentra registrada.');
+        if (!$inicVerificar)
+            return redirect()->back()->with('errorEliminar', 'La iniciativa no se encuentra registrada.');
 
         IniciativasImpactos::where('inic_codigo', $request->inic_codigo)->delete();
         IniciativasOds::where('inic_codigo', $request->inic_codigo)->delete();
@@ -228,33 +234,39 @@ class Digi_Iniciativas extends Controller {
         Resultados::where('inic_codigo', $request->inic_codigo)->delete();
         Evaluaciones::where('inic_codigo', $request->inic_codigo)->delete();
         $inicEliminar = Iniciativas::where('inic_codigo', $request->inic_codigo)->delete();
-        if (!$inicEliminar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un problema al eliminar la iniciativa, contáctese con el soporte del sistema.']);
+        if (!$inicEliminar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un problema al eliminar la iniciativa, contáctese con el soporte del sistema.']);
         return redirect()->route('digitador.iniciativas.index')->with('exitoEliminar', 'La iniciativa fue eliminada correctamente.');
     }
 
-    public function comunasByRegion(Request $request) {
+    public function comunasByRegion(Request $request)
+    {
         $comuListar = DB::table('comunas')
             ->select('comunas.regi_codigo', 'comunas.comu_codigo', 'comu_nombre')
             ->join('regiones', 'regiones.regi_codigo', '=', 'comunas.regi_codigo')
             ->where('comunas.regi_codigo', $request->region)
             ->orderBy('comunas.comu_codigo', 'asc')
             ->get();
-        if (sizeof($comuListar) == 0) return json_encode(['estado' => false, 'resultado' => 'La región no posee comunas registradas.']);
+        if (sizeof($comuListar) == 0)
+            return json_encode(['estado' => false, 'resultado' => 'La región no posee comunas registradas.']);
         return json_encode(['estado' => true, 'resultado' => $comuListar]);
     }
 
-    public function unidadesByComuna(Request $request) {
+    public function unidadesByComuna(Request $request)
+    {
         $unidListar = DB::table('unidades')
             ->select('unidades.comu_codigo', 'unidades.unid_codigo', 'unid_nombre')
             ->join('comunas', 'comunas.comu_codigo', '=', 'unidades.comu_codigo')
             ->where('unidades.comu_codigo', $request->comuna)
             ->orderBy('unidades.unid_codigo', 'asc')
             ->get();
-        if (sizeof($unidListar) == 0) return json_encode(['estado' => false, 'resultado' => 'La comuna no posee unidades registradas.']);
+        if (sizeof($unidListar) == 0)
+            return json_encode(['estado' => false, 'resultado' => 'La comuna no posee unidades registradas.']);
         return json_encode(['estado' => true, 'resultado' => $unidListar]);
     }
 
-    public function crearEvaluacion($inic_codigo) {
+    public function crearEvaluacion($inic_codigo)
+    {
         $evalVerificar = Evaluaciones::where('inic_codigo', $inic_codigo)->first();
         $inicObtener = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         return view('digitador.iniciativas.evaluacion', [
@@ -263,8 +275,10 @@ class Digi_Iniciativas extends Controller {
         ]);
     }
 
-    public function guardarEvaluacion(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function guardarEvaluacion(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
                 'plazos' => 'required',
@@ -288,7 +302,8 @@ class Digi_Iniciativas extends Controller {
                 'presentaciones.required' => 'La evaluación de las presentaciones es requerida.',
             ]
         );
-        if ($validacion->fails()) return redirect()->back()->with('errorEvaluacion', $validacion->errors()->first())->withInput();
+        if ($validacion->fails())
+            return redirect()->back()->with('errorEvaluacion', $validacion->errors()->first())->withInput();
 
         $evalCrear = Evaluaciones::create([
             'tiev_codigo' => 1,
@@ -318,8 +333,10 @@ class Digi_Iniciativas extends Controller {
             ->first();
         $partIniciales = $participantes->part_iniciales;
         $partFinales = $participantes->part_finales;
-        if ($partIniciales > 0) $valorCobertura = round(($partFinales*100)/$partIniciales);
-        if ($valorCobertura > 100) $valorCobertura = 100;
+        if ($partIniciales > 0)
+            $valorCobertura = round(($partFinales * 100) / $partIniciales);
+        if ($valorCobertura > 100)
+            $valorCobertura = 100;
         // cálculo de resultados
         $valorResultados = 0;
         $resultados = DB::table('resultados')->select(DB::raw('COALESCE(SUM(resu_cuantificacion_inicial), 0) AS resu_iniciales'), DB::raw('COALESCE(SUM(resu_cuantificacion_final), 0) AS resu_finales'))
@@ -328,15 +345,17 @@ class Digi_Iniciativas extends Controller {
             ->first();
         $resuIniciales = $resultados->resu_iniciales;
         $resuFinales = $resultados->resu_finales;
-        if ($resuIniciales > 0) $valorResultados = round(($resuFinales*100)/$resuIniciales);
-        if ($valorResultados > 100) $valorResultados = 100;
+        if ($resuIniciales > 0)
+            $valorResultados = round(($resuFinales * 100) / $resuIniciales);
+        if ($valorResultados > 100)
+            $valorResultados = 100;
         // cálculo de evaluación
         $valorEvaluacion = 0;
         $evaluacion = Evaluaciones::select('eval_plazos', 'eval_horarios', 'eval_infraestructura', 'eval_equipamiento', 'eval_conexion_dl', 'eval_desempenho_responsable', 'eval_desempenho_participantes', 'eval_calidad_presentaciones')->where('inic_codigo', $request->iniciativa)->first();
-        $valorEvaluacion = intval($evaluacion->eval_plazos) + intval($evaluacion->eval_horarios) + intval($evaluacion->eval_infraestructura)+ intval($evaluacion->eval_equipamiento) + intval($evaluacion->eval_conexion_dl) + intval($evaluacion->eval_desempenho_responsable) + intval($evaluacion->eval_desempenho_participantes) + intval($evaluacion->eval_calidad_presentaciones);
-        $valorEvaluacion = round(($valorEvaluacion*20)/8);
+        $valorEvaluacion = intval($evaluacion->eval_plazos) + intval($evaluacion->eval_horarios) + intval($evaluacion->eval_infraestructura) + intval($evaluacion->eval_equipamiento) + intval($evaluacion->eval_conexion_dl) + intval($evaluacion->eval_desempenho_responsable) + intval($evaluacion->eval_desempenho_participantes) + intval($evaluacion->eval_calidad_presentaciones);
+        $valorEvaluacion = round(($valorEvaluacion * 20) / 8);
         // cálculo y registro de INVI
-        $valorIndice = round((0.2*$mecanismo) + (0.1*$frecuencia) + (0.1*$valorCobertura) + (0.35*$valorEvaluacion) + (0.25*$valorResultados));
+        $valorIndice = round((0.2 * $mecanismo) + (0.1 * $frecuencia) + (0.1 * $valorCobertura) + (0.35 * $valorEvaluacion) + (0.25 * $valorResultados));
         Iniciativas::where('inic_codigo', $request->iniciativa)->update([
             'inic_inrel' => $valorIndice,
             'inic_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -344,12 +363,15 @@ class Digi_Iniciativas extends Controller {
             'inic_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
 
-        if (!$evalCrear) return redirect()->back()->with('errorEvaluacion', 'Ocurrió un error al registrar la evaluación de la iniciativa, intente más tarde')->withInput();
+        if (!$evalCrear)
+            return redirect()->back()->with('errorEvaluacion', 'Ocurrió un error al registrar la evaluación de la iniciativa, intente más tarde')->withInput();
         return redirect()->route('digitador.iniciativas.index')->with('exitoEvaluacion', 'La evaluación de la iniciativa fue registrada correctamente.');
     }
 
-    public function actualizarEvaluacion(Request $request, $eval_codigo) {
-        $validacion = Validator::make($request->all(),
+    public function actualizarEvaluacion(Request $request, $eval_codigo)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
                 'plazos' => 'required',
@@ -373,7 +395,8 @@ class Digi_Iniciativas extends Controller {
                 'presentaciones.required' => 'La evaluación de las presentaciones es requerida.',
             ]
         );
-        if ($validacion->fails()) return redirect()->back()->with('errorEvaluacion', $validacion->errors()->first())->withInput();
+        if ($validacion->fails())
+            return redirect()->back()->with('errorEvaluacion', $validacion->errors()->first())->withInput();
 
         $evalActualizar = Evaluaciones::where('eval_codigo', $eval_codigo)->update([
             'eval_plazos' => $request->plazos,
@@ -399,8 +422,10 @@ class Digi_Iniciativas extends Controller {
             ->first();
         $partIniciales = $participantes->part_iniciales;
         $partFinales = $participantes->part_finales;
-        if ($partIniciales > 0) $valorCobertura = round(($partFinales*100)/$partIniciales);
-        if ($valorCobertura > 100) $valorCobertura = 100;
+        if ($partIniciales > 0)
+            $valorCobertura = round(($partFinales * 100) / $partIniciales);
+        if ($valorCobertura > 100)
+            $valorCobertura = 100;
         // cálculo de resultados
         $valorResultados = 0;
         $resultados = DB::table('resultados')->select(DB::raw('COALESCE(SUM(resu_cuantificacion_inicial), 0) AS resu_iniciales'), DB::raw('COALESCE(SUM(resu_cuantificacion_final), 0) AS resu_finales'))
@@ -409,15 +434,17 @@ class Digi_Iniciativas extends Controller {
             ->first();
         $resuIniciales = $resultados->resu_iniciales;
         $resuFinales = $resultados->resu_finales;
-        if ($resuIniciales > 0) $valorResultados = round(($resuFinales*100)/$resuIniciales);
-        if ($valorResultados > 100) $valorResultados = 100;
+        if ($resuIniciales > 0)
+            $valorResultados = round(($resuFinales * 100) / $resuIniciales);
+        if ($valorResultados > 100)
+            $valorResultados = 100;
         // cálculo de evaluación
         $valorEvaluacion = 0;
         $evaluacion = Evaluaciones::select('eval_plazos', 'eval_horarios', 'eval_infraestructura', 'eval_equipamiento', 'eval_conexion_dl', 'eval_desempenho_responsable', 'eval_desempenho_participantes', 'eval_calidad_presentaciones')->where('inic_codigo', $request->iniciativa)->first();
-        $valorEvaluacion = intval($evaluacion->eval_plazos) + intval($evaluacion->eval_horarios) + intval($evaluacion->eval_infraestructura)+ intval($evaluacion->eval_equipamiento) + intval($evaluacion->eval_conexion_dl) + intval($evaluacion->eval_desempenho_responsable) + intval($evaluacion->eval_desempenho_participantes) + intval($evaluacion->eval_calidad_presentaciones);
-        $valorEvaluacion = round(($valorEvaluacion*20)/8);
+        $valorEvaluacion = intval($evaluacion->eval_plazos) + intval($evaluacion->eval_horarios) + intval($evaluacion->eval_infraestructura) + intval($evaluacion->eval_equipamiento) + intval($evaluacion->eval_conexion_dl) + intval($evaluacion->eval_desempenho_responsable) + intval($evaluacion->eval_desempenho_participantes) + intval($evaluacion->eval_calidad_presentaciones);
+        $valorEvaluacion = round(($valorEvaluacion * 20) / 8);
         // cálculo y registro de INVI
-        $valorIndice = round((0.2*$mecanismo) + (0.1*$frecuencia) + (0.1*$valorCobertura) + (0.35*$valorEvaluacion) + (0.25*$valorResultados));
+        $valorIndice = round((0.2 * $mecanismo) + (0.1 * $frecuencia) + (0.1 * $valorCobertura) + (0.35 * $valorEvaluacion) + (0.25 * $valorResultados));
         Iniciativas::where('inic_codigo', $request->iniciativa)->update([
             'inic_inrel' => $valorIndice,
             'inic_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -425,13 +452,16 @@ class Digi_Iniciativas extends Controller {
             'inic_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
 
-        if (!$evalActualizar) return redirect()->back()->with('errorEvaluacion', 'Ocurrió un error al actualizar la evaluación de la iniciativa, intente más tarde')->withInput();
+        if (!$evalActualizar)
+            return redirect()->back()->with('errorEvaluacion', 'Ocurrió un error al actualizar la evaluación de la iniciativa, intente más tarde')->withInput();
         return redirect()->route('digitador.iniciativas.index')->with('exitoEvaluacion', 'La evaluación de la iniciativa fue actualizada correctamente.');
     }
 
-    public function eliminarEvaluacion($eval_codigo) {
+    public function eliminarEvaluacion($eval_codigo)
+    {
         $evalVerificar = Evaluaciones::where('eval_codigo', $eval_codigo)->first();
-        if (!$evalVerificar) return redirect()->back()->with('errorEvaluacion', 'La evaluación no se puede eliminar porque no está registrada.');
+        if (!$evalVerificar)
+            return redirect()->back()->with('errorEvaluacion', 'La evaluación no se puede eliminar porque no está registrada.');
         $evalEliminar = Evaluaciones::where('eval_codigo', $eval_codigo)->delete();
 
         $mecanismo = Iniciativas::select('meca_puntaje')->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')->join('mecanismo', 'mecanismo.meca_codigo', '=', 'submecanismo.meca_codigo')->where('inic_codigo', $evalVerificar->inic_codigo)->first()->meca_puntaje;
@@ -444,8 +474,10 @@ class Digi_Iniciativas extends Controller {
             ->first();
         $partIniciales = $participantes->part_iniciales;
         $partFinales = $participantes->part_finales;
-        if ($partIniciales > 0) $valorCobertura = round(($partFinales*100)/$partIniciales);
-        if ($valorCobertura > 100) $valorCobertura = 100;
+        if ($partIniciales > 0)
+            $valorCobertura = round(($partFinales * 100) / $partIniciales);
+        if ($valorCobertura > 100)
+            $valorCobertura = 100;
         // cálculo de resultados
         $valorResultados = 0;
         $resultados = DB::table('resultados')->select(DB::raw('COALESCE(SUM(resu_cuantificacion_inicial), 0) AS resu_iniciales'), DB::raw('COALESCE(SUM(resu_cuantificacion_final), 0) AS resu_finales'))
@@ -454,12 +486,14 @@ class Digi_Iniciativas extends Controller {
             ->first();
         $resuIniciales = $resultados->resu_iniciales;
         $resuFinales = $resultados->resu_finales;
-        if ($resuIniciales > 0) $valorResultados = round(($resuFinales*100)/$resuIniciales);
-        if ($valorResultados > 100) $valorResultados = 100;
+        if ($resuIniciales > 0)
+            $valorResultados = round(($resuFinales * 100) / $resuIniciales);
+        if ($valorResultados > 100)
+            $valorResultados = 100;
         // cálculo de evaluación
         $valorEvaluacion = 0;
         // cálculo y registro de INVI
-        $valorIndice = round((0.2*$mecanismo) + (0.1*$frecuencia) + (0.1*$valorCobertura) + (0.35*$valorEvaluacion) + (0.25*$valorResultados));
+        $valorIndice = round((0.2 * $mecanismo) + (0.1 * $frecuencia) + (0.1 * $valorCobertura) + (0.35 * $valorEvaluacion) + (0.25 * $valorResultados));
         Iniciativas::where('inic_codigo', $evalVerificar->inic_codigo)->update([
             'inic_inrel' => $valorIndice,
             'inic_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -467,13 +501,16 @@ class Digi_Iniciativas extends Controller {
             'inic_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
 
-        if (!$evalEliminar) return redirect()->back()->with('errorEvaluacion', 'Ocurrió un error al eliminar la evaluación, intente más tarde.');
+        if (!$evalEliminar)
+            return redirect()->back()->with('errorEvaluacion', 'Ocurrió un error al eliminar la evaluación, intente más tarde.');
         return redirect()->route('digitador.iniciativas.index')->with('exitoEvaluacion', 'La evaluación de la iniciativa fue eliminada correctamente.');
     }
 
-    public function completarCobertura($inic_codigo) {
+    public function completarCobertura($inic_codigo)
+    {
         $partVerificar = Participantes::where('inic_codigo', $inic_codigo)->count();
-        if ($partVerificar == 0) return redirect()->back()->with('errorIniciativa', 'La iniciativa no posee subentornos esperados.');
+        if ($partVerificar == 0)
+            return redirect()->back()->with('errorIniciativa', 'La iniciativa no posee subentornos esperados.');
 
         $inicObtener = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         $partObtener = DB::table('participantes')
@@ -488,13 +525,17 @@ class Digi_Iniciativas extends Controller {
         ]);
     }
 
-    public function actualizarCobertura(Request $request, $inic_codigo) {
-        $validacion = Validator::make($request->all(),
+    public function actualizarCobertura(Request $request, $inic_codigo)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['inic_codigo' => 'exists:iniciativas,inic_codigo'],
             ['inic_codigo.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return redirect()->back()->with('errorCobertura', $validacion->errors()->first());
-        if ($request->inic_codigo != $inic_codigo) return redirect()->back()->with('errorCobertura', 'Ha ocurrido un problema de vulnerabilidad, intente más tarde.');
+        if ($validacion->fails())
+            return redirect()->back()->with('errorCobertura', $validacion->errors()->first());
+        if ($request->inic_codigo != $inic_codigo)
+            return redirect()->back()->with('errorCobertura', 'Ha ocurrido un problema de vulnerabilidad, intente más tarde.');
 
         $subeCodigos = $request->all();
         $actualizados = 0;
@@ -507,7 +548,8 @@ class Digi_Iniciativas extends Controller {
                     'part_rut_mod' => Session::get('digitador')->usua_rut,
                     'part_rol_mod' => Session::get('digitador')->rous_codigo
                 ]);
-                if ($partActualizar) $actualizados = $actualizados+1;
+                if ($partActualizar)
+                    $actualizados = $actualizados + 1;
             }
         }
 
@@ -521,8 +563,10 @@ class Digi_Iniciativas extends Controller {
             ->first();
         $partIniciales = $participantes->part_iniciales;
         $partFinales = $participantes->part_finales;
-        if ($partIniciales > 0) $valorCobertura = round(($partFinales*100)/$partIniciales);
-        if ($valorCobertura > 100) $valorCobertura = 100;
+        if ($partIniciales > 0)
+            $valorCobertura = round(($partFinales * 100) / $partIniciales);
+        if ($valorCobertura > 100)
+            $valorCobertura = 100;
         // cálculo de resultados
         $valorResultados = 0;
         $resultados = DB::table('resultados')->select(DB::raw('COALESCE(SUM(resu_cuantificacion_inicial), 0) AS resu_iniciales'), DB::raw('COALESCE(SUM(resu_cuantificacion_final), 0) AS resu_finales'))
@@ -531,17 +575,19 @@ class Digi_Iniciativas extends Controller {
             ->first();
         $resuIniciales = $resultados->resu_iniciales;
         $resuFinales = $resultados->resu_finales;
-        if ($resuIniciales > 0) $valorResultados = round(($resuFinales*100)/$resuIniciales);
-        if ($valorResultados > 100) $valorResultados = 100;
+        if ($resuIniciales > 0)
+            $valorResultados = round(($resuFinales * 100) / $resuIniciales);
+        if ($valorResultados > 100)
+            $valorResultados = 100;
         // cálculo de evaluación
         $valorEvaluacion = 0;
         $evaluacion = Evaluaciones::select('eval_plazos', 'eval_horarios', 'eval_infraestructura', 'eval_equipamiento', 'eval_conexion_dl', 'eval_desempenho_responsable', 'eval_desempenho_participantes', 'eval_calidad_presentaciones')->where('inic_codigo', $inic_codigo)->first();
         if ($evaluacion) {
-            $valorEvaluacion = intval($evaluacion->eval_plazos) + intval($evaluacion->eval_horarios) + intval($evaluacion->eval_infraestructura)+ intval($evaluacion->eval_equipamiento) + intval($evaluacion->eval_conexion_dl) + intval($evaluacion->eval_desempenho_responsable) + intval($evaluacion->eval_desempenho_participantes) + intval($evaluacion->eval_calidad_presentaciones);
-            $valorEvaluacion = round(($valorEvaluacion*20)/8);
+            $valorEvaluacion = intval($evaluacion->eval_plazos) + intval($evaluacion->eval_horarios) + intval($evaluacion->eval_infraestructura) + intval($evaluacion->eval_equipamiento) + intval($evaluacion->eval_conexion_dl) + intval($evaluacion->eval_desempenho_responsable) + intval($evaluacion->eval_desempenho_participantes) + intval($evaluacion->eval_calidad_presentaciones);
+            $valorEvaluacion = round(($valorEvaluacion * 20) / 8);
         }
         // cálculo y registro de INVI
-        $valorIndice = round((0.2*$mecanismo) + (0.1*$frecuencia) + (0.1*$valorCobertura) + (0.35*$valorEvaluacion) + (0.25*$valorResultados));
+        $valorIndice = round((0.2 * $mecanismo) + (0.1 * $frecuencia) + (0.1 * $valorCobertura) + (0.35 * $valorEvaluacion) + (0.25 * $valorResultados));
         Iniciativas::where('inic_codigo', $inic_codigo)->update([
             'inic_inrel' => $valorIndice,
             'inic_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -549,13 +595,16 @@ class Digi_Iniciativas extends Controller {
             'inic_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
 
-        if ($actualizados != (count($request->all()) -2)) return redirect()->route('digitador.cobertura.index', $inic_codigo)->with('errorCobertura', 'Algunos registros no fueron actualizados correctamente.');
+        if ($actualizados != (count($request->all()) - 2))
+            return redirect()->route('digitador.cobertura.index', $inic_codigo)->with('errorCobertura', 'Algunos registros no fueron actualizados correctamente.');
         return redirect()->route('digitador.cobertura.index', $inic_codigo)->with('exitoCobertura', 'Los participantes finales fueron actualizados correctamente.');
     }
 
-    public function completarResultados($inic_codigo) {
+    public function completarResultados($inic_codigo)
+    {
         $resuVerificar = Resultados::where('inic_codigo', $inic_codigo)->count();
-        if ($resuVerificar == 0) return redirect()->back()->with('errorIniciativa', 'La iniciativa no posee resultados esperados.');
+        if ($resuVerificar == 0)
+            return redirect()->back()->with('errorIniciativa', 'La iniciativa no posee resultados esperados.');
 
         $inicObtener = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         $resuObtener = DB::table('resultados')
@@ -568,13 +617,17 @@ class Digi_Iniciativas extends Controller {
         ]);
     }
 
-    public function actualizarResultados(Request $request, $inic_codigo) {
-        $validacion = Validator::make($request->all(),
+    public function actualizarResultados(Request $request, $inic_codigo)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['inic_codigo' => 'exists:iniciativas,inic_codigo'],
             ['inic_codigo.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return redirect()->back()->with('errorResultados', $validacion->errors()->first());
-        if ($request->inic_codigo != $inic_codigo) return redirect()->back()->with('errorResultados', 'Ha ocurrido un problema de vulnerabilidad, intente más tarde.');
+        if ($validacion->fails())
+            return redirect()->back()->with('errorResultados', $validacion->errors()->first());
+        if ($request->inic_codigo != $inic_codigo)
+            return redirect()->back()->with('errorResultados', 'Ha ocurrido un problema de vulnerabilidad, intente más tarde.');
 
         $resuCodigos = $request->all();
         $actualizados = 0;
@@ -586,7 +639,8 @@ class Digi_Iniciativas extends Controller {
                     'resu_rut_mod' => Session::get('digitador')->usua_rut,
                     'resu_rol_mod' => Session::get('digitador')->rous_codigo
                 ]);
-                if ($resuActualizar) $actualizados = $actualizados+1;
+                if ($resuActualizar)
+                    $actualizados = $actualizados + 1;
             }
         }
 
@@ -600,8 +654,10 @@ class Digi_Iniciativas extends Controller {
             ->first();
         $partIniciales = $participantes->part_iniciales;
         $partFinales = $participantes->part_finales;
-        if ($partIniciales > 0) $valorCobertura = round(($partFinales*100)/$partIniciales);
-        if ($valorCobertura > 100) $valorCobertura = 100;
+        if ($partIniciales > 0)
+            $valorCobertura = round(($partFinales * 100) / $partIniciales);
+        if ($valorCobertura > 100)
+            $valorCobertura = 100;
         // cálculo de resultados
         $valorResultados = 0;
         $resultados = DB::table('resultados')->select(DB::raw('COALESCE(SUM(resu_cuantificacion_inicial), 0) AS resu_iniciales'), DB::raw('COALESCE(SUM(resu_cuantificacion_final), 0) AS resu_finales'))
@@ -610,17 +666,19 @@ class Digi_Iniciativas extends Controller {
             ->first();
         $resuIniciales = $resultados->resu_iniciales;
         $resuFinales = $resultados->resu_finales;
-        if ($resuIniciales > 0) $valorResultados = round(($resuFinales*100)/$resuIniciales);
-        if ($valorResultados > 100) $valorResultados = 100;
+        if ($resuIniciales > 0)
+            $valorResultados = round(($resuFinales * 100) / $resuIniciales);
+        if ($valorResultados > 100)
+            $valorResultados = 100;
         // cálculo de evaluación
         $valorEvaluacion = 0;
         $evaluacion = Evaluaciones::select('eval_plazos', 'eval_horarios', 'eval_infraestructura', 'eval_equipamiento', 'eval_conexion_dl', 'eval_desempenho_responsable', 'eval_desempenho_participantes', 'eval_calidad_presentaciones')->where('inic_codigo', $inic_codigo)->first();
         if ($evaluacion) {
-            $valorEvaluacion = intval($evaluacion->eval_plazos) + intval($evaluacion->eval_horarios) + intval($evaluacion->eval_infraestructura)+ intval($evaluacion->eval_equipamiento) + intval($evaluacion->eval_conexion_dl) + intval($evaluacion->eval_desempenho_responsable) + intval($evaluacion->eval_desempenho_participantes) + intval($evaluacion->eval_calidad_presentaciones);
-            $valorEvaluacion = round(($valorEvaluacion*20)/8);
+            $valorEvaluacion = intval($evaluacion->eval_plazos) + intval($evaluacion->eval_horarios) + intval($evaluacion->eval_infraestructura) + intval($evaluacion->eval_equipamiento) + intval($evaluacion->eval_conexion_dl) + intval($evaluacion->eval_desempenho_responsable) + intval($evaluacion->eval_desempenho_participantes) + intval($evaluacion->eval_calidad_presentaciones);
+            $valorEvaluacion = round(($valorEvaluacion * 20) / 8);
         }
         // cálculo y registro de INVI
-        $valorIndice = round((0.2*$mecanismo) + (0.1*$frecuencia) + (0.1*$valorCobertura) + (0.35*$valorEvaluacion) + (0.25*$valorResultados));
+        $valorIndice = round((0.2 * $mecanismo) + (0.1 * $frecuencia) + (0.1 * $valorCobertura) + (0.35 * $valorEvaluacion) + (0.25 * $valorResultados));
         Iniciativas::where('inic_codigo', $inic_codigo)->update([
             'inic_inrel' => $valorIndice,
             'inic_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
@@ -628,16 +686,20 @@ class Digi_Iniciativas extends Controller {
             'inic_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
 
-        if ($actualizados != (count($request->all()) -2)) return redirect()->route('digitador.resultados.index', $inic_codigo)->with('errorResultados', 'Algunos registros no fueron actualizados correctamente.');
+        if ($actualizados != (count($request->all()) - 2))
+            return redirect()->route('digitador.resultados.index', $inic_codigo)->with('errorResultados', 'Algunos registros no fueron actualizados correctamente.');
         return redirect()->route('digitador.resultados.index', $inic_codigo)->with('exitoResultados', 'Los resultados finales fueron actualizados correctamente.');
     }
 
-    public function datosIndice(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function datosIndice(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $mecaDatos = DB::table('mecanismo')->select('meca_puntaje', 'meca_nombre')
             ->join('submecanismo', 'submecanismo.meca_codigo', '=', 'mecanismo.meca_codigo')
@@ -652,16 +714,20 @@ class Digi_Iniciativas extends Controller {
         $resuDatos = Resultados::select(DB::raw('IFNULL(resu_cuantificacion_inicial, 0) AS resu_cuantificacion_inicial'), DB::raw('IFNULL(resu_cuantificacion_final, 0) AS resu_cuantificacion_final'))->where('inic_codigo', $request->iniciativa)->get();
         $evalDatos = Evaluaciones::select('eval_plazos', 'eval_horarios', 'eval_infraestructura', 'eval_equipamiento', 'eval_conexion_dl', 'eval_desempenho_responsable', 'eval_desempenho_participantes', 'eval_calidad_presentaciones')
             ->where('inic_codigo', $request->iniciativa)->first();
-        return json_encode(['estado' => true, 'resultado' => [
-            'mecanismo' => $mecaDatos,
-            'frecuencia' => $frecDatos,
-            'cobertura' => $partDatos,
-            'resultados' => $resuDatos,
-            'evaluacion' => $evalDatos
-        ]]);
+        return json_encode([
+            'estado' => true,
+            'resultado' => [
+                'mecanismo' => $mecaDatos,
+                'frecuencia' => $frecDatos,
+                'cobertura' => $partDatos,
+                'resultados' => $resuDatos,
+                'evaluacion' => $evalDatos
+            ]
+        ]);
     }
 
-    public function actualizarIndice(Request $request) {
+    public function actualizarIndice(Request $request)
+    {
         try {
             Iniciativas::where('inic_codigo', $request->inic_codigo)->update([
                 'inic_inrel' => $request->inic_inrel,
@@ -673,9 +739,11 @@ class Digi_Iniciativas extends Controller {
         }
     }
 
-    public function listarEvidencia($inic_codigo) {
+    public function listarEvidencia($inic_codigo)
+    {
         $inicVerificar = Iniciativas::where('inic_codigo', $inic_codigo)->first();
-        if (!$inicVerificar) return redirect()->route('digitador.iniciativas.index')->with('errorIniciativa', 'La iniciativa no se encuentra registrada en el sistema.');
+        if (!$inicVerificar)
+            return redirect()->route('digitador.iniciativas.index')->with('errorIniciativa', 'La iniciativa no se encuentra registrada en el sistema.');
 
         $inevListar = IniciativasEvidencias::where(['inic_codigo' => $inic_codigo, 'inev_vigente' => 'S'])->get();
         return view('digitador.iniciativas.evidencias', [
@@ -684,12 +752,15 @@ class Digi_Iniciativas extends Controller {
         ]);
     }
 
-    public function guardarEvidencia(Request $request, $inic_codigo) {
+    public function guardarEvidencia(Request $request, $inic_codigo)
+    {
         try {
             $inicVerificar = Iniciativas::where('inic_codigo', $inic_codigo)->first();
-            if (!$inicVerificar) return redirect()->route('digitador.iniciativas.index')->with('errorIniciativa', 'La iniciativa no se encuentra registrada en el sistema.');
+            if (!$inicVerificar)
+                return redirect()->route('digitador.iniciativas.index')->with('errorIniciativa', 'La iniciativa no se encuentra registrada en el sistema.');
 
-            $validarEntradas = Validator::make($request->all(),
+            $validarEntradas = Validator::make(
+                $request->all(),
                 [
                     'inev_nombre' => 'required|max:50',
                     'inev_descripcion' => 'required|max:500',
@@ -705,7 +776,8 @@ class Digi_Iniciativas extends Controller {
                     'inev_archivo.max' => 'El archivo excede el tamaño máximo permitido (10 MB).'
                 ]
             );
-            if ($validarEntradas->fails()) return redirect()->route('digitador.evidencia.listar', $inic_codigo)->with('errorValidacion', $validarEntradas->errors()->first());
+            if ($validarEntradas->fails())
+                return redirect()->route('digitador.evidencia.listar', $inic_codigo)->with('errorValidacion', $validarEntradas->errors()->first());
 
             $inevGuardar = IniciativasEvidencias::insertGetId([
                 'inic_codigo' => $inic_codigo,
@@ -717,11 +789,13 @@ class Digi_Iniciativas extends Controller {
                 'inev_rol_mod' => Session::get('digitador')->rous_codigo,
                 'inev_rut_mod' => Session::get('digitador')->usua_rut
             ]);
-            if (!$inevGuardar) redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
+            if (!$inevGuardar)
+                redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
 
             $archivo = $request->file('inev_archivo');
-            $rutaEvidencia = 'files/evidencias/'.$inevGuardar;
-            if (File::exists(public_path($rutaEvidencia))) File::delete(public_path($rutaEvidencia));
+            $rutaEvidencia = 'files/evidencias/' . $inevGuardar;
+            if (File::exists(public_path($rutaEvidencia)))
+                File::delete(public_path($rutaEvidencia));
             $moverArchivo = $archivo->move(public_path('files/evidencias'), $inevGuardar);
             if (!$moverArchivo) {
                 IniciativasEvidencias::where('inev_codigo', $inevGuardar)->delete();
@@ -729,26 +803,30 @@ class Digi_Iniciativas extends Controller {
             }
 
             $inevActualizar = IniciativasEvidencias::where('inev_codigo', $inevGuardar)->update([
-                'inev_ruta' => 'files/evidencias/'.$inevGuardar,
+                'inev_ruta' => 'files/evidencias/' . $inevGuardar,
                 'inev_mime' => $archivo->getClientMimeType(),
                 'inev_nombre_origen' => $archivo->getClientOriginalName(),
                 'inev_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
                 'inev_rol_mod' => Session::get('digitador')->rous_codigo,
                 'inev_rut_mod' => Session::get('digitador')->usua_rut
             ]);
-            if (!$inevActualizar) return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
+            if (!$inevActualizar)
+                return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
             return redirect()->route('digitador.evidencia.listar', $inic_codigo)->with('exitoEvidencia', 'La evidencia fue registrada correctamente.');
         } catch (\Throwable $th) {
             return redirect()->route('digitador.evidencia.listar', $inic_codigo)->with('errorEvidencia', 'Ocurrió un problema al registrar la evidencia, intente más tarde.');
         }
     }
 
-    public function actualizarEvidencia(Request $request, $inev_codigo) {
+    public function actualizarEvidencia(Request $request, $inev_codigo)
+    {
         try {
             $evidencia = IniciativasEvidencias::where('inev_codigo', $inev_codigo)->first();
-            if (!$evidencia) return redirect()->back()->with('errorEvidencia', 'La evidencia no se encuentra registrada o vigente en el sistema.');
+            if (!$evidencia)
+                return redirect()->back()->with('errorEvidencia', 'La evidencia no se encuentra registrada o vigente en el sistema.');
 
-            $validarEntradas = Validator::make($request->all(),
+            $validarEntradas = Validator::make(
+                $request->all(),
                 [
                     'inev_nombre_edit' => 'required|max:50',
                     'inev_descripcion_edit' => 'required|max:500',
@@ -760,7 +838,8 @@ class Digi_Iniciativas extends Controller {
                     'inev_descripcion_edit.max' => 'La descripción de la evidencia excede el máximo de caracteres permitidos (500).'
                 ]
             );
-            if ($validarEntradas->fails()) return redirect()->route('digitador.evidencia.listar', $evidencia->inic_codigo)->with('errorValidacion', $validarEntradas->errors()->first());
+            if ($validarEntradas->fails())
+                return redirect()->route('digitador.evidencia.listar', $evidencia->inic_codigo)->with('errorValidacion', $validarEntradas->errors()->first());
 
             $inevActualizar = IniciativasEvidencias::where('inev_codigo', $inev_codigo)->update([
                 'inev_nombre' => $request->inev_nombre_edit,
@@ -769,21 +848,24 @@ class Digi_Iniciativas extends Controller {
                 'inev_rol_mod' => Session::get('digitador')->rous_codigo,
                 'inev_rut_mod' => Session::get('digitador')->usua_rut
             ]);
-            if (!$inevActualizar) return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al actualizar la evidencia, intente más tarde.');
+            if (!$inevActualizar)
+                return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al actualizar la evidencia, intente más tarde.');
             return redirect()->route('digitador.evidencia.listar', $evidencia->inic_codigo)->with('exitoEvidencia', 'La evidencia fue actualizada correctamente.');
         } catch (\Throwable $th) {
             return redirect()->back()->with('errorEvidencia', 'Ocurrió un problema al actualizar la evidencia, intente más tarde.');
         }
     }
 
-    public function descargarEvidencia($inev_codigo) {
+    public function descargarEvidencia($inev_codigo)
+    {
         try {
             $evidencia = IniciativasEvidencias::where('inev_codigo', $inev_codigo)->first();
-            if (!$evidencia) return redirect()->back()->with('errorEvidencia', 'La evidencia no se encuentra registrada o vigente en el sistema.');
+            if (!$evidencia)
+                return redirect()->back()->with('errorEvidencia', 'La evidencia no se encuentra registrada o vigente en el sistema.');
 
             $archivo = public_path($evidencia->inev_ruta);
             $cabeceras = array(
-                'Content-Type: '.$evidencia->inev_mime,
+                'Content-Type: ' . $evidencia->inev_mime,
                 'Cache-Control: no-cache, no-store, must-revalidate',
                 'Pragma: no-cache'
             );
@@ -793,21 +875,26 @@ class Digi_Iniciativas extends Controller {
         }
     }
 
-    public function eliminarEvidencia($inev_codigo) {
+    public function eliminarEvidencia($inev_codigo)
+    {
         try {
             $evidencia = IniciativasEvidencias::where('inev_codigo', $inev_codigo)->first();
-            if (!$evidencia) return redirect()->back()->with('errorEvidencia', 'La evidencia no se encuentra registrada o vigente en el sistema.');
+            if (!$evidencia)
+                return redirect()->back()->with('errorEvidencia', 'La evidencia no se encuentra registrada o vigente en el sistema.');
 
-            if (File::exists(public_path($evidencia->inev_ruta))) File::delete(public_path($evidencia->inev_ruta));
+            if (File::exists(public_path($evidencia->inev_ruta)))
+                File::delete(public_path($evidencia->inev_ruta));
             $inevEliminar = IniciativasEvidencias::where('inev_codigo', $inev_codigo)->delete();
-            if (!$inevEliminar) return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al eliminar la evidencia, intente más tarde.');
+            if (!$inevEliminar)
+                return redirect()->back()->with('errorEvidencia', 'Ocurrió un error al eliminar la evidencia, intente más tarde.');
             return redirect()->route('digitador.evidencia.listar', $evidencia->inic_codigo)->with('exitoEvidencia', 'La evidencia fue eliminada correctamente.');
         } catch (\Throwable $th) {
             return redirect()->back()->with('errorEvidencia', 'Ocurrió un problema al eliminar la evidencia, intente más tarde.');
         }
     }
 
-    public function crearPaso1() {
+    public function crearPaso1()
+    {
         $listarUnidades = DB::table('unidades')
             ->select('unidades.unid_codigo', 'unid_nombre', 'comu_nombre')
             ->join('comunas', 'comunas.comu_codigo', '=', 'unidades.comu_codigo')
@@ -818,6 +905,7 @@ class Digi_Iniciativas extends Controller {
         $listarConvenios = Convenios::select('conv_codigo', 'conv_nombre')->where('conv_vigente', 'S')->orderBy('conv_codigo', 'asc')->get();
         $listarFormatos = FormatoImplementacion::select('foim_codigo', 'foim_nombre')->where('foim_vigente', 'S')->orderBy('foim_codigo', 'asc')->get();
         $listarCargos = Usuarios::select('usua_cargo')->distinct()->where('usua_cargo', '<>', '')->WhereNotNull('usua_cargo')->get();
+        $listarMecanismo = DB::table('mecanismo')->get();
         $listarSubmecanismos = DB::table('submecanismo')
             ->select('subm_codigo', 'meca_nombre', 'subm_nombre')
             ->leftJoin('mecanismo', 'mecanismo.meca_codigo', '=', 'submecanismo.meca_codigo')
@@ -829,14 +917,16 @@ class Digi_Iniciativas extends Controller {
             'unidades' => $listarUnidades,
             'pilares' => $listarPilares,
             'convenios' => $listarConvenios,
-            'formatos' =>  $listarFormatos,
+            'formatos' => $listarFormatos,
             'cargos' => $listarCargos,
-            'mecanismos' => $listarSubmecanismos,
+            'mecanismos' => $listarMecanismo,
+            'actividades' => $listarSubmecanismos,
             'frecuencias' => $listarFrecuencias
         ]);
     }
 
-    public function verificarPaso1(Request $request) {
+    public function verificarPaso1(Request $request)
+    {
         $request->validate(
             [
                 'nombre' => 'required|max:255',
@@ -846,6 +936,7 @@ class Digi_Iniciativas extends Controller {
                 'pilar' => 'required',
                 'implementacion' => 'required',
                 'nombreresponsable' => 'max:100',
+                'mecanismo' => 'required',
                 'submecanismo' => 'required',
                 'frecuencia' => 'required'
             ],
@@ -853,13 +944,14 @@ class Digi_Iniciativas extends Controller {
                 'nombre.required' => 'El nombre es requerido.',
                 'nombre.max' => 'El nombre excede el máximo de caracteres permitidos (255).',
                 'descripcion.required' => 'La descripción y objetivos son requeridos.',
-                'descripcion.max'=> 'La descripción y objetivos excede el máximo de caracteres permitidos (65535).',
+                'descripcion.max' => 'La descripción y objetivos excede el máximo de caracteres permitidos (65535).',
                 'fechainicio.required' => 'La fecha de inicio es requerida.',
                 'fechainicio.date' => 'La fecha de inicio debe estar en un formato válido.',
                 'unidad.required' => 'La unidad es requerida.',
                 'pilar.required' => 'El pilar es requerido.',
                 'implementacion.required' => 'El formato de implementación es requerido.',
                 'nombreresponsable.max' => 'El nombre del encargado responsable excede el máximo de caracteres permitidos (100).',
+                'mecanismo.required' => 'El mecanismo asociado es requerido.',
                 'submecanismo.required' => 'La actividad asociada es requerida.',
                 'frecuencia.required' => 'La frecuencia es requerida.'
             ]
@@ -867,12 +959,12 @@ class Digi_Iniciativas extends Controller {
 
         $mecanismo = Submecanismos::select('meca_puntaje')->join('mecanismo', 'mecanismo.meca_codigo', '=', 'submecanismo.meca_codigo')->where('subm_codigo', $request->submecanismo)->first()->meca_puntaje;
         $frecuencia = Frecuencia::select('frec_puntaje')->where('frec_codigo', $request->frecuencia)->first()->frec_puntaje;
-        $valorIndice = round((0.2*$mecanismo) + (0.1*$frecuencia));
+        $valorIndice = round((0.2 * $mecanismo) + (0.1 * $frecuencia));
 
         $inicCrear = Iniciativas::insertGetId([
             'inic_nombre' => $request->nombre,
             'inic_objetivo_desc' => $request->descripcion,
-            'inic_fecha_inicio'=> $request->fechainicio,
+            'inic_fecha_inicio' => $request->fechainicio,
             'inic_fecha_fin' => $request->fechafin,
             'pila_codigo' => $request->pilar,
             'frec_codigo' => $request->frecuencia,
@@ -888,7 +980,8 @@ class Digi_Iniciativas extends Controller {
             'inic_rut_mod' => Session::get('digitador')->usua_rut,
             'inic_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
-        if (!$inicCrear) return redirect()->back()->with('errorPaso1', 'Ocurrió un error durante el registro de los datos de la iniciativa, intente más tarde.')->withInput();
+        if (!$inicCrear)
+            return redirect()->back()->with('errorPaso1', 'Ocurrió un error durante el registro de los datos de la iniciativa, intente más tarde.')->withInput();
 
         // prepara datos para insertar en tabla iniciativas_unidades
         $inicCodigo = $inicCrear;
@@ -940,10 +1033,17 @@ class Digi_Iniciativas extends Controller {
             //throw $th;
         }
 
+        $insuCrar = DB::table('iniciativas_submecanismo')->insert([
+            'inic_codigo' => $inicCodigo,
+            'subm_codigo' => $request->submecanismo,
+            'meca_codigo' => $request->mecanismo,
+        ]);
+
         return redirect()->route('digitador.paso2.editar', $inicCodigo)->with('exitoPaso1', 'Los datos de la iniciativa fueron registrados correctamente.');
     }
 
-    public function editarPaso1($inic_codigo) {
+    public function editarPaso1($inic_codigo)
+    {
         $inicObtener = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         $listarUnidades = DB::table('unidades')
             ->select('unidades.unid_codigo', 'unid_nombre', 'comu_nombre')
@@ -956,11 +1056,13 @@ class Digi_Iniciativas extends Controller {
         foreach ($inunListar as $registro) {
             array_push($inunCodigos, $registro->unid_codigo);
         }
+        $insuListar = DB::table('iniciativas_submecanismo')->where('inic_codigo',$inic_codigo)->get();
         $listarPilares = Pilares::select('pila_codigo', 'pila_nombre')->where('pila_vigente', 'S')->orderBy('pila_codigo', 'asc')->get();
         $listarConvenios = Convenios::select('conv_codigo', 'conv_nombre')->where('conv_vigente', 'S')->orderBy('conv_codigo', 'asc')->get();
         $listarFormatos = FormatoImplementacion::select('foim_codigo', 'foim_nombre')->where('foim_vigente', 'S')->orderBy('foim_codigo', 'asc')->get();
         $listarCargos = Usuarios::select('usua_cargo')->distinct()->where('usua_cargo', '<>', '')->WhereNotNull('usua_cargo')->get();
-        $listarMecanismos = DB::table('submecanismo')
+        $listarMecanismo = DB::table('mecanismo')->get();
+        $listarSubmecanismos = DB::table('submecanismo')
             ->select('mecanismo.meca_codigo', 'subm_codigo', 'meca_nombre', 'subm_nombre')
             ->join('mecanismo', 'mecanismo.meca_codigo', '=', 'submecanismo.meca_codigo')
             ->where(['meca_vigente' => 'S', 'subm_vigente' => 'S'])
@@ -973,14 +1075,16 @@ class Digi_Iniciativas extends Controller {
             'iniciativasUnidades' => $inunCodigos,
             'pilares' => $listarPilares,
             'convenios' => $listarConvenios,
-            'formatos' =>  $listarFormatos,
+            'formatos' => $listarFormatos,
             'cargos' => $listarCargos,
-            'mecanismos' => $listarMecanismos,
+            'mecanismos' => $listarMecanismo,
+            'submecanismos' => $listarSubmecanismos,
             'frecuencias' => $listarFrecuencias
         ]);
     }
 
-    public function actualizarPaso1(Request $request, $inic_codigo) {
+    public function actualizarPaso1(Request $request, $inic_codigo)
+    {
         $request->validate(
             [
                 'nombre' => 'required|max:255',
@@ -991,13 +1095,14 @@ class Digi_Iniciativas extends Controller {
                 'implementacion' => 'required',
                 'nombreresponsable' => 'max:100',
                 'submecanismo' => 'required',
+                'mecanismo' => 'required',
                 'frecuencia' => 'required'
             ],
             [
                 'nombre.required' => 'El nombre es requerido.',
                 'nombre.max' => 'El nombre excede el máximo de caracteres permitidos (255).',
                 'descripcion.required' => 'La descripción y objetivos son requeridos.',
-                'descripcion.max'=> 'La descripción y objetivos excede el máximo de caracteres permitidos (65535).',
+                'descripcion.max' => 'La descripción y objetivos excede el máximo de caracteres permitidos (65535).',
                 'fechainicio.required' => 'La fecha de inicio es requerida.',
                 'fechainicio.date' => 'La fecha de inicio debe estar en un formato válido.',
                 'unidad.required' => 'La unidad es requerida.',
@@ -1005,18 +1110,19 @@ class Digi_Iniciativas extends Controller {
                 'implementacion.required' => 'El formato de implementación es requerido.',
                 'nombreresponsable.max' => 'El nombre del encargado responsable excede el máximo de caracteres permitidos (100).',
                 'submecanismo.required' => 'La actividad asociada es requerida.',
+                'mecanismo.required' => 'Es requerido que se asigne un mecanismo',
                 'frecuencia.required' => 'La frecuencia es requerida.'
             ]
         );
 
         $mecanismo = Submecanismos::select('meca_puntaje')->join('mecanismo', 'mecanismo.meca_codigo', '=', 'submecanismo.meca_codigo')->where('subm_codigo', $request->submecanismo)->first()->meca_puntaje;
         $frecuencia = Frecuencia::select('frec_puntaje')->where('frec_codigo', $request->frecuencia)->first()->frec_puntaje;
-        $valorIndice = round((0.2*$mecanismo) + (0.1*$frecuencia));
+        $valorIndice = round((0.2 * $mecanismo) + (0.1 * $frecuencia));
 
         $inicActualizar = Iniciativas::where('inic_codigo', $inic_codigo)->update([
             'inic_nombre' => $request->nombre,
             'inic_objetivo_desc' => $request->descripcion,
-            'inic_fecha_inicio'=> $request->fechainicio,
+            'inic_fecha_inicio' => $request->fechainicio,
             'inic_fecha_fin' => $request->fechafin,
             'pila_codigo' => $request->pilar,
             'frec_codigo' => $request->frecuencia,
@@ -1030,7 +1136,8 @@ class Digi_Iniciativas extends Controller {
             'inic_rut_mod' => Session::get('digitador')->usua_rut,
             'inic_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
-        if (!$inicActualizar) return redirect()->back()->with('errorPaso1', 'Ocurrió un error durante el registro de los datos de la iniciativa, intente más tarde.')->withInput();
+        if (!$inicActualizar)
+            return redirect()->back()->with('errorPaso1', 'Ocurrió un error durante el registro de los datos de la iniciativa, intente más tarde.')->withInput();
 
         // elimina los registros antiguos y prepara los datos para registrar en tabla iniciativas_unidades
         IniciativasUnidades::where('inic_codigo', $inic_codigo)->delete();
@@ -1083,10 +1190,35 @@ class Digi_Iniciativas extends Controller {
             //throw $th;
         }
 
+        $insuVerificar = DB::table('iniciativas_submecanismo')->where('inic_codigo',$inic_codigo)->get();
+
+        if(count($insuVerificar) > 0){
+            DB::table('iniciativas_submecanismo')->where('inic_codigo',$inic_codigo)->delete();
+            $insuCrear = DB::table('iniciativas_submecanismo')->insert([
+                'inic_codigo' => $inic_codigo,
+                'subm_codigo' => $request->submecanismo,
+                'meca_codigo' => $request->mecanismo,
+            ]);
+        }else{
+            $insuCrear = DB::table('iniciativas_submecanismo')->insert([
+                'inic_codigo' => $inic_codigo,
+                'subm_codigo' => $request->submecanismo,
+                'meca_codigo' => $request->mecanismo,
+            ]);
+        }
+
         return redirect()->route('digitador.paso2.editar', $inic_codigo)->with('exitoPaso1', 'Los datos de la iniciativa fueron actualizados correctamente.');
     }
 
-    public function editarPaso2($inic_codigo) {
+    public function obternerSubmecanismos(Request $request){
+        $submecanismo = Submecanismos::where('meca_codigo',$request->meca_codigo)->get();
+        if (sizeof($submecanismo) == 0)
+            return json_encode(['status' => false, 'resultado' => 'El mecanismo no posee submecanimos asosiados.']);
+        return json_encode(['status' => true, 'resultado' => $submecanismo]);
+    }
+
+    public function editarPaso2($inic_codigo)
+    {
         $inicAgregada = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         $listarRegiones = Regiones::select('regi_codigo', 'regi_nombre')->orderBy('regi_codigo')->get();
         $listarParticipantes = DB::table('participantes')
@@ -1112,7 +1244,8 @@ class Digi_Iniciativas extends Controller {
         ]);
     }
 
-    public function actualizarPaso2(Request $request, $inic_codigo) {
+    public function actualizarPaso2(Request $request, $inic_codigo)
+    {
         $request->validate(
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
@@ -1125,11 +1258,14 @@ class Digi_Iniciativas extends Controller {
         );
 
         $inubVerificar = IniciativasUbicaciones::where('inic_codigo', $request->iniciativa)->count();
-        if ($inubVerificar == 0) return redirect()->back()->with('errorPaso2', 'Debe registrar la territorialidad de la iniciativa.')->withInput();
+        if ($inubVerificar == 0)
+            return redirect()->back()->with('errorPaso2', 'Debe registrar la territorialidad de la iniciativa.')->withInput();
         $partVerificar = Participantes::where('inic_codigo', $request->iniciativa)->count();
-        if ($partVerificar == 0) return redirect()->back()->with('errorPaso2', 'Debe registrar los subentornos esperados de la iniciativa.')->withInput();
+        if ($partVerificar == 0)
+            return redirect()->back()->with('errorPaso2', 'Debe registrar los subentornos esperados de la iniciativa.')->withInput();
         $resuVerificar = Resultados::where('inic_codigo', $request->iniciativa)->count();
-        if ($resuVerificar == 0) return redirect()->back()->with('errorPaso2', 'Debe registrar los resultados esperados de la iniciativa.')->withInput();
+        if ($resuVerificar == 0)
+            return redirect()->back()->with('errorPaso2', 'Debe registrar los resultados esperados de la iniciativa.')->withInput();
 
         // elimina los registros antiguos y prepara datos para insertar en tabla iniciativas_impactos
         IniciativasImpactos::where('inic_codigo', $inic_codigo)->delete();
@@ -1157,7 +1293,8 @@ class Digi_Iniciativas extends Controller {
         return redirect()->route('digitador.paso3.editar', $inic_codigo)->with('exitoPaso2', 'Los datos de la iniciativa fueron actualizados correctamente.');
     }
 
-    public function editarPaso3($inic_codigo) {
+    public function editarPaso3($inic_codigo)
+    {
         $inicEditar = Iniciativas::where('inic_codigo', $inic_codigo)->first();
         $listarRegiones = Regiones::select('regi_codigo', 'regi_nombre')->orderBy('regi_codigo')->get();
         $listarParticipantes = DB::table('participantes')
@@ -1173,13 +1310,16 @@ class Digi_Iniciativas extends Controller {
         ]);
     }
 
-    public function obtenerSubentornos(Request $request) {
+    public function obtenerSubentornos(Request $request)
+    {
         $listarSubentornos = Subentornos::select('sube_codigo', 'sube_nombre')->where('ento_codigo', $request->ento_codigo)->get();
         return json_encode($listarSubentornos);
     }
 
-    public function guardarParticipante(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function guardarParticipante(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
                 'entorno' => 'required|exists:entornos,ento_codigo',
@@ -1197,10 +1337,12 @@ class Digi_Iniciativas extends Controller {
                 'cantidad.min' => 'La cantidad de participantes debe ser un número mayor o igual que cero.'
             ]
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $partVerificar = Participantes::where(['inic_codigo' => $request->iniciativa, 'sube_codigo' => $request->subentorno])->first();
-        if ($partVerificar) return json_encode(['estado' => false, 'resultado' => 'El subentorno ya se encuentra asociado a la iniciativa.']);
+        if ($partVerificar)
+            return json_encode(['estado' => false, 'resultado' => 'El subentorno ya se encuentra asociado a la iniciativa.']);
 
         $partGuardar = Participantes::create([
             'inic_codigo' => $request->iniciativa,
@@ -1212,13 +1354,16 @@ class Digi_Iniciativas extends Controller {
             'part_rut_mod' => Session::get('digitador')->usua_rut,
             'part_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
-        if (!$partGuardar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al asociar el subentorno, intente más tarde.']);
+        if (!$partGuardar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al asociar el subentorno, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'El subentorno fue asociado correctamente.']);
     }
 
-    public function actualizarParticipante(Request $request) {
+    public function actualizarParticipante(Request $request)
+    {
         $partVerificar = Participantes::where(['inic_codigo' => $request->iniciativa, 'sube_codigo' => $request->subentorno])->first();
-        if (!$partVerificar) return json_encode(['estado' => false, 'resultado' => 'No se puede actualizar los datos del participante porque el subentorno no se encuentra asociado a la iniciativa.']);
+        if (!$partVerificar)
+            return json_encode(['estado' => false, 'resultado' => 'No se puede actualizar los datos del participante porque el subentorno no se encuentra asociado a la iniciativa.']);
 
         $partActualizar = Participantes::where(['inic_codigo' => $request->iniciativa, 'sube_codigo' => $request->subentorno])->update([
             'part_genero_hombre' => $request->hombre,
@@ -1239,16 +1384,20 @@ class Digi_Iniciativas extends Controller {
             'part_rut_mod' => Session::get('digitador')->usua_rut,
             'part_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
-        if (!$partActualizar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al actualizar los participantes del subentorno seleccionado, intente más tarde.']);
+        if (!$partActualizar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al actualizar los participantes del subentorno seleccionado, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'Los datos del subentorno participante fueron guardados correctamente.']);
     }
 
-    public function listarParticipantes(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function listarParticipantes(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $partListar = DB::table('participantes')
             ->select('inic_codigo', 'participantes.sube_codigo', 'sube_nombre', 'part_cantidad_inicial', 'part_cantidad_final', 'part_genero_hombre', 'part_genero_mujer', 'part_genero_otro', 'part_etario_ninhos', 'part_etario_jovenes', 'part_etario_adultos', 'part_etario_adumayores', 'part_procedencia_rural', 'part_procedencia_urbano', 'part_nacionalidad_chilena', 'part_nacionalidad_migrante', 'part_adscrito_pueblos', 'part_no_adscrito_pueblos')
@@ -1256,13 +1405,16 @@ class Digi_Iniciativas extends Controller {
             ->where(['inic_codigo' => $request->iniciativa, 'part_vigente' => 'S'])
             ->orderBy('part_creado', 'asc')
             ->get();
-        if (sizeof($partListar) == 0) return json_encode(['estado' => false, 'resultado' => '']);
+        if (sizeof($partListar) == 0)
+            return json_encode(['estado' => false, 'resultado' => '']);
         return json_encode(['estado' => true, 'resultado' => $partListar]);
     }
 
-    public function eliminarParticipante(Request $request) {
+    public function eliminarParticipante(Request $request)
+    {
         $partVerificar = Participantes::where(['inic_codigo' => $request->iniciativa, 'sube_codigo' => $request->subentorno])->first();
-        if (!$partVerificar) return json_encode(['estado' => false, 'resultado' => 'El subentorno participante no se encuentra asociado a la iniciativa.']);
+        if (!$partVerificar)
+            return json_encode(['estado' => false, 'resultado' => 'El subentorno participante no se encuentra asociado a la iniciativa.']);
 
         $partEliminar = Participantes::where(['inic_codigo' => $request->iniciativa, 'sube_codigo' => $request->subentorno])->update([
             'part_genero_hombre' => NULL,
@@ -1283,16 +1435,20 @@ class Digi_Iniciativas extends Controller {
             'part_rut_mod' => Session::get('digitador')->usua_rut,
             'part_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
-        if (!$partEliminar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar los datos del subentorno participante, intente más tarde.']);
+        if (!$partEliminar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar los datos del subentorno participante, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'Los datos del subentorno participante fueron eliminados correctamente.']);
     }
 
-    public function listarSubentornosParticipantes(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function listarSubentornosParticipantes(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $partListar = DB::table('participantes')
             ->select('inic_codigo', 'participantes.sube_codigo', 'ento_nombre', 'sube_nombre', 'part_cantidad_inicial')
@@ -1301,21 +1457,27 @@ class Digi_Iniciativas extends Controller {
             ->where('inic_codigo', $request->iniciativa)
             ->orderBy('part_creado', 'asc')
             ->get();
-        if (sizeof($partListar) == 0) return json_encode(['estado' => false, 'resultado' => '']);
+        if (sizeof($partListar) == 0)
+            return json_encode(['estado' => false, 'resultado' => '']);
         return json_encode(['estado' => true, 'resultado' => $partListar]);
     }
 
-    public function eliminarSubentornoParticipante(Request $request) {
+    public function eliminarSubentornoParticipante(Request $request)
+    {
         $partVerificar = Participantes::where(['inic_codigo' => $request->inic_codigo, 'sube_codigo' => $request->sube_codigo])->first();
-        if (!$partVerificar) return json_encode(['estado' => false, 'resultado' => 'El subentorno no se encuentra asociado a la iniciativa.']);
+        if (!$partVerificar)
+            return json_encode(['estado' => false, 'resultado' => 'El subentorno no se encuentra asociado a la iniciativa.']);
 
         $partEliminar = Participantes::where(['inic_codigo' => $request->inic_codigo, 'sube_codigo' => $request->sube_codigo])->delete();
-        if (!$partEliminar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al desvincular el subentorno, intente más tarde.']);
+        if (!$partEliminar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al desvincular el subentorno, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'El subentorno fue desvinculado correctamente.']);
     }
 
-    public function guardarResultado(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function guardarResultado(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
                 'cantidad' => 'required|integer|min:1',
@@ -1330,7 +1492,8 @@ class Digi_Iniciativas extends Controller {
                 'nombre.max' => 'Nombre del resultado excede el máximo de caracteres permitidos (100).'
             ]
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $resuGuardar = Resultados::create([
             'inic_codigo' => $request->iniciativa,
@@ -1342,16 +1505,20 @@ class Digi_Iniciativas extends Controller {
             'resu_rut_mod' => Session::get('digitador')->usua_rut,
             'resu_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
-        if (!$resuGuardar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al guardar el resultado esperado, intente más tarde.']);
+        if (!$resuGuardar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al guardar el resultado esperado, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'El resultado esperado fue registrado correctamente.']);
     }
 
-    public function listarResultados(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function listarResultados(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $resuListar = DB::table('resultados')
             ->select('resu_codigo', 'resultados.inic_codigo', 'resu_nombre', 'resu_cuantificacion_inicial')
@@ -1359,25 +1526,32 @@ class Digi_Iniciativas extends Controller {
             ->where('resultados.inic_codigo', $request->iniciativa)
             ->orderBy('resu_creado', 'asc')
             ->get();
-        if (sizeof($resuListar) == 0) return json_encode(['estado' => false, 'resultado' => '']);
+        if (sizeof($resuListar) == 0)
+            return json_encode(['estado' => false, 'resultado' => '']);
         return json_encode(['estado' => true, 'resultado' => $resuListar]);
     }
 
-    public function eliminarResultado(Request $request) {
+    public function eliminarResultado(Request $request)
+    {
         $resuVerificar = Resultados::where(['inic_codigo' => $request->inic_codigo, 'resu_codigo' => $request->resu_codigo])->first();
-        if (!$resuVerificar) return json_encode(['estado' => false, 'resultado' => 'El resultado esperado no se encuentra asociado a la iniciativa.']);
+        if (!$resuVerificar)
+            return json_encode(['estado' => false, 'resultado' => 'El resultado esperado no se encuentra asociado a la iniciativa.']);
 
         $resuEliminar = Resultados::where(['inic_codigo' => $request->inic_codigo, 'resu_codigo' => $request->resu_codigo])->delete();
-        if (!$resuEliminar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar el resultado esperado, intente más tarde.']);
+        if (!$resuEliminar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar el resultado esperado, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'El resultado esperado fue eliminado correctamente.']);
     }
 
-    public function listarComunas(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function listarComunas(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $comuListar = DB::table('comunas')
             ->select('comunas.regi_codigo', 'comunas.comu_codigo', 'comu_nombre')
@@ -1385,19 +1559,24 @@ class Digi_Iniciativas extends Controller {
             ->where('comunas.regi_codigo', $request->region)
             ->orderBy('comunas.comu_codigo', 'asc')
             ->get();
-        if (sizeof($comuListar) == 0) return json_encode(['estado' => false, 'resultado' => '']);
+        if (sizeof($comuListar) == 0)
+            return json_encode(['estado' => false, 'resultado' => '']);
         return json_encode(['estado' => true, 'resultado' => $comuListar]);
     }
 
-    public function guardarUbicacion(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function guardarUbicacion(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $inubVerificar = IniciativasUbicaciones::where(['inic_codigo' => $request->iniciativa, 'comu_codigo' => $request->comuna])->first();
-        if ($inubVerificar) return json_encode(['estado' => false, 'resultado' => 'La ubicación ya se encuentra asociada a la iniciativa']);
+        if ($inubVerificar)
+            return json_encode(['estado' => false, 'resultado' => 'La ubicación ya se encuentra asociada a la iniciativa']);
 
         $inubCrear = IniciativasUbicaciones::create([
             'inic_codigo' => $request->iniciativa,
@@ -1408,16 +1587,20 @@ class Digi_Iniciativas extends Controller {
             'inub_rut_mod' => Session::get('digitador')->usua_rut,
             'inub_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
-        if (!$inubCrear) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error durante el registro de la ubicación, intente más tarde.']);
+        if (!$inubCrear)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error durante el registro de la ubicación, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'La ubicación fue registrada correctamente.']);
     }
 
-    public function listarUbicacion(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function listarUbicacion(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $inubListar = DB::table('iniciativas_ubicaciones')
             ->select('regi_nombre', 'comu_nombre', 'inic_codigo', 'comunas.comu_codigo')
@@ -1426,33 +1609,43 @@ class Digi_Iniciativas extends Controller {
             ->where('inic_codigo', $request->iniciativa)
             ->orderBy('inub_creado', 'asc')
             ->get();
-        if (sizeof($inubListar) == 0) return json_encode(['estado' => false, 'resultado' => '']);
+        if (sizeof($inubListar) == 0)
+            return json_encode(['estado' => false, 'resultado' => '']);
         return json_encode(['estado' => true, 'resultado' => $inubListar]);
     }
 
-    public function eliminarUbicacion(Request $request) {
+    public function eliminarUbicacion(Request $request)
+    {
         $inubVerificar = IniciativasUbicaciones::where(['inic_codigo' => $request->inic_codigo, 'comu_codigo' => $request->comu_codigo])->first();
-        if (!$inubVerificar) return json_encode(['estado' => false, 'resultado' => 'La ubicación no se encuentra asociada a la iniciativa.']);
+        if (!$inubVerificar)
+            return json_encode(['estado' => false, 'resultado' => 'La ubicación no se encuentra asociada a la iniciativa.']);
 
         $inubEliminar = IniciativasUbicaciones::where(['inic_codigo' => $request->inic_codigo, 'comu_codigo' => $request->comu_codigo])->delete();
-        if (!$inubEliminar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar la ubicación, intente más tarde.']);
+        if (!$inubEliminar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar la ubicación, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'La ubicación fue eliminada correctamente.']);
     }
 
-    public function consultarCantidad(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function consultarCantidad(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $partDatos = Participantes::select('part_cantidad_final')->where(['inic_codigo' => $request->iniciativa, 'sube_codigo' => $request->subentorno])->first();
-        if (!$partDatos) return json_encode(['estado' => false, 'resultado' => '']);
+        if (!$partDatos)
+            return json_encode(['estado' => false, 'resultado' => '']);
         return json_encode(['estado' => true, 'resultado' => $partDatos]);
     }
 
-    public function guardarDinero(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function guardarDinero(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
                 'entidad' => 'exists:entidades,enti_codigo'
@@ -1462,7 +1655,8 @@ class Digi_Iniciativas extends Controller {
                 'entidad.exists' => 'La entidad no se encuentra registrada.'
             ]
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $codiVerificar = CostosDinero::where(['inic_codigo' => $request->iniciativa, 'enti_codigo' => $request->entidad])->first();
         if (!$codiVerificar) {
@@ -1485,12 +1679,15 @@ class Digi_Iniciativas extends Controller {
             ]);
         }
 
-        if (!$codiGuardar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al guardar el recurso, intente más tarde.']);
+        if (!$codiGuardar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al guardar el recurso, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'El recurso fue guardado correctamente.']);
     }
 
-    public function guardarEspecie(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function guardarEspecie(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
                 'entidad' => 'exists:entidades,enti_codigo',
@@ -1507,7 +1704,8 @@ class Digi_Iniciativas extends Controller {
                 'valorizacion.min' => 'La valorización de la especie debe ser un número mayor o igual que cero.'
             ]
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $coesGuardar = CostosEspecies::create([
             'inic_codigo' => $request->iniciativa,
@@ -1520,43 +1718,55 @@ class Digi_Iniciativas extends Controller {
             'coes_rut_mod' => Session::get('digitador')->usua_rut,
             'coes_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
-        if (!$coesGuardar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al guardar la especie, intente más tarde.']);
+        if (!$coesGuardar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al guardar la especie, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'La especie fue guardada correctamente.']);
     }
 
-    public function listarEspecie(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function listarEspecie(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $coesListar = CostosEspecies::select('coes_codigo', 'inic_codigo', 'enti_codigo', 'coes_nombre', 'coes_valorizacion')->where('inic_codigo', $request->iniciativa)->orderBy('coes_creado', 'asc')->get();
-        if (sizeof($coesListar) == 0) return json_encode(['estado' => false, 'resultado' => '']);
+        if (sizeof($coesListar) == 0)
+            return json_encode(['estado' => false, 'resultado' => '']);
         return json_encode(['estado' => true, 'resultado' => $coesListar]);
     }
 
-    public function eliminarEspecie(Request $request) {
+    public function eliminarEspecie(Request $request)
+    {
         $coesVerificar = CostosEspecies::where(['coes_codigo' => $request->especie, 'inic_codigo' => $request->iniciativa, 'enti_codigo' => $request->entidad])->first();
-        if (!$coesVerificar) return json_encode(['estado' => false, 'resultado' => 'La especie no se encuentra asociada a la iniciativa y entidad.']);
+        if (!$coesVerificar)
+            return json_encode(['estado' => false, 'resultado' => 'La especie no se encuentra asociada a la iniciativa y entidad.']);
 
         $coesEliminar = CostosEspecies::where(['coes_codigo' => $request->especie, 'inic_codigo' => $request->iniciativa, 'enti_codigo' => $request->entidad])->delete();
-        if (!$coesEliminar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar la especie, intente más tarde.']);
+        if (!$coesEliminar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar la especie, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'La especie fue eliminada correctamente.']);
     }
 
-    public function listarTipoInfra() {
+    public function listarTipoInfra()
+    {
         $tiinListar = TipoInfraestructura::select('tiin_codigo', 'tiin_nombre')->where('tiin_vigente', 'S')->get();
         return json_encode($tiinListar);
     }
 
-    public function buscarTipoInfra(Request $request) {
+    public function buscarTipoInfra(Request $request)
+    {
         $tiinConsultar = TipoInfraestructura::select('tiin_codigo', 'tiin_valor')->where('tiin_codigo', $request->tipoinfra)->first();
         return json_encode($tiinConsultar);
     }
 
-    public function guardarInfraestructura(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function guardarInfraestructura(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
                 'entidad' => 'exists:entidades,enti_codigo',
@@ -1572,10 +1782,12 @@ class Digi_Iniciativas extends Controller {
                 'horas.min' => 'La cantidad de horas debe ser un número mayor o igual que cero.'
             ]
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $coinVerificar = CostosInfraestructura::where(['inic_codigo' => $request->iniciativa, 'enti_codigo' => $request->entidad, 'tiin_codigo' => $request->tipoinfra])->first();
-        if ($coinVerificar) return json_encode(['estado' => false, 'resultado' => 'La infraestructura ya se encuentra asociada a la entidad.']);
+        if ($coinVerificar)
+            return json_encode(['estado' => false, 'resultado' => 'La infraestructura ya se encuentra asociada a la entidad.']);
 
         $tiinConsultar = TipoInfraestructura::select('tiin_valor')->where('tiin_codigo', $request->tipoinfra)->first();
         $coinGuardar = CostosInfraestructura::create([
@@ -1583,23 +1795,27 @@ class Digi_Iniciativas extends Controller {
             'enti_codigo' => $request->entidad,
             'tiin_codigo' => $request->tipoinfra,
             'coin_horas' => $request->horas,
-            'coin_valorizacion' => $request->horas*$tiinConsultar->tiin_valor,
+            'coin_valorizacion' => $request->horas * $tiinConsultar->tiin_valor,
             'coin_creado' => Carbon::now()->format('Y-m-d H:i:s'),
             'coin_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'coin_vigente' => 'S',
             'coin_rut_mod' => Session::get('digitador')->usua_rut,
             'coin_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
-        if (!$coinGuardar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al guardar la infraestructura, intente más tarde.']);
+        if (!$coinGuardar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al guardar la infraestructura, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'La infraestructura fue guardada correctamente.']);
     }
 
-    public function listarInfraestructura(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function listarInfraestructura(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $coinListar = DB::table('costos_infraestructura')
             ->select('inic_codigo', 'enti_codigo', 'costos_infraestructura.tiin_codigo', 'tiin_nombre', 'coin_horas', 'coin_valorizacion')
@@ -1607,31 +1823,39 @@ class Digi_Iniciativas extends Controller {
             ->where('inic_codigo', $request->iniciativa)
             ->orderBy('coin_creado', 'asc')
             ->get();
-        if (sizeof($coinListar) == 0) return json_encode(['estado' => false, 'resultado' => '']);
+        if (sizeof($coinListar) == 0)
+            return json_encode(['estado' => false, 'resultado' => '']);
         return json_encode(['estado' => true, 'resultado' => $coinListar]);
     }
 
-    public function eliminarInfraestructura(Request $request) {
+    public function eliminarInfraestructura(Request $request)
+    {
         $coinVerificar = CostosInfraestructura::where(['inic_codigo' => $request->iniciativa, 'enti_codigo' => $request->entidad, 'tiin_codigo' => $request->tipoinfra])->first();
-        if (!$coinVerificar) return json_encode(['estado' => false, 'resultado' => 'La infraestructura no se encuentra asociada a la iniciativa y entidad.']);
+        if (!$coinVerificar)
+            return json_encode(['estado' => false, 'resultado' => 'La infraestructura no se encuentra asociada a la iniciativa y entidad.']);
 
         $coinEliminar = CostosInfraestructura::where(['inic_codigo' => $request->iniciativa, 'enti_codigo' => $request->entidad, 'tiin_codigo' => $request->tipoinfra])->delete();
-        if (!$coinEliminar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar la infraestructura, intente más tarde.']);
+        if (!$coinEliminar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar la infraestructura, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'La infraestructura fue eliminada correctamente.']);
     }
 
-    public function listarTipoRrhh() {
+    public function listarTipoRrhh()
+    {
         $tirhListar = TipoRrhh::select('tirh_codigo', 'tirh_nombre')->where('tirh_vigente', 'S')->get();
         return json_encode($tirhListar);
     }
 
-    public function buscarTipoRrhh(Request $request) {
+    public function buscarTipoRrhh(Request $request)
+    {
         $tirhConsultar = TipoRrhh::select('tirh_codigo', 'tirh_valor')->where('tirh_codigo', $request->tiporrhh)->first();
         return json_encode($tirhConsultar);
     }
 
-    public function guardarRrhh(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function guardarRrhh(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             [
                 'iniciativa' => 'exists:iniciativas,inic_codigo',
                 'entidad' => 'exists:entidades,enti_codigo',
@@ -1647,10 +1871,12 @@ class Digi_Iniciativas extends Controller {
                 'horas.min' => 'La cantidad de horas debe ser un número mayor o igual que cero.'
             ]
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $corhVerificar = CostosRrhh::where(['inic_codigo' => $request->iniciativa, 'enti_codigo' => $request->entidad, 'tirh_codigo' => $request->tiporrhh])->first();
-        if ($corhVerificar) return json_encode(['estado' => false, 'resultado' => 'El recurso humano ya se encuentra asociado a la entidad.']);
+        if ($corhVerificar)
+            return json_encode(['estado' => false, 'resultado' => 'El recurso humano ya se encuentra asociado a la entidad.']);
 
         $tirhConsultar = TipoRrhh::select('tirh_valor')->where('tirh_codigo', $request->tiporrhh)->first();
         $corhGuardar = CostosRrhh::create([
@@ -1658,23 +1884,27 @@ class Digi_Iniciativas extends Controller {
             'enti_codigo' => $request->entidad,
             'tirh_codigo' => $request->tiporrhh,
             'corh_horas' => $request->horas,
-            'corh_valorizacion' => $request->horas*$tirhConsultar->tirh_valor,
+            'corh_valorizacion' => $request->horas * $tirhConsultar->tirh_valor,
             'corh_creado' => Carbon::now()->format('Y-m-d H:i:s'),
             'corh_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'corh_vigente' => 'S',
             'corh_rut_mod' => Session::get('digitador')->usua_rut,
             'corh_rol_mod' => Session::get('digitador')->rous_codigo
         ]);
-        if (!$corhGuardar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al guardar el recurso humano, intente más tarde.']);
+        if (!$corhGuardar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al guardar el recurso humano, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'El recurso humano fue guardado correctamente.']);
     }
 
-    public function listarRrhh(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function listarRrhh(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $corhListar = DB::table('costos_rrhh')
             ->select('inic_codigo', 'enti_codigo', 'costos_rrhh.tirh_codigo', 'tirh_nombre', 'corh_horas', 'corh_valorizacion')
@@ -1682,25 +1912,32 @@ class Digi_Iniciativas extends Controller {
             ->where('inic_codigo', $request->iniciativa)
             ->orderBy('corh_creado', 'asc')
             ->get();
-        if (sizeof($corhListar) == 0) return json_encode(['estado' => false, 'resultado' => '']);
+        if (sizeof($corhListar) == 0)
+            return json_encode(['estado' => false, 'resultado' => '']);
         return json_encode(['estado' => true, 'resultado' => $corhListar]);
     }
 
-    public function eliminarRrhh(Request $request) {
+    public function eliminarRrhh(Request $request)
+    {
         $corhVerificar = CostosRrhh::where(['inic_codigo' => $request->iniciativa, 'enti_codigo' => $request->entidad, 'tirh_codigo' => $request->tiporrhh])->first();
-        if (!$corhVerificar) return json_encode(['estado' => false, 'resultado' => 'El recurso humano no se encuentra asociado a la iniciativa y entidad.']);
+        if (!$corhVerificar)
+            return json_encode(['estado' => false, 'resultado' => 'El recurso humano no se encuentra asociado a la iniciativa y entidad.']);
 
         $corhEliminar = CostosRrhh::where(['inic_codigo' => $request->iniciativa, 'enti_codigo' => $request->entidad, 'tirh_codigo' => $request->tiporrhh])->delete();
-        if (!$corhEliminar) return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar el recurso humano, intente más tarde.']);
+        if (!$corhEliminar)
+            return json_encode(['estado' => false, 'resultado' => 'Ocurrió un error al eliminar el recurso humano, intente más tarde.']);
         return json_encode(['estado' => true, 'resultado' => 'El recurso humano fue eliminado correctamente.']);
     }
 
-    public function listarRecursos(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function listarRecursos(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $codiListar = CostosDinero::select('enti_codigo', DB::raw('COALESCE(SUM(codi_valorizacion), 0) AS suma_dinero'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
         $coesListar = CostosEspecies::select('enti_codigo', DB::raw('COALESCE(SUM(coes_valorizacion), 0) AS suma_especies'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
@@ -1710,45 +1947,57 @@ class Digi_Iniciativas extends Controller {
         return json_encode(['estado' => true, 'resultado' => $resultado]);
     }
 
-    public function consultarDinero(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function consultarDinero(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $codiListar = CostosDinero::select('enti_codigo', DB::raw('COALESCE(SUM(codi_valorizacion), 0) AS suma_dinero'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
         return json_encode(['estado' => true, 'resultado' => $codiListar]);
     }
 
-    public function consultarEspecies(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function consultarEspecies(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $coesListar = CostosEspecies::select('enti_codigo', DB::raw('COALESCE(SUM(coes_valorizacion), 0) AS suma_especies'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
         return json_encode(['estado' => true, 'resultado' => $coesListar]);
     }
 
-    public function consultarInfraestructura(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function consultarInfraestructura(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $coinListar = CostosInfraestructura::select('enti_codigo', DB::raw('COALESCE(SUM(coin_valorizacion), 0) AS suma_infraestructura'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
         return json_encode(['estado' => true, 'resultado' => $coinListar]);
     }
 
-    public function consultarRrhh(Request $request) {
-        $validacion = Validator::make($request->all(),
+    public function consultarRrhh(Request $request)
+    {
+        $validacion = Validator::make(
+            $request->all(),
             ['iniciativa' => 'exists:iniciativas,inic_codigo'],
             ['iniciativa.exists' => 'La iniciativa no se encuentra registrada.']
         );
-        if ($validacion->fails()) return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
+        if ($validacion->fails())
+            return json_encode(['estado' => false, 'resultado' => $validacion->errors()->first()]);
 
         $corhListar = CostosRrhh::select('enti_codigo', DB::raw('COALESCE(SUM(corh_valorizacion), 0) AS suma_rrhh'))->where('inic_codigo', $request->iniciativa)->groupBy('enti_codigo')->get();
         return json_encode(['estado' => true, 'resultado' => $corhListar]);

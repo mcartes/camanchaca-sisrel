@@ -282,9 +282,14 @@
                                                 style="width: 100%">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @forelse ($mecanismos as $mecanismo)
-                                                    <option value="{{ $mecanismo->meca_codigo }}">
-                                                        {{ $mecanismo->meca_nombre }}</option>
-                                                    {{-- <option value="{{ $mecanismo->meca_codigo }}" {{ $iniciativa->subm_codigo==$mecanismo->subm_codigo ? 'selected' : '' }}>{{ $mecanismo->subm_nombre }} ({{ $mecanismo->meca_nombre }})</option> --}}
+                                                    @if (count($mecanismoSeleccionado) > 0)
+                                                        <option value="{{ $mecanismo->meca_codigo }}"
+                                                            {{ $mecanismoSeleccionado[0]->meca_codigo == $mecanismo->meca_codigo ? 'selected' : '' }}>
+                                                            {{ $mecanismo->meca_nombre }}</option>
+                                                    @else
+                                                        <option value="{{ $mecanismo->meca_codigo }}">
+                                                            {{ $mecanismo->meca_nombre }}</option>
+                                                    @endif
                                                 @empty
                                                     <option value="-1">No existen registros</option>
                                                 @endforelse
