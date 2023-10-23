@@ -100,11 +100,9 @@ class IniciativasController extends Controller
                     ->where(['inic_vigente' => 'S', 'comunas.regi_codigo' => $request->region, 'comunas.comu_codigo' => $request->comuna, 'unidades.unid_codigo' => $request->unidad])
                     ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $request->fecha_termino])
                     ->distinct()
-                    ->orderBy('iniciativas.inic_creado','desc')
+                    ->orderBy('iniciativas.inic_creado', 'desc')
                     ->get();
-            }
-
-            elseif ($request->region == '' && $request->comuna != '' && $request->unidad != '' && $request->fecha_inicio == "" && $request->fecha_termino == "") {
+            } elseif ($request->region == '' && $request->comuna != '' && $request->unidad != '' && $request->fecha_inicio == "" && $request->fecha_termino == "") {
                 $inicListar = DB::table('iniciativas')
                     ->select('iniciativas.inic_codigo', 'inic_nombre', 'inic_nombre_responsable', 'meca_nombre', 'inic_aprobada')
                     ->join('submecanismo', 'submecanismo.subm_codigo', '=', 'iniciativas.subm_codigo')
@@ -113,7 +111,7 @@ class IniciativasController extends Controller
                     ->join('comunas', 'comunas.comu_codigo', '=', 'iniciativas_ubicaciones.comu_codigo')
                     ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', '=', 'iniciativas.inic_codigo')
                     ->join('unidades', 'unidades.unid_codigo', '=', 'iniciativas_unidades.unid_codigo')
-                    ->where(['inic_vigente' => 'S', 'comunas.comu_codigo' => $request->comuna,'unidades.unid_codigo'=>$request->unidad])
+                    ->where(['inic_vigente' => 'S', 'comunas.comu_codigo' => $request->comuna, 'unidades.unid_codigo' => $request->unidad])
                     ->distinct()
                     ->get();
             } elseif ($request->region == '' && $request->comuna != '' && $request->unidad != '' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
@@ -125,10 +123,10 @@ class IniciativasController extends Controller
                     ->join('comunas', 'comunas.comu_codigo', '=', 'iniciativas_ubicaciones.comu_codigo')
                     ->join('iniciativas_unidades', 'iniciativas_unidades.inic_codigo', '=', 'iniciativas.inic_codigo')
                     ->join('unidades', 'unidades.unid_codigo', '=', 'iniciativas_unidades.unid_codigo')
-                    ->where(['inic_vigente' => 'S', 'comunas.comu_codigo' => $request->comuna,'unidades.unid_codigo'=>$request->unidad])
+                    ->where(['inic_vigente' => 'S', 'comunas.comu_codigo' => $request->comuna, 'unidades.unid_codigo' => $request->unidad])
                     ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $request->fecha_termino])
                     ->distinct()
-                    ->orderBy('iniciativas.inic_creado','desc')
+                    ->orderBy('iniciativas.inic_creado', 'desc')
                     ->get();
             } elseif ($request->region == '' && $request->comuna == '' && $request->unidad == '' && $request->fecha_inicio != "" && $request->fecha_termino != "") {
                 $inicListar = DB::table('iniciativas')
@@ -142,7 +140,7 @@ class IniciativasController extends Controller
                     ->where(['inic_vigente' => 'S'])
                     ->whereBetween('iniciativas.inic_creado', [$request->fecha_inicio, $request->fecha_termino])
                     ->distinct()
-                    ->orderBy('iniciativas.inic_creado','desc')
+                    ->orderBy('iniciativas.inic_creado', 'desc')
                     ->get();
 
             } else {
@@ -314,15 +312,16 @@ class IniciativasController extends Controller
         Participantes::where('inic_codigo', $request->inic_codigo)->delete();
         Resultados::where('inic_codigo', $request->inic_codigo)->delete();
         Evaluaciones::where('inic_codigo', $request->inic_codigo)->delete();
-        DB::table('iniciativas_submecanismo')->where('inic_codigo',$request->inic_codigo)->delete();
+        DB::table('iniciativas_submecanismo')->where('inic_codigo', $request->inic_codigo)->delete();
         $inicEliminar = Iniciativas::where('inic_codigo', $request->inic_codigo)->delete();
         if (!$inicEliminar)
             return json_encode(['estado' => false, 'resultado' => 'Ocurrió un problema al eliminar la iniciativa, contáctese con el soporte del sistema.']);
         return redirect()->route('admin.iniciativas.index')->with('exitoEliminar', 'La iniciativa fue eliminada correctamente.');
     }
 
-    public function obternerSubmecanismos(Request $request){
-        $submecanismo = Submecanismos::where('meca_codigo',$request->meca_codigo)->get();
+    public function obternerSubmecanismos(Request $request)
+    {
+        $submecanismo = Submecanismos::where('meca_codigo', $request->meca_codigo)->get();
         if (sizeof($submecanismo) == 0)
             return json_encode(['status' => false, 'resultado' => 'El mecanismo no posee submecanimos asosiados.']);
         return json_encode(['status' => true, 'resultado' => $submecanismo]);
@@ -840,12 +839,12 @@ class IniciativasController extends Controller
         return json_encode([
             'estado' => true,
             'resultado' => [
-                'mecanismo' => $mecaDatos,
-                'frecuencia' => $frecDatos,
-                'cobertura' => $partDatos,
-                'resultados' => $resuDatos,
-                'evaluacion' => $evalDatos
-            ]
+                    'mecanismo' => $mecaDatos,
+                    'frecuencia' => $frecDatos,
+                    'cobertura' => $partDatos,
+                    'resultados' => $resuDatos,
+                    'evaluacion' => $evalDatos
+                ]
         ]);
     }
 
@@ -916,7 +915,15 @@ class IniciativasController extends Controller
                 redirect()->back()->with('errorEvidencia', 'Ocurrió un error al registrar la evidencia, intente más tarde.');
 
             $archivo = $request->file('inev_archivo');
+            // $rutaEvidencia = 'files/evidencias/' . $inevGuardar;
+            $nombreOriginal = $archivo->getClientOriginalName();
+
+            // Cambiar la extensión del archivo a minúsculas
+            $nombreModificado = pathinfo($nombreOriginal, PATHINFO_FILENAME) . '.' . strtolower(pathinfo($nombreOriginal, PATHINFO_EXTENSION));
+            $extension = pathinfo(strtolower(pathinfo($nombreOriginal, PATHINFO_EXTENSION)));
+            // return $nombreModificado;
             $rutaEvidencia = 'files/evidencias/' . $inevGuardar;
+
             if (File::exists(public_path($rutaEvidencia)))
                 File::delete(public_path($rutaEvidencia));
             $moverArchivo = $archivo->move(public_path('files/evidencias'), $inevGuardar);
@@ -927,8 +934,8 @@ class IniciativasController extends Controller
 
             $inevActualizar = IniciativasEvidencias::where('inev_codigo', $inevGuardar)->update([
                 'inev_ruta' => 'files/evidencias/' . $inevGuardar,
-                'inev_mime' => $archivo->getClientMimeType(),
-                'inev_nombre_origen' => $archivo->getClientOriginalName(),
+                'inev_mime' => $extension,
+                'inev_nombre_origen' => $nombreModificado,
                 'inev_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
                 'inev_rol_mod' => Session::get('admin')->rous_codigo,
                 'inev_rut_mod' => Session::get('admin')->usua_rut
@@ -1179,7 +1186,7 @@ class IniciativasController extends Controller
         foreach ($inunListar as $registro) {
             array_push($inunCodigos, $registro->unid_codigo);
         }
-        $insuListar = DB::table('iniciativas_submecanismo')->where('inic_codigo',$inic_codigo)->get();
+        $insuListar = DB::table('iniciativas_submecanismo')->where('inic_codigo', $inic_codigo)->get();
         $listarPilares = Pilares::select('pila_codigo', 'pila_nombre')->where('pila_vigente', 'S')->orderBy('pila_codigo', 'asc')->get();
         $listarConvenios = Convenios::select('conv_codigo', 'conv_nombre')->where('conv_vigente', 'S')->orderBy('conv_codigo', 'asc')->get();
         $listarFormatos = FormatoImplementacion::select('foim_codigo', 'foim_nombre')->where('foim_vigente', 'S')->orderBy('foim_codigo', 'asc')->get();
@@ -1313,16 +1320,16 @@ class IniciativasController extends Controller
             //throw $th;
         }
 
-        $insuVerificar = DB::table('iniciativas_submecanismo')->where('inic_codigo',$inic_codigo)->get();
+        $insuVerificar = DB::table('iniciativas_submecanismo')->where('inic_codigo', $inic_codigo)->get();
 
-        if(count($insuVerificar) > 0){
-            DB::table('iniciativas_submecanismo')->where('inic_codigo',$inic_codigo)->delete();
+        if (count($insuVerificar) > 0) {
+            DB::table('iniciativas_submecanismo')->where('inic_codigo', $inic_codigo)->delete();
             $insuCrear = DB::table('iniciativas_submecanismo')->insert([
                 'inic_codigo' => $inic_codigo,
                 'subm_codigo' => $request->submecanismo,
                 'meca_codigo' => $request->mecanismo,
             ]);
-        }else{
+        } else {
             $insuCrear = DB::table('iniciativas_submecanismo')->insert([
                 'inic_codigo' => $inic_codigo,
                 'subm_codigo' => $request->submecanismo,

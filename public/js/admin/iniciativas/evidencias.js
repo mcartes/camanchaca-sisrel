@@ -34,6 +34,7 @@ function convertToLowerCase(input) {
           file.name = newName;
         }
       };
+      console.log(file);
 
       reader.readAsText(file);
     }
