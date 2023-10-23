@@ -886,16 +886,12 @@ class IniciativasController extends Controller
                 [
                     'inev_nombre' => 'required|max:50',
                     'inev_descripcion' => 'required|max:500',
-                    'inev_archivo' => 'required|max:10000',
                 ],
                 [
                     'inev_nombre.required' => 'El nombre de la evidencia es requerido.',
                     'inev_nombre.max' => 'El nombre de la evidencia excede el máximo de caracteres permitidos (50).',
                     'inev_descripcion.required' => 'La descripción de la evidencia es requerida.',
                     'inev_descripcion.max' => 'La descripción de la evidencia excede el máximo de caracteres permitidos (500).',
-                    'inev_archivo.required' => 'El archivo de la evidencia es requerido.',
-                    // 'inev_archivo.mimes' => 'El tipo de archivo no está permitido, intente con un formato de archivo tradicional.',
-                    'inev_archivo.max' => 'El archivo excede el tamaño máximo permitido (10 MB).'
                 ]
             );
             if ($validarEntradas->fails())
@@ -920,8 +916,7 @@ class IniciativasController extends Controller
 
             // Cambiar la extensión del archivo a minúsculas
             $nombreModificado = pathinfo($nombreOriginal, PATHINFO_FILENAME) . '.' . strtolower(pathinfo($nombreOriginal, PATHINFO_EXTENSION));
-            $extension = pathinfo(strtolower(pathinfo($nombreOriginal, PATHINFO_EXTENSION)));
-            // return $nombreModificado;
+            $extension = strtolower(pathinfo($nombreOriginal, PATHINFO_EXTENSION));
             $rutaEvidencia = 'files/evidencias/' . $inevGuardar;
 
             if (File::exists(public_path($rutaEvidencia)))
