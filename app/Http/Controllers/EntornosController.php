@@ -16,7 +16,7 @@ class EntornosController extends Controller
     public function ListarEntornos()
     {
         return view('admin.entornos.listar', [
-            'entorno' => Entornos::paginate(7),
+            'entorno' => Entornos::all(),
         ]);
     }
 

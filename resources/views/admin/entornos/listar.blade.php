@@ -116,7 +116,7 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                                <div class="card-body">{{ $entorno->links() }}</div>
+                                {{-- <div class="card-body">{{ $entorno->links() }}</div> --}}
                             </div>
                         </div>
                     </div>

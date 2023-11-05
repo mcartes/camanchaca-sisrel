@@ -193,7 +193,7 @@
                                         <i class="fas fa-chart-bar"></i>
                                     </div>
                                 </div>
-                                <input type="number" class="form-control" id="puntaje" name="puntaje" value="{{ old('puntaje') }}" autocomplete="off" min="0">
+                                <input type="number" class="form-control" id="puntaje" name="puntaje" value="{{ old('puntaje') }}" autocomplete="off" min="0" max="100" step="0.1">
                             </div>
                         </div>
                         @if ($errors->has('puntaje'))
@@ -314,7 +314,7 @@
                                             <i class="fas fa-chart-bar"></i>
                                         </div>
                                     </div>
-                                    <input type="number" class="form-control" id="puntaje" name="puntaje" value="{{ old('puntaje') ?? $cl->encl_puntaje }}" autocomplete="off" min="0">
+                                    <input type="number" class="form-control" id="puntaje" name="puntaje" value="{{ old('puntaje') ?? $cl->encl_puntaje }}" autocomplete="off" min="0" max="100" step="0.1">
                                 </div>
                                 @if ($errors->has('puntaje'))
                                     <div class="alert alert-warning alert-dismissible show fade mt-2">
