@@ -40,6 +40,7 @@
                             <table class="table table-bordered table-md" id="table-1">
                                 <thead>
                                     <tr>
+                                        <th>Región</th>
                                         <th>Comuna</th>
                                         <th>Categoría</th>
                                         <th>Año</th>
@@ -52,6 +53,7 @@
                                 <tbody>
                                     @foreach ($encuestapr as $encuesta)
                                     <tr>
+                                        <td>{{ $encuesta->regi_nombre }}</td>
                                         <td>{{ $encuesta->comu_nombre }}</td>
                                         <td>{{ $encuesta->cape_nombre }}</td>
                                         <td>{{ $encuesta->enpe_anho }}</td>
@@ -103,23 +105,23 @@
                     @csrf
 
                     <div class="form-group ">
-                        <label for="comuna">Comuna</label>
+                        <label for="region">Región</label>
                         <div class="input-group">
 
-                            <select class="form-control form-control-sm" name="comuna" id="comuna">
+                            <select class="form-control form-control-sm" name="region" id="region">
                                 <option value="" selected disabled>Seleccione...</option>
-                                @foreach ($comunas as $comuna)
-                                <option value="{{ $comuna->comu_codigo }}" {{ old('comuna') == $comuna->comu_codigo ? 'selected' : '' }}>
-                                    {{ $comuna->comu_nombre }}
+                                @foreach ($regiones as $region)
+                                <option value="{{ $region->regi_codigo }}" {{ old('region') == $region->regi_codigo ? 'selected' : '' }}>
+                                    {{ $region->regi_nombre }}
                                 </option>
                                 @endforeach
                             </select>
                         </div>
-                        @if ($errors->has('comuna'))
+                        @if ($errors->has('region'))
                         <div class="alert alert-warning alert-dismissible show fade mt-2 text-center">
                             <div class="alert-body">
                                 <button class="close" data-dismiss="alert"><span>&times;</span></button>
-                                <strong>{{ $errors->first('comuna') }}</strong>
+                                <strong>{{ $errors->first('region') }}</strong>
                             </div>
                         </div>
                         @endif

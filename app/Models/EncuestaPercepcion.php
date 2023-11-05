@@ -15,6 +15,7 @@ class EncuestaPercepcion extends Model
 
     protected $fillable = [
         'enpe_codigo',
+        'regi_codigo',
         'comu_codigo',
         'cape_codigo',
         'enpe_anho',

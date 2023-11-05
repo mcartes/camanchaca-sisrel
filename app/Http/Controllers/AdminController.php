@@ -60,8 +60,8 @@ class AdminController extends Controller
     {
         $usuario = Usuarios::where(['usua_rut' => $rut, 'rous_codigo' => $rol])->first();
         $unidades = Unidades::all();
-        $roles = DB::table('roles_usuarios')->select('rous_codigo','rous_nombre')->limit(3)->orderBy('rous_codigo')->get();
-        return view('admin.usuarios.editar', compact('usuario','unidades','roles'));
+        $roles = DB::table('roles_usuarios')->select('rous_codigo', 'rous_nombre')->limit(3)->orderBy('rous_codigo')->get();
+        return view('admin.usuarios.editar', compact('usuario', 'unidades', 'roles'));
     }
 
     public function actualizarUsuario(Request $request, $rut, $rol)
@@ -97,7 +97,8 @@ class AdminController extends Controller
         );
 
         $usuaVerificar = Usuarios::where(['usua_rut' => $rut, 'rous_codigo' => $rol])->first();
-        if (!$usuaVerificar) return redirect()->route('admin.listar.usuario')->with('errorUsuario', 'El usuario no se encuentra registrado en el sistema.');
+        if (!$usuaVerificar)
+            return redirect()->route('admin.listar.usuario')->with('errorUsuario', 'El usuario no se encuentra registrado en el sistema.');
 
         $usuario = Usuarios::where(['usua_rut' => $rut, 'rous_codigo' => $rol])->update([
             'unid_codigo' => $request->unidad,
@@ -113,27 +114,32 @@ class AdminController extends Controller
             'usua_rut_mod' => Session::get('admin')->usua_rut,
             'usua_rol_mod' => Session::get('admin')->rous_codigo,
         ]);
-        if (!$usuario) return redirect()->back()->with('errorUsuario', 'Ocurrió un problema al actualizar los datos del usuario, intente más tarde.')->withInput();
+        if (!$usuario)
+            return redirect()->back()->with('errorUsuario', 'Ocurrió un problema al actualizar los datos del usuario, intente más tarde.')->withInput();
         return redirect()->route('admin.listar.usuario')->with('exitoUsuario', 'El usuario fue actualizado correctamente.');
     }
 
     public function destroy(Request $request)
     {
         $usuaVerificar = Usuarios::where(['usua_rut' => $request->usua_rut, 'rous_codigo' => $request->rous_codigo])->first();
-        if (!$usuaVerificar) return redirect()->route('admin.listar.usuario')->with('errorUsuario', 'El usuario no se encuentra registrado en el sistema.');
+        if (!$usuaVerificar)
+            return redirect()->route('admin.listar.usuario')->with('errorUsuario', 'El usuario no se encuentra registrado en el sistema.');
 
         $usuaEliminar = Usuarios::where(['usua_rut' => $request->usua_rut, 'rous_codigo' => $request->rous_codigo])->delete();
-        if (!$usuaEliminar) return redirect()->route('admin.listar.usuario')->with('errorUsuario', 'El usuario no se pudo eliminar, intente más tarde.');
+        if (!$usuaEliminar)
+            return redirect()->route('admin.listar.usuario')->with('errorUsuario', 'El usuario no se pudo eliminar, intente más tarde.');
         return redirect()->route('admin.listar.usuario')->with('exitoUsuario', 'El usuario fue eliminado correctamente.');
     }
 
-    public function cambiarClave($rut, $rol) {
+    public function cambiarClave($rut, $rol)
+    {
         return view('admin.usuarios.clave', [
             'usuario' => Usuarios::where(['usua_rut' => $rut, 'rous_codigo' => $rol])->first()
         ]);
     }
 
-    public function actualizarClave(Request $request, $rut, $rol) {
+    public function actualizarClave(Request $request, $rut, $rol)
+    {
         $request->validate(
             [
                 'nueva' => 'required|min:8|max:25',
@@ -150,7 +156,8 @@ class AdminController extends Controller
         );
 
         $usuaVerificar = Usuarios::where(['usua_rut' => $rut, 'rous_codigo' => $rol])->first();
-        if (!$usuaVerificar) return redirect()->route('admin.listar.usuario')->with('errorUsuario', 'El usuario no se encuentra registrado en el sistema.');
+        if (!$usuaVerificar)
+            return redirect()->route('admin.listar.usuario')->with('errorUsuario', 'El usuario no se encuentra registrado en el sistema.');
 
         $claveActualizar = Usuarios::where(['usua_rut' => $rut, 'rous_codigo' => $rol])->update([
             'usua_clave' => Hash::make($request->nueva),
@@ -158,13 +165,16 @@ class AdminController extends Controller
             'usua_rut_mod' => Session::get('admin')->usua_rut,
             'usua_rol_mod' => Session::get('admin')->rous_codigo,
         ]);
-        if (!$claveActualizar) return redirect()->back()->with('errorClave', 'La contraseña del usuario no se pudo actualizar, intente más tarde.')->withInput();
+        if (!$claveActualizar)
+            return redirect()->back()->with('errorClave', 'La contraseña del usuario no se pudo actualizar, intente más tarde.')->withInput();
         return redirect()->route('admin.editar.usuario', [$rut, $rol])->with('exitoClave', 'La contraseña del usuario fue actualizada correctamente.');
     }
 
-    public function verPerfil($usua_rut, $rous_codigo) {
+    public function verPerfil($usua_rut, $rous_codigo)
+    {
         $usuario = Usuarios::where(['usua_rut' => $usua_rut, 'rous_codigo' => $rous_codigo])->first();
-        if (!$usuario) return redirect()->back();
+        if (!$usuario)
+            return redirect()->back();
 
         return view('admin.perfil.mostrar', [
             'usuario' => $usuario,
@@ -172,7 +182,8 @@ class AdminController extends Controller
         ]);
     }
 
-    public function actualizarPerfil(Request $request, $usua_rut, $rous_codigo) {
+    public function actualizarPerfil(Request $request, $usua_rut, $rous_codigo)
+    {
         $request->validate(
             [
                 'nombre' => 'required|max:100',
@@ -210,20 +221,24 @@ class AdminController extends Controller
             'usua_rut_mod' => Session::get('admin')->usua_rut,
             'usua_rol_mod' => Session::get('admin')->rous_codigo,
         ]);
-        if (!$usuario) return redirect()->back()->with('errorPerfil', 'Ocurrió un problema al actualizar los datos del perfil, intente más tarde.')->withInput();
+        if (!$usuario)
+            return redirect()->back()->with('errorPerfil', 'Ocurrió un problema al actualizar los datos del perfil, intente más tarde.')->withInput();
         return redirect()->route('admin.perfil.show', ['usua_rut' => $usua_rut, 'rous_codigo' => $rous_codigo])->with('exitoPerfil', 'El perfil fue actualizado correctamente.');
     }
 
-    public function cambiarClavePerfil($usua_rut, $rous_codigo) {
+    public function cambiarClavePerfil($usua_rut, $rous_codigo)
+    {
         $usuario = Usuarios::where(['usua_rut' => $usua_rut, 'rous_codigo' => $rous_codigo])->first();
-        if (!$usuario) return redirect()->back();
+        if (!$usuario)
+            return redirect()->back();
 
         return view('admin.perfil.clave', [
             'usuario' => $usuario
         ]);
     }
 
-    public function actualizarClavePerfil(Request $request, $usua_rut, $rous_codigo) {
+    public function actualizarClavePerfil(Request $request, $usua_rut, $rous_codigo)
+    {
         $request->validate(
             [
                 'nueva' => 'required|min:8|max:25',
@@ -245,18 +260,18 @@ class AdminController extends Controller
             'usua_rut_mod' => Session::get('admin')->usua_rut,
             'usua_rol_mod' => Session::get('admin')->rous_codigo,
         ]);
-        if (!$claveActualizar) return redirect()->back()->with('errorClave', 'La contraseña no se pudo actualizar, intente más tarde.')->withInput();
+        if (!$claveActualizar)
+            return redirect()->back()->with('errorClave', 'La contraseña no se pudo actualizar, intente más tarde.')->withInput();
         return redirect()->route('admin.perfil.show', [$usua_rut, $rous_codigo])->with('exitoPerfil', 'La contraseña fue actualizada correctamente.');
     }
 
     public function obetenerOrganizaciones(Request $request)
     {
         $organizaciones = null;
-        if(count($request->all()) > 0) {
+        if (count($request->all()) > 0) {
             if ($request->comuna != '') {
                 $organizaciones = Organizaciones::leftJoin('entornos', 'entornos.ento_codigo', '=', 'organizaciones.ento_codigo')->where('organizaciones.comu_codigo', $request->comuna)->get();
-            }
-            else {
+            } else {
                 return 'hola';
             }
         } else {
@@ -272,21 +287,21 @@ class AdminController extends Controller
     {
         $dirigentes = null;
         $organizaciones = DB::table('dirigentes_organizaciones')
-        ->join('organizaciones','organizaciones.orga_codigo','=','dirigentes_organizaciones.orga_codigo')
-        ->join('dirigentes','dirigentes.diri_codigo','=','dirigentes_organizaciones.diri_codigo')
-        ->select('organizaciones.orga_codigo','organizaciones.orga_nombre')
-        ->distinct()
-        ->get();
-        if(count($request->all()) > 0){
-            if($request->orga_codigo != ""){
+            ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'dirigentes_organizaciones.orga_codigo')
+            ->join('dirigentes', 'dirigentes.diri_codigo', '=', 'dirigentes_organizaciones.diri_codigo')
+            ->select('organizaciones.orga_codigo', 'organizaciones.orga_nombre')
+            ->distinct()
+            ->get();
+        if (count($request->all()) > 0) {
+            if ($request->orga_codigo != "") {
                 $dirigentes = DB::table('dirigentes_organizaciones')
-                ->join('dirigentes','dirigentes.diri_codigo','=','dirigentes_organizaciones.diri_codigo')
-                ->join('organizaciones','organizaciones.orga_codigo','=','dirigentes_organizaciones.orga_codigo')
-                ->select('organizaciones.*','dirigentes.*')
-                ->where('organizaciones.orga_codigo','=',$request->orga_codigo)
-                ->get();
+                    ->join('dirigentes', 'dirigentes.diri_codigo', '=', 'dirigentes_organizaciones.diri_codigo')
+                    ->join('organizaciones', 'organizaciones.orga_codigo', '=', 'dirigentes_organizaciones.orga_codigo')
+                    ->select('organizaciones.*', 'dirigentes.*')
+                    ->where('organizaciones.orga_codigo', '=', $request->orga_codigo)
+                    ->get();
             }
-        }else{
+        } else {
             $dirigentes = Dirigentes::all();
         }
 
@@ -364,10 +379,10 @@ class AdminController extends Controller
     {
         return view('admin.dirigentes.editardirigente', [
             'diri' => DB::table('dirigentes_organizaciones')
-            ->join('dirigentes','dirigentes.diri_codigo','=','dirigentes_organizaciones.diri_codigo')
-            ->select('dirigentes.*','dirigentes_organizaciones.orga_codigo')
-            ->where('dirigentes.diri_codigo',$diricodigo)
-            ->first(),
+                ->join('dirigentes', 'dirigentes.diri_codigo', '=', 'dirigentes_organizaciones.diri_codigo')
+                ->select('dirigentes.*', 'dirigentes_organizaciones.orga_codigo')
+                ->where('dirigentes.diri_codigo', $diricodigo)
+                ->first(),
             'organizaciones' => Organizaciones::all(),
 
         ]);
@@ -561,13 +576,16 @@ class AdminController extends Controller
     public function eliminarOrganizacion($organizacion)
     {
         $orgaActividades = Actividades::where('orga_codigo', $organizacion)->get();
-        if (sizeof($orgaActividades) > 0) return redirect()->route('admin.listar.org')->with('errorOrganizacion', 'La organización no se puede eliminar porque posee actividades asociadas.');
+        if (sizeof($orgaActividades) > 0)
+            return redirect()->route('admin.listar.org')->with('errorOrganizacion', 'La organización no se puede eliminar porque posee actividades asociadas.');
 
-        $orgaDonaciones =  Donaciones::where('orga_codigo', $organizacion)->get();
-        if (sizeof($orgaDonaciones) > 0) return redirect()->route('admin.listar.org')->with('errorOrganizacion', 'La organización no se puede eliminar porque posee donaciones asociadas.');
+        $orgaDonaciones = Donaciones::where('orga_codigo', $organizacion)->get();
+        if (sizeof($orgaDonaciones) > 0)
+            return redirect()->route('admin.listar.org')->with('errorOrganizacion', 'La organización no se puede eliminar porque posee donaciones asociadas.');
 
         $orgaDirigentes = DirigentesOrganizaciones::where('orga_codigo', $organizacion)->get();
-        if (sizeof($orgaDirigentes) > 0) return redirect()->route('admin.listar.org')->with('errorOrganizacion', 'La organización no se puede eliminar porque posee dirigentes asociados.');
+        if (sizeof($orgaDirigentes) > 0)
+            return redirect()->route('admin.listar.org')->with('errorOrganizacion', 'La organización no se puede eliminar porque posee dirigentes asociados.');
 
         Organizaciones::where('orga_codigo', $organizacion)->delete();
         return redirect()->route('admin.listar.org')->wiht('exitoOrganizacion', 'La organización fue eliminada correctamente.');
@@ -585,10 +603,12 @@ class AdminController extends Controller
         return view('admin.encuestapr.listar', [
             'comunas' => Comunas::all(),
             'caper' => CategoriasPercepcion::all(),
+            'regiones' => Regiones::all(),
             'encuestapr' => DB::table('encuesta_percepcion')
                 ->join('comunas', 'encuesta_percepcion.comu_codigo', '=', 'comunas.comu_codigo')
+                ->join('regiones', 'comunas.regi_codigo', 'regiones.regi_codigo')
                 ->join('categorias_percepcion', 'encuesta_percepcion.cape_codigo', '=', 'categorias_percepcion.cape_codigo')
-                ->select('encuesta_percepcion.*', 'comunas.comu_nombre', 'categorias_percepcion.cape_nombre')
+                ->select('encuesta_percepcion.*', 'comunas.comu_nombre', 'categorias_percepcion.cape_nombre','regiones.regi_nombre')
                 ->get(),
         ]);
     }
@@ -599,35 +619,62 @@ class AdminController extends Controller
     {
         $request->validate(
             [
-                'comuna' => 'required',
+                'region' => 'required',
                 'catepr' => 'required',
                 'anho' => 'required',
                 'puntaje' => 'required'
             ],
             [
-                'comuna.required' => 'La comuna es requerida.',
+                'region.required' => 'La región es requerida.',
                 'catepr.required' => 'Es necesario asignar una categoría de percepción.',
                 'anho.required' => 'Especifique el año de la encuesta.',
                 'puntaje.required' => 'Es necesario que especifique el puntaje obtenido en la encuesta.'
             ]
         );
+        $comunas = Comunas::select('comu_codigo')->where('regi_codigo', $request->region)->get();
+        if (count($comunas) > 0) {
+            for ($i = 0; $i < count($comunas); $i++) {
+                $verificarEncuesta = EncuestaPercepcion::where(['comu_codigo' => $comunas[$i]->comu_codigo, 'cape_codigo' => $request->catepe, 'enpe_anho' => $request->anho])->first();
+                if ($verificarEncuesta)
+                    return redirect()->route('admin.encuestapr.listar')->with('errorEncuestacl', 'Ya existe una encuesta de clima para la comuna, categoría y año ingresado.');
+                $encuesta = EncuestaPercepcion::create([
+                    'regi_codigo' => $request->region,
+                    'comu_codigo' => $comunas[$i]->comu_codigo,
+                    'cape_codigo' => $request->catepr,
+                    'enpe_anho' => $request->anho,
+                    'enpe_puntaje' => $request->puntaje,
+                    'enpe_creado' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'enpe_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'enpe_vigente' => 'S',
+                    'enpe_rut_mod' => Session::get('admin')->usua_rut,
+                    'enep_rol_mod' => Session::get('admin')->rous_codigo
+                ]);
+            }
+            if (!$encuesta)
+                return redirect()->back()->with('errorEncuestacl', 'Ocurrió un error durante el registro de la encuesta de clima, intente más tarde.');
+            return redirect()->route('admin.encuestapr.listar')->with('exitoEncuestacl', 'La encuesta de clima fue ingresada correctamente.');
+        } else {
+            redirect()->back()->with('errorEncuestapr', 'No se enuentran comunas asociadas a la región');
+        }
 
-        $verificarEncuesta = EncuestaPercepcion::where(['comu_codigo' => $request->comuna, 'cape_codigo' => $request->catepr, 'enpe_anho' => $request->anho])->first();
-        if ($verificarEncuesta) return redirect()->route('admin.listar.encuestapr')->with('errorEncuestapr', 'Ya existe una encuesta de percepción para la comuna, categoría y año ingresado.');
+        // $verificarEncuesta = EncuestaPercepcion::where(['comu_codigo' => $request->comuna, 'cape_codigo' => $request->catepr, 'enpe_anho' => $request->anho])->first();
+        // if ($verificarEncuesta)
+        //     return redirect()->route('admin.listar.encuestapr')->with('errorEncuestapr', 'Ya existe una encuesta de percepción para la comuna, categoría y año ingresado.');
 
-        $encuestapr = EncuestaPercepcion::create([
-            'comu_codigo' => $request->comuna,
-            'cape_codigo' => $request->catepr,
-            'enpe_anho' => $request->anho,
-            'enpe_puntaje' => $request->puntaje,
-            'enpe_creado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'enpe_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'enpe_vigente' => 'S',
-            'enpe_rut_mod' => Session::get('admin')->usua_rut,
-            'enep_rol_mod' => Session::get('admin')->rous_codigo
-        ]);
-        if (!$encuestapr) return redirect()->back()->with('errorEncuestapr', 'Ocurrió un error durante el registro de la encuesta de percepción, intente más tarde.');
-        return redirect()->route('admin.listar.encuestapr')->with('exitoEncuestapr', 'La encuesta de percepción fue ingresada correctamente.');
+        // $encuestapr = EncuestaPercepcion::create([
+        //     'comu_codigo' => $request->comuna,
+        //     'cape_codigo' => $request->catepr,
+        //     'enpe_anho' => $request->anho,
+        //     'enpe_puntaje' => $request->puntaje,
+        //     'enpe_creado' => Carbon::now()->format('Y-m-d H:i:s'),
+        //     'enpe_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+        //     'enpe_vigente' => 'S',
+        //     'enpe_rut_mod' => Session::get('admin')->usua_rut,
+        //     'enep_rol_mod' => Session::get('admin')->rous_codigo
+        // ]);
+        // if (!$encuestapr)
+        //     return redirect()->back()->with('errorEncuestapr', 'Ocurrió un error durante el registro de la encuesta de percepción, intente más tarde.');
+        // return redirect()->route('admin.listar.encuestapr')->with('exitoEncuestapr', 'La encuesta de percepción fue ingresada correctamente.');
     }
 
     public function ActualizarEncuestaPr(Request $request, $enpe_codigo)
@@ -642,7 +689,8 @@ class AdminController extends Controller
         );
 
         $enclVerificar = EncuestaPercepcion::where('enpe_codigo', $enpe_codigo)->first();
-        if (!$enclVerificar) return redirect()->back()->with('errorEncuestapr', 'La encuesta de percepción no se encuentra registrada en el sistema.');
+        if (!$enclVerificar)
+            return redirect()->back()->with('errorEncuestapr', 'La encuesta de percepción no se encuentra registrada en el sistema.');
 
         $encuesta = EncuestaPercepcion::where(['enpe_codigo' => $enpe_codigo])->update([
             'enpe_puntaje' => $request->puntaje,
@@ -651,17 +699,20 @@ class AdminController extends Controller
             'enpe_rut_mod' => Session::get('admin')->usua_rut,
             'enpe_rol_mod' => Session::get('admin')->rous_codigo
         ]);
-        if (!$encuesta) return redirect()->back()->with('errorEncuestapr', 'Ocurrió un error durante la actualización de la encuesta de percepción.');
+        if (!$encuesta)
+            return redirect()->back()->with('errorEncuestapr', 'Ocurrió un error durante la actualización de la encuesta de percepción.');
         return redirect()->route('admin.listar.encuestapr')->with('exitoEncuestapr', 'La encuesta de percepción fue actualizada correctamente.');
     }
 
     public function EliminarEncuestaPr($enpe_codigo)
     {
         $enclVerificar = EncuestaPercepcion::where('enpe_codigo', $enpe_codigo)->first();
-        if (!$enclVerificar) return redirect()->back()->with('errorEncuestapr', 'La encuesta de percepción no se encuentra registrada en el sistema.');
+        if (!$enclVerificar)
+            return redirect()->back()->with('errorEncuestapr', 'La encuesta de percepción no se encuentra registrada en el sistema.');
 
         $enprEliminar = EncuestaPercepcion::where(['enpe_codigo' => $enpe_codigo])->delete();
-        if (!$enprEliminar) return redirect()->back()->with('errorEncuestapr', 'Ocurrió un error al eliminar la encuesta de percepción, intente más tarde.');
+        if (!$enprEliminar)
+            return redirect()->back()->with('errorEncuestapr', 'Ocurrió un error al eliminar la encuesta de percepción, intente más tarde.');
         return redirect()->route('admin.listar.encuestapr')->with('exitoEncuestapr', 'La encuesta de percepción fue eliminada correctamente.');
     }
 
@@ -682,13 +733,13 @@ class AdminController extends Controller
         if (isset($request->region)) {
             $comunas = Comunas::all()->where('regi_codigo', $request->region);
             $cantidadDeIniciativas = IniciativasUnidades::join('unidades', 'unidades.unid_codigo', '=', 'iniciativas_unidades.unid_codigo')
-            ->join('comunas', 'comunas.comu_codigo', '=', 'unidades.comu_codigo')
-            ->join('regiones', 'regiones.regi_codigo', '=', 'comunas.regi_codigo')
-            ->where('iniciativas_unidades.inun_vigente', 'S')
-            ->where('regiones.regi_codigo', $request->region)
-            ->count();
+                ->join('comunas', 'comunas.comu_codigo', '=', 'unidades.comu_codigo')
+                ->join('regiones', 'regiones.regi_codigo', '=', 'comunas.regi_codigo')
+                ->where('iniciativas_unidades.inun_vigente', 'S')
+                ->where('regiones.regi_codigo', $request->region)
+                ->count();
 
-            return response()->json(['comunas' => $comunas,"iniciativas" => $cantidadDeIniciativas, 'success' => true]);
+            return response()->json(['comunas' => $comunas, "iniciativas" => $cantidadDeIniciativas, 'success' => true]);
         } else {
             return response()->json(['success' => false]);
         }
@@ -697,20 +748,20 @@ class AdminController extends Controller
     public function obtenerDatosComuna(Request $request)
     {
         if (isset($request->comunas)) {
-            $comuna = Comunas::join('regiones','regiones.regi_codigo','=','comunas.regi_codigo')
-            ->where('comu_codigo', $request->comunas)->get();
+            $comuna = Comunas::join('regiones', 'regiones.regi_codigo', '=', 'comunas.regi_codigo')
+                ->where('comu_codigo', $request->comunas)->get();
             $organizaciones = Organizaciones::all()->where('comu_codigo', $request->comunas);
-            $actividades = Actividades::join('organizaciones','organizaciones.orga_codigo','=',"actividades.orga_codigo")
-            ->join('comunas','comunas.comu_codigo','=','organizaciones.comu_codigo')
-            ->where('comunas.comu_codigo',$request->comunas)->get();
+            $actividades = Actividades::join('organizaciones', 'organizaciones.orga_codigo', '=', "actividades.orga_codigo")
+                ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
+                ->where('comunas.comu_codigo', $request->comunas)->get();
 
-            $donaciones = Donaciones::join('organizaciones','organizaciones.orga_codigo','=','donaciones.orga_codigo')
-            ->join('comunas','comunas.comu_codigo','=','organizaciones.comu_codigo')
-            ->select('organizaciones.orga_codigo')
-            ->where('comunas.comu_codigo',$request->comunas)
-            ->get();
+            $donaciones = Donaciones::join('organizaciones', 'organizaciones.orga_codigo', '=', 'donaciones.orga_codigo')
+                ->join('comunas', 'comunas.comu_codigo', '=', 'organizaciones.comu_codigo')
+                ->select('organizaciones.orga_codigo')
+                ->where('comunas.comu_codigo', $request->comunas)
+                ->get();
 
-            $unidades = Unidades::all()->where('comu_codigo',$request->comunas)->where('tuni_codigo',1);
+            $unidades = Unidades::all()->where('comu_codigo', $request->comunas)->where('tuni_codigo', 1);
             $entornos = DB::table('entornos')->orderBy('ento_codigo')->get();
             $percepcion = EncuestaPercepcion::select('enpe_puntaje')->where('comu_codigo', $request->comunas)->get();
             $clima = EncuestaClima::select('encl_puntaje')->where('comu_codigo', $request->comunas)->get();
@@ -724,9 +775,9 @@ class AdminController extends Controller
 
             $n_categorias_cl = CategoriasClima::all()->count();
             $inviIniciativas = Iniciativas::select(DB::raw('IFNULL(SUM(inic_inrel), 0) AS suma_total, COUNT(*) as total_iniciativas'))
-            ->join('iniciativas_ubicaciones','iniciativas_ubicaciones.inic_codigo','=','iniciativas.inic_codigo')
-            ->where('iniciativas_ubicaciones.comu_codigo',$request->comunas)
-            ->first();
+                ->join('iniciativas_ubicaciones', 'iniciativas_ubicaciones.inic_codigo', '=', 'iniciativas.inic_codigo')
+                ->where('iniciativas_ubicaciones.comu_codigo', $request->comunas)
+                ->first();
             if ($inviIniciativas->total_iniciativas != 0) {
 
                 $inviPromedio = round($inviIniciativas->suma_total / $inviIniciativas->total_iniciativas);
@@ -738,7 +789,7 @@ class AdminController extends Controller
             $unidades = Unidades::all()->where('comu_codigo', $request->comunas)->where('tuni_codigo', 1);
             $cantidadIniciativas = DB::table('iniciativas_ubicaciones')->where('comu_codigo', $request->comunas)->get();
 
-            return response()->json(['donaciones'=>$donaciones,'actividades' =>$actividades,'comuna' => $comuna, 'entornos' => $entornos, 'success' => true, 'percepcion' => $percepcion, 'clima' => $clima, 'prensa' => $prensa, 'operaciones' => $operaciones, 'n_cat_cl' => $n_categorias_cl,'unidades' => $unidades,'organizaciones' => $organizaciones,'iniciativas' => $cantidadIniciativas,'invi' =>$inviPromedio]);
+            return response()->json(['donaciones' => $donaciones, 'actividades' => $actividades, 'comuna' => $comuna, 'entornos' => $entornos, 'success' => true, 'percepcion' => $percepcion, 'clima' => $clima, 'prensa' => $prensa, 'operaciones' => $operaciones, 'n_cat_cl' => $n_categorias_cl, 'unidades' => $unidades, 'organizaciones' => $organizaciones, 'iniciativas' => $cantidadIniciativas, 'invi' => $inviPromedio]);
         } else {
             return response()->json(['success' => false]);
         }
@@ -759,13 +810,13 @@ class AdminController extends Controller
     {
         if (isset($request->org)) {
             $organizacion = Organizaciones::where('ento_codigo', $request->entorno)->where('orga_codigo', $request->org)
-            ->select('orga_codigo','orga_nombre','orga_geoubicacion','orga_descripcion','orga_domicilio','orga_cantidad_socios','orga_fecha_vinculo')
-            ->get();
+                ->select('orga_codigo', 'orga_nombre', 'orga_geoubicacion', 'orga_descripcion', 'orga_domicilio', 'orga_cantidad_socios', 'orga_fecha_vinculo')
+                ->get();
 
-            $donaciones = Donaciones::where("orga_codigo",$request->org)->select('dona_motivo')->limit(3)->orderBy('dona_fecha_entrega')->get();
-            $actividades = Actividades::where("orga_codigo",$request->org)->select('acti_nombre')->limit(3)->orderBy('acti_fecha')->get();
+            $donaciones = Donaciones::where("orga_codigo", $request->org)->select('dona_motivo')->limit(3)->orderBy('dona_fecha_entrega')->get();
+            $actividades = Actividades::where("orga_codigo", $request->org)->select('acti_nombre')->limit(3)->orderBy('acti_fecha')->get();
             $entorno = Entornos::all()->where('ento_codigo', $request->entorno);
-            return response()->json(['organizacion' => $organizacion, 'entorno' => $entorno,'donaciones' => $donaciones,'actividades' => $actividades, 'success' => true]);
+            return response()->json(['organizacion' => $organizacion, 'entorno' => $entorno, 'donaciones' => $donaciones, 'actividades' => $actividades, 'success' => true]);
         } else {
             return response()->json(['success' => false]);
         }
@@ -815,12 +866,14 @@ class AdminController extends Controller
             'conv_rol_mod' => Session::get('admin')->rous_codigo,
             'conv_rut_mod' => Session::get('admin')->usua_rut
         ]);
-        if (!$convGuardar) redirect()->back()->with('errorConvenio', 'Ocurrió un error durante el registro del convenio, intente más tarde.');
+        if (!$convGuardar)
+            redirect()->back()->with('errorConvenio', 'Ocurrió un error durante el registro del convenio, intente más tarde.');
 
         $archivo = $request->file('conv_archivo');
-        $rutaConvenio = 'files/convenios/'.$convGuardar.'.pdf';
-        if (File::exists(public_path($rutaConvenio))) File::delete(public_path($rutaConvenio));
-        $moverArchivo = $archivo->move(public_path('files/convenios'), $convGuardar.'.pdf');
+        $rutaConvenio = 'files/convenios/' . $convGuardar . '.pdf';
+        if (File::exists(public_path($rutaConvenio)))
+            File::delete(public_path($rutaConvenio));
+        $moverArchivo = $archivo->move(public_path('files/convenios'), $convGuardar . '.pdf');
         if (!$moverArchivo) {
             Convenios::where('conv_codigo', $convGuardar)->delete();
             return redirect()->back()->with('errorConvenio', 'Ocurrió un error durante el registro del convenio, intente más tarde.');
@@ -828,12 +881,13 @@ class AdminController extends Controller
 
         $convActualizar = Convenios::where('conv_codigo', $convGuardar)->update([
             'conv_nombre_archivo' => $request->file('conv_archivo')->getClientOriginalName(),
-            'conv_ruta_archivo' => 'public/files/convenios/'.$convGuardar.'.pdf',
+            'conv_ruta_archivo' => 'public/files/convenios/' . $convGuardar . '.pdf',
             'conv_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'conv_rol_mod' => Session::get('admin')->rous_codigo,
             'conv_rut_mod' => Session::get('admin')->usua_rut
         ]);
-        if (!$convActualizar) return redirect()->back()->with('errorConvenio', 'Ocurrió un error durante el registro del convenio, intente más tarde.');
+        if (!$convActualizar)
+            return redirect()->back()->with('errorConvenio', 'Ocurrió un error durante el registro del convenio, intente más tarde.');
         return redirect()->route('admin.convenios.listar')->with('exitoConvenio', 'El convenio fue registrado correctamente.');
     }
 
@@ -862,7 +916,8 @@ class AdminController extends Controller
         );
 
         $convVerificar = Convenios::where('conv_codigo', $conv)->first();
-        if (!$convVerificar) redirect()->route('admin.convenios.listar')->with('errorConvenio', 'El convenio no se encuentra registrado en el sistema.');
+        if (!$convVerificar)
+            redirect()->route('admin.convenios.listar')->with('errorConvenio', 'El convenio no se encuentra registrado en el sistema.');
 
         $convActualizar = Convenios::where(['conv_codigo' => $conv])->update([
             'conv_nombre' => $request->conv_nombre,
@@ -873,15 +928,19 @@ class AdminController extends Controller
             'conv_rol_mod' => Session::get('admin')->rous_codigo
 
         ]);
-        if (!$convActualizar) return redirect()->back()->with('errorConvenio', 'Ocurrió un error al actualizar el convenio, intente más tarde.');
+        if (!$convActualizar)
+            return redirect()->back()->with('errorConvenio', 'Ocurrió un error al actualizar el convenio, intente más tarde.');
         return redirect()->route('admin.convenios.listar')->with('exitoConvenio', 'El convenio fue actualizado correctamente.');
     }
 
-    public function cambiarConvenio(Request $request, $conv_codigo) {
+    public function cambiarConvenio(Request $request, $conv_codigo)
+    {
         $convVerificar = Convenios::where('conv_codigo', $conv_codigo)->first();
-        if (!$convVerificar) redirect()->route('admin.convenios.listar')->with('errorConvenio', 'El convenio no se encuentra registrado en el sistema.');
+        if (!$convVerificar)
+            redirect()->route('admin.convenios.listar')->with('errorConvenio', 'El convenio no se encuentra registrado en el sistema.');
 
-        $validacion = Validator::make($request->all(),
+        $validacion = Validator::make(
+            $request->all(),
             [
                 'conv_archivo' => 'required|mimes:pdf'
             ],
@@ -890,36 +949,44 @@ class AdminController extends Controller
                 'conv_archivo.mimes' => 'El archivo del convenio debe estar en formato PDF.'
             ]
         );
-        if ($validacion->fails()) return redirect()->back()->with('errorConvenio', $validacion->errors()->first())->withInput();
+        if ($validacion->fails())
+            return redirect()->back()->with('errorConvenio', $validacion->errors()->first())->withInput();
 
         $archivo = $request->file('conv_archivo');
-        $rutaConvenio = 'files/convenios/'.$conv_codigo.'.pdf';
-        if (File::exists(public_path($rutaConvenio))) File::delete(public_path($rutaConvenio));
-        $moverArchivo = $archivo->move(public_path('files/convenios'), $conv_codigo.'.pdf');
-        if (!$moverArchivo) return redirect()->back()->with('errorConvenio', 'Ocurrió un error al actualizar el archivo del convenio, intente más tarde.');
+        $rutaConvenio = 'files/convenios/' . $conv_codigo . '.pdf';
+        if (File::exists(public_path($rutaConvenio)))
+            File::delete(public_path($rutaConvenio));
+        $moverArchivo = $archivo->move(public_path('files/convenios'), $conv_codigo . '.pdf');
+        if (!$moverArchivo)
+            return redirect()->back()->with('errorConvenio', 'Ocurrió un error al actualizar el archivo del convenio, intente más tarde.');
 
         $convActualizar = Convenios::where('conv_codigo', $conv_codigo)->update([
             'conv_nombre_archivo' => $request->file('conv_archivo')->getClientOriginalName(),
-            'conv_ruta_archivo' => 'public/files/convenios/'.$conv_codigo.'.pdf',
+            'conv_ruta_archivo' => 'public/files/convenios/' . $conv_codigo . '.pdf',
             'conv_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
             'conv_rol_mod' => Session::get('admin')->rous_codigo,
             'conv_rut_mod' => Session::get('admin')->usua_rut
         ]);
-        if (!$convActualizar) return redirect()->back()->with('errorConvenio', 'Ocurrió un error al actualizar el archivo del convenio, intente más tarde.');
+        if (!$convActualizar)
+            return redirect()->back()->with('errorConvenio', 'Ocurrió un error al actualizar el archivo del convenio, intente más tarde.');
         return redirect()->route('admin.convenios.editar', $conv_codigo)->with('exitoConvenio', 'El archivo del convenio fue actualizado correctamente.');
     }
 
     public function Eliminarconvenio($codigo)
     {
         $convenio = Convenios::where('conv_codigo', $codigo)->first();
-        if (!$convenio) return redirect()->route('admin.convenios.listar')->with('errorConvenio', 'El convenio no se encuentra registrado en el sistema.');
+        if (!$convenio)
+            return redirect()->route('admin.convenios.listar')->with('errorConvenio', 'El convenio no se encuentra registrado en el sistema.');
 
         $inicConvenios = Iniciativas::where('conv_codigo', $codigo)->get();
-        if (sizeof($inicConvenios) > 0) return redirect()->route('admin.convenios.listar')->with('errorConvenio', 'El convenio no se puede eliminar porque posee iniciativas asociadas.');
+        if (sizeof($inicConvenios) > 0)
+            return redirect()->route('admin.convenios.listar')->with('errorConvenio', 'El convenio no se puede eliminar porque posee iniciativas asociadas.');
 
-        if (File::exists(public_path('files/convenios/'.$convenio->conv_codigo.'.pdf'))) File::delete(public_path('files/convenios/'.$convenio->conv_codigo.'.pdf'));
+        if (File::exists(public_path('files/convenios/' . $convenio->conv_codigo . '.pdf')))
+            File::delete(public_path('files/convenios/' . $convenio->conv_codigo . '.pdf'));
         $convEliminar = Convenios::where('conv_codigo', $codigo)->delete();
-        if (!$convEliminar) return redirect()->route('admin.convenios.listar')->with('errorConvenio', 'Ocurrió un error al eliminar el convenio, intente más tarde.');
+        if (!$convEliminar)
+            return redirect()->route('admin.convenios.listar')->with('errorConvenio', 'Ocurrió un error al eliminar el convenio, intente más tarde.');
         return redirect()->route('admin.convenios.listar')->with('exitoConvenio', 'El convenio fue eliminado correctamente.');
     }
 
@@ -928,10 +995,12 @@ class AdminController extends Controller
         return view('admin.encuestacl.listar', [
             'categoriacl' => CategoriasClima::all(),
             'comunas' => Comunas::all(),
+            'regiones' => Regiones::all(),
             'encuestacl' => DB::table('encuesta_clima')
                 ->join('comunas', 'encuesta_clima.comu_codigo', '=', 'comunas.comu_codigo')
+                ->join('regiones', 'comunas.regi_codigo', 'regiones.regi_codigo')
                 ->join('categorias_clima', 'encuesta_clima.cacl_codigo', '=', 'categorias_clima.cacl_codigo')
-                ->select('encuesta_clima.*', 'comunas.comu_nombre', 'categorias_clima.cacl_nombre')
+                ->select('encuesta_clima.regi_codigo', 'encuesta_clima.*', 'categorias_clima.cacl_nombre', 'comunas.comu_nombre', 'regiones.regi_nombre')
                 ->get()
         ]);
     }
@@ -940,35 +1009,53 @@ class AdminController extends Controller
     {
         $request->validate(
             [
-                'comuna' => 'required',
+                'region' => 'required',
                 'catecl' => 'required',
                 'anho' => 'required',
                 'puntaje' => 'required',
             ],
             [
-                'comuna.required' => 'La comuna asociada es requerida.',
+                'region.required' => 'La región asociada es requerida.',
                 'catecl.required' => 'La categoría del clima es requerida.',
                 'anho.required' => 'El año en que se realizó la encuesta es requerido.',
                 'puntaje.required' => 'El puntaje es requerido.',
             ]
         );
 
-        $verificarEncuesta = EncuestaClima::where(['comu_codigo' => $request->comuna, 'cacl_codigo' => $request->catecl, 'encl_anho' => $request->anho])->first();
-        if ($verificarEncuesta) return redirect()->route('admin.encuestacl.listar')->with('errorEncuestacl', 'Ya existe una encuesta de clima para la comuna, categoría y año ingresado.');
+        $comunas = Comunas::select('comu_codigo')->where('regi_codigo', $request->region)->get();
+        if (count($comunas) > 0) {
+            for ($i = 0; $i < count($comunas); $i++) {
+                // echo ;
+                $verificarEncuesta = EncuestaClima::where(['comu_codigo' => $comunas[$i]->comu_codigo, 'cacl_codigo' => $request->catecl, 'encl_anho' => $request->anho])->first();
+                if ($verificarEncuesta)
+                    return redirect()->route('admin.encuestacl.listar')->with('errorEncuestacl', 'Ya existe una encuesta de clima para la comuna, categoría y año ingresado.');
+                $encuesta = EncuestaClima::create([
+                    'regi_codigo' => $request->region,
+                    'comu_codigo' => $comunas[$i]->comu_codigo,
+                    'cacl_codigo' => $request->catecl,
+                    'encl_anho' => $request->anho,
+                    'encl_puntaje' => $request->puntaje,
+                    'encl_creado' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'encl_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+                    'encl_vigente' => 'S',
+                    'encl_rut_mod' => Session::get('admin')->usua_rut,
+                    'encl_rol_mod' => Session::get('admin')->rous_codigo
+                ]);
+            }
+            if (!$encuesta)
+                return redirect()->back()->with('errorEncuestacl', 'Ocurrió un error durante el registro de la encuesta de clima, intente más tarde.');
+            return redirect()->route('admin.encuestacl.listar')->with('exitoEncuestacl', 'La encuesta de clima fue ingresada correctamente.');
+        } else {
+            redirect()->back()->with('errorEncuestacl', 'Ocurrió un error durante el registro de la encuesta de clima, intente más tarde.');
+            return "No se enuentran comunas asociadas a la región";
+        }
 
-        $encuesta = EncuestaClima::create([
-            'comu_codigo' => $request->comuna,
-            'cacl_codigo' => $request->catecl,
-            'encl_anho' => $request->anho,
-            'encl_puntaje' => $request->puntaje,
-            'encl_creado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'encl_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
-            'encl_vigente' => 'S',
-            'encl_rut_mod' => Session::get('admin')->usua_rut,
-            'encl_rol_mod' => Session::get('admin')->rous_codigo
-        ]);
-        if (!$encuesta) return redirect()->back()->with('errorEncuestacl', 'Ocurrió un error durante el registro de la encuesta de clima, intente más tarde.');
-        return redirect()->route('admin.encuestacl.listar')->with('exitoEncuestacl', 'La encuesta de clima fue ingresada correctamente.');
+
+
+        // $verificarEncuesta = EncuestaClima::where(['comu_codigo' => $request->comuna, 'cacl_codigo' => $request->catecl, 'encl_anho' => $request->anho])->first();
+        // if ($verificarEncuesta) return redirect()->route('admin.encuestacl.listar')->with('errorEncuestacl', 'Ya existe una encuesta de clima para la comuna, categoría y año ingresado.');
+
+
     }
 
     public function ActualizarEncuestacl(Request $request, $encl)
@@ -985,7 +1072,8 @@ class AdminController extends Controller
         );
 
         $enclVerificar = EncuestaClima::where('encl_codigo', $encl)->first();
-        if (!$enclVerificar) return redirect()->back()->with('errorEncuestacl', 'La encuesta de clima no se encuentra registrada en el sistema.');
+        if (!$enclVerificar)
+            return redirect()->back()->with('errorEncuestacl', 'La encuesta de clima no se encuentra registrada en el sistema.');
 
         $encuestacl = EncuestaClima::where(['encl_codigo' => $encl])->update([
             'encl_puntaje' => $request->puntaje,
@@ -994,17 +1082,20 @@ class AdminController extends Controller
             'encl_rut_mod' => Session::get('admin')->usua_rut,
             'encl_rol_mod' => Session::get('admin')->rous_codigo
         ]);
-        if (!$encuestacl) return redirect()->back()->with('errorEncuestacl', 'Ocurrió un error durante la actualización de la encuesta de clima, intente más tarde.');
+        if (!$encuestacl)
+            return redirect()->back()->with('errorEncuestacl', 'Ocurrió un error durante la actualización de la encuesta de clima, intente más tarde.');
         return redirect()->route('admin.encuestacl.listar')->with('exitoEncuestacl', 'La encuesta de clima fue actualizada correctamente.');
     }
 
     public function EliminarEncuestacl($codigo)
     {
         $enclVerificar = EncuestaClima::where('encl_codigo', $codigo)->first();
-        if (!$enclVerificar) return redirect()->back()->with('errorEncuestacl', 'La encuesta de clima no se encuentra registrada en el sistema.');
+        if (!$enclVerificar)
+            return redirect()->back()->with('errorEncuestacl', 'La encuesta de clima no se encuentra registrada en el sistema.');
 
         $enclEliminar = EncuestaClima::where(['encl_codigo' => $codigo])->delete();
-        if (!$enclEliminar) return redirect()->back()->with('errorEncuestacl', 'Ocurrió un error al eliminar la encuesta de clima, intente más tarde.');
+        if (!$enclEliminar)
+            return redirect()->back()->with('errorEncuestacl', 'Ocurrió un error al eliminar la encuesta de clima, intente más tarde.');
         return redirect()->route('admin.encuestacl.listar')->with('exitoEncuestacl', 'La encuesta de clima fue eliminada correctamente.');
     }
 
@@ -1179,10 +1270,12 @@ class AdminController extends Controller
     public function EliminarImpactos($impa_codigo)
     {
         $impaVerificar = IniciativasImpactos::where('impa_codigo', $impa_codigo)->get();
-        if (sizeof($impaVerificar) > 0) return redirect()->back()->with('errorImpacto', 'El impacto no se puede eliminar porque tiene algunas iniciativas asociadas.');
+        if (sizeof($impaVerificar) > 0)
+            return redirect()->back()->with('errorImpacto', 'El impacto no se puede eliminar porque tiene algunas iniciativas asociadas.');
 
         $impaEliminar = Impactos::where('impa_codigo', $impa_codigo)->delete();
-        if (!$impaEliminar) return redirect()->back()->with('errorImpacto', 'Ocurrió un error al eliminar el impacto.');
+        if (!$impaEliminar)
+            return redirect()->back()->with('errorImpacto', 'Ocurrió un error al eliminar el impacto.');
         return redirect()->route('admin.impactos.listar')->with('exitoImpacto', 'El impacto fue eliminado correctamente.');
     }
 
@@ -1236,7 +1329,8 @@ class AdminController extends Controller
         );
 
         $verificarEvaluacion = EvaluacionOperaciones::where('unid_codigo', $request->unid_codigo)->first();
-        if ($verificarEvaluacion) return redirect()->back()->with('errorOperacion', 'Ya existe una evaluación de operación para la unidad ingresada.');
+        if ($verificarEvaluacion)
+            return redirect()->back()->with('errorOperacion', 'Ya existe una evaluación de operación para la unidad ingresada.');
 
         $operacion = EvaluacionOperaciones::create([
             'unid_codigo' => $request->unid_codigo,
@@ -1247,7 +1341,8 @@ class AdminController extends Controller
             'evop_rut_mod' => Session::get('admin')->usua_rut,
             'evop_rol_mod' => Session::get('admin')->rous_codigo,
         ]);
-        if (!$operacion) return redirect()->back()->with('errorOperacion', 'Ocurrió un error al registrar la evaluación de operación, intente más tarde.');
+        if (!$operacion)
+            return redirect()->back()->with('errorOperacion', 'Ocurrió un error al registrar la evaluación de operación, intente más tarde.');
         return redirect()->route('admin.operacion.listar')->with('exitoOperacion', 'La evaluación de operación fue registrada correctamente.');
     }
 
@@ -1267,7 +1362,8 @@ class AdminController extends Controller
         );
 
         $evopVerificar = EvaluacionOperaciones::where('evop_codigo', $evop_codigo)->first();
-        if (!$evopVerificar) return redirect()->back()->with('errorOperacion', 'La evaluación de operación no se encuentra registrada en el sistema.');
+        if (!$evopVerificar)
+            return redirect()->back()->with('errorOperacion', 'La evaluación de operación no se encuentra registrada en el sistema.');
 
         $tuniActualizar = EvaluacionOperaciones::where('evop_codigo', $evop_codigo)->update([
             'evop_valor' => $request->evop_valor,
@@ -1276,7 +1372,8 @@ class AdminController extends Controller
             'evop_rut_mod' => Session::get('admin')->usua_rut,
             'evop_rol_mod' => Session::get('admin')->rous_codigo,
         ]);
-        if (!$tuniActualizar) return redirect()->back()->with('errorOperacion', 'Ocurrió un error al actualizar la evaluación de operación, intente más tarde.');
+        if (!$tuniActualizar)
+            return redirect()->back()->with('errorOperacion', 'Ocurrió un error al actualizar la evaluación de operación, intente más tarde.');
         return redirect()->route('admin.operacion.listar')->with('exitoOperacion', 'La evaluación de operación fue actualizada correctamente.');
     }
 
@@ -1284,10 +1381,12 @@ class AdminController extends Controller
     public function EliminarOperacion($evop_codigo)
     {
         $evopVerificar = EvaluacionOperaciones::where('evop_codigo', $evop_codigo)->first();
-        if (!$evopVerificar) return redirect()->back()->with('errorOperacion', 'La evaluación de operación no se encuentra registrada en el sistema.');
+        if (!$evopVerificar)
+            return redirect()->back()->with('errorOperacion', 'La evaluación de operación no se encuentra registrada en el sistema.');
 
         $evopEliminar = EvaluacionOperaciones::where('evop_codigo', $evop_codigo)->delete();
-        if (!$evopEliminar) return redirect()->back()->with('errorOperacion', 'Ocurrió un error al eliminar la evaluación de operación, intente más tarde.');
+        if (!$evopEliminar)
+            return redirect()->back()->with('errorOperacion', 'Ocurrió un error al eliminar la evaluación de operación, intente más tarde.');
         return redirect()->route('admin.operacion.listar')->with('exitoOperacion', 'La evaluación de operación fue eliminada correctamente.');
     }
 
@@ -1316,7 +1415,8 @@ class AdminController extends Controller
         );
 
         $evprVerificar = EvaluacionPrensa::where('regi_codigo', $request->regi_codigo)->first();
-        if ($evprVerificar) return redirect()->back()->with('errorEvaluacionPrensa', 'La evaluación de prensa para la región ya se encuentra registrada.');
+        if ($evprVerificar)
+            return redirect()->back()->with('errorEvaluacionPrensa', 'La evaluación de prensa para la región ya se encuentra registrada.');
 
         $evprGuardar = EvaluacionPrensa::create([
             'regi_codigo' => $request->regi_codigo,
@@ -1327,7 +1427,8 @@ class AdminController extends Controller
             'evpr_rut_mod' => Session::get('admin')->usua_rut,
             'evpr_rol_mod' => Session::get('admin')->rous_codigo,
         ]);
-        if (!$evprGuardar) return redirect()->back()->with('errorEvaluacionPrensa', 'Ocurrió un error al registrar la evaluación de prensa, intente más tarde.');
+        if (!$evprGuardar)
+            return redirect()->back()->with('errorEvaluacionPrensa', 'Ocurrió un error al registrar la evaluación de prensa, intente más tarde.');
         return redirect()->route('admin.evaluacionprensa.listar')->with('exitoEvaluacionPrensa', 'La evaluación de prensa fue registrada correctamente.');
     }
 
@@ -1348,7 +1449,8 @@ class AdminController extends Controller
         );
 
         $evprVerificar = EvaluacionPrensa::where('evpr_codigo', $evpr_codigo)->first();
-        if (!$evprVerificar) return redirect()->back()->with('errorEvaluacionPrensa', 'La evaluación de prensa no se encuentra registrada en el sistema.');
+        if (!$evprVerificar)
+            return redirect()->back()->with('errorEvaluacionPrensa', 'La evaluación de prensa no se encuentra registrada en el sistema.');
 
         $evprActualizar = EvaluacionPrensa::where('evpr_codigo', $evpr_codigo)->update([
             'evpr_valor' => $request->evpr_valor,
@@ -1357,17 +1459,20 @@ class AdminController extends Controller
             'evpr_rut_mod' => Session::get('admin')->usua_rut,
             'evpr_rol_mod' => Session::get('admin')->rous_codigo,
         ]);
-        if (!$evprActualizar) return redirect()->back()->with('errorEvaluacionPrensa', 'Ocurrió un error al actualizar la evaluación de prensa, intente más tarde.');
+        if (!$evprActualizar)
+            return redirect()->back()->with('errorEvaluacionPrensa', 'Ocurrió un error al actualizar la evaluación de prensa, intente más tarde.');
         return redirect()->route('admin.evaluacionprensa.listar')->with('exitoEvaluacionPrensa', 'La evaluación de prensa fue actualizada correctamente.');
     }
 
     public function EliminarEvaluacionprensa($evpr_codigo)
     {
         $evprVerificar = EvaluacionPrensa::where('evpr_codigo', $evpr_codigo)->first();
-        if (!$evprVerificar) return redirect()->back()->with('errorEvaluacionPrensa', 'La evaluación de prensa no se encuentra registrada en el sistema.');
+        if (!$evprVerificar)
+            return redirect()->back()->with('errorEvaluacionPrensa', 'La evaluación de prensa no se encuentra registrada en el sistema.');
 
         $evprEliminar = EvaluacionPrensa::where('evpr_codigo', $evpr_codigo)->delete();
-        if (!$evprEliminar) return redirect()->back()->with('errorEvaluacionPrensa', 'Ocurrió un error al eliminar la evaluación de prensa, intente más tarde.');
+        if (!$evprEliminar)
+            return redirect()->back()->with('errorEvaluacionPrensa', 'Ocurrió un error al eliminar la evaluación de prensa, intente más tarde.');
         return redirect()->route('admin.evaluacionprensa.listar')->with('exitoEvaluacionPrensa', 'La evaluación de prensa fue eliminada correctamente.');
     }
 }

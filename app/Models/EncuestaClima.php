@@ -17,6 +17,7 @@ class EncuestaClima extends Model
        // primary key
         'encl_codigo',
         // claves foraneas
+        'regi_codigo',
         'comu_codigo',
         'cacl_codigo',
         // elementos oWo

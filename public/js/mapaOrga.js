@@ -231,10 +231,10 @@ function cargarInfoComuna() {
             else clima = Math.round(clima / data.n_cat_cl);
 
             comu_avg = Math.round(
-                percepcion * 0.25 +
-                clima * 0.25 +
-                prensa * 0.25 +
-                operaciones * 0.25
+                percepcion * 0.33 +
+                clima * 0.33 +
+                prensa * 0.33
+                // operaciones * 0.25
             );
 
 
@@ -248,7 +248,7 @@ function cargarInfoComuna() {
 
 
             if(color_comuna == "" ){
-                mensaje = `<div class="alert alert-warning alert-dismissible show fade"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>No se puede determinar el índice de criticidad porque no se ha informado acerca de las encuestas de clima y percepción, ni de las evaluaciones de operación y prensa.</strong></div></div>`;
+                mensaje = `<div class="alert alert-warning alert-dismissible show fade"><div class="alert-body"><button class="close" data-dismiss="alert"><span>&times;</span></button><strong>No se puede determinar el índice de criticidad porque no se ha informado acerca de las encuestas de clima y percepción, tampoc se encuenta la evaluación de prensa.</strong></div></div>`;
                 $('#div-alert-undifined').html(mensaje);
                 $('#div-alert-undifined').show();
             }else{
