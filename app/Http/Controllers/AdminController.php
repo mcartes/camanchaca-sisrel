@@ -634,7 +634,7 @@ class AdminController extends Controller
         $comunas = Comunas::select('comu_codigo')->where('regi_codigo', $request->region)->get();
         if (count($comunas) > 0) {
             for ($i = 0; $i < count($comunas); $i++) {
-                $verificarEncuesta = EncuestaPercepcion::where(['comu_codigo' => $comunas[$i]->comu_codigo, 'cape_codigo' => $request->catepe, 'enpe_anho' => $request->anho])->first();
+                $verificarEncuesta = EncuestaPercepcion::where(['comu_codigo' => $comunas[$i]->comu_codigo, 'cape_codigo' => $request->catepr, 'enpe_anho' => $request->anho])->first();
                 if ($verificarEncuesta)
                     return redirect()->route('admin.encuestapr.listar')->with('errorEncuestacl', 'Ya existe una encuesta de clima para la comuna, categoría y año ingresado.');
                 $encuesta = EncuestaPercepcion::create([
