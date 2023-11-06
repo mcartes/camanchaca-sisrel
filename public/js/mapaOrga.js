@@ -276,7 +276,6 @@ function cargarInfoComuna() {
                     <br><b>Índice de criticidad:</b> ${ isNaN(comu_avg) ? 0 : comu_avg }
                     <br><b>Encuesta de clima: </b>${ clima }
                     <br><b>Encuesta de percepción: </b>${ percepcion }
-                    <br><b>Evaluación de operaciones: </b>${ operaciones }
                     <br><b>Evaluación de prensa: </b>${ prensa }
                     `;
 
