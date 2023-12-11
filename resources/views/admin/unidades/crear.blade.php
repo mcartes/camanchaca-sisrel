@@ -108,6 +108,33 @@
                                                 </div>
                                             </div>
 
+                                            <div class="form-group col-xl-6">
+                                                <label class="label" for="divi_codigo">División</label> <label
+                                                    for="" style="color: red;">*</label>
+                                                <div class="form-group">
+                                                    <select class="form-control select2" id="divi_codigo" name="divi_codigo" style="width: 100%"
+                                                        onchange="cargarCoordenadas()">
+                                                        <option value="" selected disabled>Seleccione...</option>
+                                                        @foreach ($divisiones as $divi)
+                                                            <option value="{{ $divi->divi_codigo }}"
+                                                                {{ old('divi_codigo') == $divi->divi_codigo ? 'selected' : '' }}>
+                                                                {{ $divi->divi_nombre }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                    @if ($errors->has('comu_codigo'))
+                                                        <div class="alert alert-warning alert-dismissible show fade mt-2">
+                                                            <div class="alert-body">
+                                                                <button class="close"
+                                                                    data-dismiss="alert"><span>&times;</span></button>
+                                                                <strong>{{ $errors->first('comu_codigo') }}</strong>
+                                                            </div>
+                                                        </div>
+                                                    @endif
+
+                                                </div>
+                                            </div>
+
 
                                             {{-- <div class="form-group col-6">
                                                 <label for="apellido">Cargo de la unidad</label>

@@ -51,7 +51,7 @@ class AutenticationController extends Controller {
             return redirect()->route('digitador.dbgeneral.index');
         } elseif ($usuario->rous_codigo == 3) {
             $request->session()->put('observador', $usuario);
-            return redirect()->route('observador.index.iniciativas');
+            return redirect()->route('observador.dbgeneral.index');
         } else {
             $request->session()->put('superadmin', $usuario);
             return redirect()->route('superadmin.listar.usuarios');

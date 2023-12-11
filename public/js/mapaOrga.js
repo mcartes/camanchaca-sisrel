@@ -234,7 +234,6 @@ function cargarInfoComuna() {
                 percepcion * 0.33 +
                 clima * 0.33 +
                 prensa * 0.33
-                // operaciones * 0.25
             );
 
 

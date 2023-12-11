@@ -63,6 +63,7 @@ class UnidadesController extends Controller
             'unidades' => Unidades::all(),
             'comunas' => Comunas::all(),
             'tipounidades' => TipoUnidades::all(),
+            'divisiones' => DB::table('divisiones')->get()
         ]);
     }
 
@@ -76,6 +77,7 @@ class UnidadesController extends Controller
                 // 'unid_responsable' => 'required|max:50',
                 'tuni_codigo' => 'required',
                 'comu_codigo' => 'required',
+                'divi_codigo' => 'required'
 
 
             ],
@@ -85,7 +87,8 @@ class UnidadesController extends Controller
                 // 'unid_descripcion.required' => 'La descripción de las actividades de la unidad es requerida.',
                 // 'unid_responsable.required' => 'El nombre la persona a cargo requerido.',
                 'tuni_codigo.required' => 'Seleccione el codigo del tipo de unidad adjunta.',
-                'comu_codigo.required' => 'Seleccione la comuna adjuna a la unidad.'
+                'comu_codigo.required' => 'Seleccione la comuna adjuna a la unidad.',
+                'divi_codigo.required' => 'Seleccione la división adjuna a la unidad.'
             ]
         );
 
@@ -98,6 +101,7 @@ class UnidadesController extends Controller
             'tuni_codigo' => $request->tuni_codigo,
             'comu_codigo' => $request->comu_codigo,
             'unid_nombre' => $request->unid_nombre,
+            'divi_codigo' => $request->divi_codigo,
             // 'unid_descripcion' => $request->unid_descripcion,
             // 'unid_responsable' => $request->unid_responsable,
             // 'unid_nombre_cargo' => $request->unid_nombre_cargo,
@@ -119,10 +123,12 @@ class UnidadesController extends Controller
     public function editarunidad($unidades)
     {
         return view('admin.unidades.editar', [
-            'unid' => Unidades::where(['unid_codigo' => $unidades])->select('unid_codigo','tuni_codigo','comu_codigo', 'unid_nombre', 'unid_descripcion','unid_responsable','unid_nombre_cargo', 'unid_vigente', 'unid_geoubicacion->lat as lat', 'unid_geoubicacion->lng as lng')
+            'unid' => Unidades::where(['unid_codigo' => $unidades])->select('unid_codigo','tuni_codigo','divi_codigo','comu_codigo', 'unid_nombre', 'unid_descripcion','unid_responsable','unid_nombre_cargo', 'unid_vigente', 'unid_geoubicacion->lat as lat', 'unid_geoubicacion->lng as lng')
             ->first(),
             'tuni' => TipoUnidades::all(),
-            'comu' => Comunas::all()
+            'comu' => Comunas::all(),
+            'divi' => DB::table('divisiones')->get()
+            // ''
         ]);
     }
 
@@ -135,6 +141,7 @@ class UnidadesController extends Controller
                 // 'unid_descripcion' => 'required|max:200',
                 // 'unid_responsable' => 'required|max:50',
                 'tuni_codigo' => 'required',
+                'divi_codigo' => 'required',
                 'comu_codigo' => 'required',
                 'unid_vigente' => 'required',
 
@@ -144,8 +151,9 @@ class UnidadesController extends Controller
                 // 'unid_nombre_cargo.required' => 'El nombre de la unidad a cargo es requerido.',
                 // 'unid_descripcion.required' => 'La descripcion de las actividades de la unidad es requerida.',
                 // 'unid_responsable.required' => 'El nombre la persona a cargo requerido.',
-                'tuni_codigo.required' => 'seleccione el codigo del tipo de unidad adjunta.',
-                'comu_codigo.required' => 'seleccione la comuna adjuna a la unidad.',
+                'tuni_codigo.required' => 'Seleccione el codigo del tipo de unidad adjunta.',
+                'divi_codigo.required' => 'Seleccione la división adjunta a la unidad.',
+                'comu_codigo.required' => 'Seleccione la comuna adjuna a la unidad.',
                 'unid_vigente.required' => 'seleccione la vigencia de la unidad.',
             ]
         );
@@ -162,6 +170,7 @@ class UnidadesController extends Controller
             'unid_responsable' => $request->unid_responsable,
             'tuni_codigo' => $request->tuni_codigo,
             'comu_codigo' => $request->comu_codigo,
+            'divi_codigo' => $request->divi_codigo,
             'unid_geoubicacion' => Json::encode(['lat' => $request->lat, 'lng' => $request->lng]),
             'unid_rol_mod' => Session::get('admin')->rous_codigo,
             'unid_rut_mod' => Session::get('admin')->usua_rut,

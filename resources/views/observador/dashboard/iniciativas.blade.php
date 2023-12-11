@@ -1,10 +1,10 @@
 @extends('observador.panel_observador')
 @section('contenido')
     <section class="section">
-        
+
         <div class="row">
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
+                <div class="card card-statistic-2">
                     <div class="card-icon l-bg-cyan">
                         <i class="fab fa-slack"></i>
                     </div>
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
+                <div class="card card-statistic-2">
                     <div class="card-icon l-bg-green">
                         <i class="fas fa-users"></i>
                     </div>
@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
+                <div class="card card-statistic-2">
                     <div class="card-icon l-bg-orange">
                         <i class="fas fa-dollar-sign"></i>
                     </div>
@@ -46,7 +46,7 @@
                         <div class="padding-20">
                             <div class="text-right">
                                 <h3 class="font-light mb-0" data-toggle="tooltip" data-placement="right" title="{{ '$'.number_format($inversion, 0, ',', '.') }}">
-                                    <i class="ti-arrow-up text-success"></i> 
+                                    <i class="ti-arrow-up text-success"></i>
                                     @if ($inversion > 1000000)
                                         {{ number_format($inversion / 1000000, 1).' M' }}
                                     @else
@@ -60,7 +60,7 @@
                 </div>
             </div>
             <div class="col-lg-3 col-md-6 col-sm-6 col-12">
-                <div class="card card-statistic-1">
+                <div class="card card-statistic-2">
                     <div class="card-icon l-bg-red">
                         <i class="fas fa-flag-checkered"></i>
                     </div>
@@ -77,7 +77,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -91,7 +91,7 @@
                             <div class="col-3 col-md-3 col-lg-3"></div>
                         </div>
                         <form action="{{ route('observador.index.iniciativas') }}" method="GET">
-                            <div class="row">                            
+                            <div class="row">
                                 <div class="col-4 col-md-4 col-lg-4">
                                     <div class="form-group">
                                         <label>Región</label>

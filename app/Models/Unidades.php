@@ -25,6 +25,7 @@ class Unidades extends Model {
         'unid_rol_mod',
         //foraneas
         'tuni_codigo',
-        'comu_codigo'
+        'comu_codigo',
+        'divi_codigo'
     ];
 }

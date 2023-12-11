@@ -136,7 +136,6 @@
                                         </div>
                                         <div class="row">
 
-
                                             {{-- <div class="form-group col-3">
                                                 <label for="apellido">Cargo de la unidad</label>
                                                 <div class="input-group">
@@ -176,7 +175,22 @@
                                                         autocomplete="off">
                                                 </div>
                                             </div> --}}
-                                            <div class="col-xl-3 col-md-3 col-lg-3">
+                                            <div class="form-group col-xl-4">
+                                                <label class="label" for="divi_codigo">División</label> <label
+                                                    for="" style="color: red;">*</label>
+                                                <div class="form-group">
+                                                    <select class="form-control select2" id="divi_codigo" name="divi_codigo" style="width: 100%">
+                                                        @foreach ($divi as $divi)
+                                                            <option value="{{ $divi->divi_codigo }}"
+                                                                {{ $unid->divi_codigo == $divi->divi_codigo ? 'selected' : '' }}>
+                                                                {{ $divi->divi_nombre }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-4 col-md-4 col-lg-4">
                                                 <div class="form-group">
                                                     <label>Estado de la unidad</label>
                                                     <div class="input-group">
