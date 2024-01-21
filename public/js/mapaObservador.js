@@ -228,10 +228,9 @@ function cargarInfoComuna() {
             else clima = Math.round(clima / data.n_cat_cl);
 
             comu_avg = Math.round(
-                percepcion * 0.25 +
-                clima * 0.25 +
-                prensa * 0.25 +
-                operaciones * 0.25
+                percepcion * 0.34 +
+                clima * 0.33+
+                prensa * 0.33
             );
 
 
@@ -273,7 +272,6 @@ function cargarInfoComuna() {
                     <br><b>Índice de criticidad:</b> ${ isNaN(comu_avg) ? 0 : comu_avg }
                     <br><b>Encuesta de clima: </b>${ clima }
                     <br><b>Encuesta de percepción: </b>${ percepcion }
-                    <br><b>Evaluación de operaciones: </b>${ operaciones }
                     <br><b>Evaluación de prensa: </b>${ prensa }
                     `;
 

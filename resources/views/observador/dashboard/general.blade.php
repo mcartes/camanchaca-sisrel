@@ -130,18 +130,73 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xl-4 col-lg-6">
-                            <div class="card l-bg-cyan">
-                                <div class="card-header">Vista General</div>
-                                <div class="card-body">Mostrar datos de la empresa</div>
+                        <div class="col-3"></div>
+                        <div class="col-xl-6">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h4>Filtrar por</h4>
+                                </div>
+
+                                <div class="card-body">
+                                    <form action="{{ route('observador.dbgeneral.index') }}" method="GET">
+                                        <div class="row">
+                                            <div class="col-xl-6 col-md-6 col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="region">Región</label>
+                                                    <select name="region" id="region" class="form-control select2"
+                                                        style="width: 100%">
+                                                        <option value="">Seleccione...</option>
+                                                        @forelse ($regiones as $region)
+                                                            <option value="{{ $region->regi_codigo }}"
+                                                                {{ Request::get('region') == $region->regi_codigo ? 'selected' : '' }}>
+                                                                {{ $region->regi_nombre }}</option>
+                                                        @empty
+                                                            <option value="-1">No existen registros</option>
+                                                        @endforelse
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-6 col-md-6 col-lg-6">
+                                                <div class="form-group">
+                                                    <label for="division">División</label>
+                                                    <select name="division" id="division" class="form-control select2"
+                                                        style="width: 100%">
+                                                        <option value="">Seleccione...</option>
+                                                        @forelse ($divisiones as $division)
+                                                            <option value="{{ $division->divi_codigo }}"
+                                                                {{ Request::get('division') == $division->divi_codigo ? 'selected' : '' }}>
+                                                                {{ $division->divi_nombre }}</option>
+                                                        @empty
+                                                            <option value="-1">No existen registros</option>
+                                                        @endforelse
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-12 col-md-12 col-lg-12 text-right">
+                                                <button type="submit" class="btn btn-primary mr-1 waves-effect"><i
+                                                        class="fas fa-search"></i> Filtrar</button>
+                                                <a href="{{ route('observador.dbgeneral.index') }}" type="button"
+                                                    class="btn btn-primary mr-1 waves-effect"><i class="fas fa-broom"></i>
+                                                    Limpiar</a>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
                         </div>
+                    </div>
 
+
+
+                    {{--
+                    <div class="row">
                         <div class="col-xl-4 col-lg-6">
-                            <div class="card l-bg-orange">
+                            <div class="card">
                                 <div class="card-header">Región</div>
                                 <div class="card-body">
-                                    <form action="{{route('observador.dbgeneral.index')}}" method="GET">
+                                    <form action="{{ route('observador.dbgeneral.index') }}" method="GET">
                                         <div class="form-group">
                                             <select class="form-control select2" id="region" name="region"
                                                 style="width: 100%">
@@ -155,26 +210,12 @@
                                                 @endforelse
                                             </select>
                                         </div>
-                                        <div class="col-12 col-md-12 col-lg-12 text-right">
-                                            <button type="submit" class="btn btn-primary mr-1 waves-effect"><i
-                                                    class="fas fa-search"></i> Filtrar</button>
-                                            <a href="{{ route('observador.dbgeneral.index') }}" type="button"
-                                                class="btn btn-primary mr-1 waves-effect"><i class="fas fa-broom"></i>
-                                                Limpiar</a>
-                                        </div>
+
                                     </form>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-xl-4 col-lg-6">
-                            <div class="card l-bg-green">
-                                <div class="card-header">División</div>
-                                <div class="card-body">Mostrar datos de la empresa</div>
-                            </div>
-                        </div>
-
-                    </div>
+                    </div> --}}
 
                     <div class="row">
                         <div class="col-xl-6 col-md-6 col-lg-6">
@@ -198,35 +239,83 @@
                             </div>
                         </div>
                     </div>
+
                     {{-- <div class="row">
-                        <div class="col-12 col-md-6 col-lg-6">
+                        <div class="col-xl-12">
                             <div class="card">
                                 <div class="card-header">
-                                    <h4>Inversión</h4>
+                                    <h4>Indicar dato para reporte</h4>
                                 </div>
                                 <div class="card-body">
-                                    <canvas id="chartInversion"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-12 col-md-6 col-lg-6">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4>ODS relacionados</h4>
-                                </div>
-                                <div class="card-body">
-                                    <div class="gallery gallery-md">
-                                        @foreach ($objetivos as $obj)
-                                            @if (in_array($obj->obde_codigo, $odsvinculados))
-                                                <div class="gallery-item" data-image="{{ asset($obj->obde_ruta_imagen) }}"
-                                                    data-title="{{ $obj->obde_nombre }}"></div>
-                                            @else
-                                                <div class="gallery-item" style="filter: saturate(0) opacity(0.40);"
-                                                    data-image="{{ asset($obj->obde_ruta_imagen) }}"
-                                                    data-title="{{ $obj->obde_nombre }}"></div>
-                                            @endif
-                                        @endforeach
-                                    </div>
+                                    <form action="{{ route('observador.index.reporte') }}" target="_blank"
+                                        method="GET">
+                                        @csrf
+                                        <div class="row">
+
+                                            <div class="col-xl-3 col-md-3 col-lg-6">
+                                                <div class="form-group"><label for="regi_codigo">Región</label>
+                                                    <select name="regi_codigo" id="regi_codigo" class="select2 form-control" style="width: 100%">
+                                                        <option value="">Seleccione...</option>
+                                                        @forelse ($regiones as $region)
+                                                            <option value="{{$region->regi_codigo}}">{{$region->regi_nombre}}</option>
+                                                        @empty
+                                                            <option value="">Sin registros disponibles</option>
+                                                        @endforelse
+                                                    </select>
+                                                    </div>
+                                            </div>
+
+                                            <div class="col-xl-3 col-md-3 col-lg-6">
+                                                <div class="form-group"><label for="comu_codigo">Comuna</label>
+                                                    <select name="comu_codigo" id="comu_codigo" class="select2 form-control" style="width: 100%">
+                                                        <option value="">Seleccione...</option>
+                                                        @forelse ($comunas as $comuna)
+                                                            <option value="{{$comuna->comu_codigo}}">{{$comuna->comu_nombre}}</option>
+                                                        @empty
+                                                            <option value="">Sin registros disponibles</option>
+                                                        @endforelse
+                                                    </select>
+                                                    </div>
+                                            </div>
+
+                                            <div class="col-xl-2 col-md-2 col-lg-6">
+                                                <div class="form-group"><label for="tipo_unidad">Tipo de unidad</label>
+                                                    <select name="tipo_unidad" id="tipo_unidad" class="select2 form-control" style="width: 100%">
+                                                        <option value="">Seleccione...</option>
+                                                        @forelse ($tipoUnidades as $tipoUnidad)
+                                                            <option value="{{$tipoUnidad->tuni_codigo}}">{{$tipoUnidad->tuni_nombre}}</option>
+                                                        @empty
+                                                            <option value="">Sin registros disponibles</option>
+                                                        @endforelse
+                                                    </select>
+                                                    </div>
+                                            </div>
+
+                                            <div class="col-xl-2 col-md-2 col-lg-2">
+                                                <div class="form-group">
+                                                    <label for="fecha_inicio">Desde</label>
+                                                    <input required class="form-control" type="date"
+                                                        name="fecha_inicio" id="fecha_inicio">
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-2 col-md-2 col-lg-2">
+                                                <div class="form-group">
+                                                    <label for="fecha_final">Hasta</label>
+                                                    <input required class="form-control" type="date"
+                                                        name="fecha_final" id="fecha_final">
+                                                </div>
+                                            </div>
+
+
+                                        </div>
+
+                                        <div class="col-12 col-md-12 col-lg-12 text-right">
+                                            <button type="submit" class="btn btn-success mr-1 waves-effect"><i
+                                                    class="fas fa-clipboard"></i> Generar reporte</button>
+                                        </div>
+                                    </form>
+
                                 </div>
                             </div>
                         </div>
@@ -237,17 +326,17 @@
     </section>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script src="{{ asset('public/js/chart.min.js') }}"></script>
     <script src="{{ asset('public/js/page/gallery1.js') }}"></script>
 
     <script>
         $(document).ready(function() {
             iniciativas();
             organizaciones();
-            inversion();
+
         });
 
-        function pieChart(div_name, data) {
+        function pieChart(div_name, data, view_label = true) {
+
             // Themes begin
             am4core.useTheme(am4themes_animated);
             // Themes end
@@ -272,8 +361,10 @@
             pieSeries.labels.template.fill = am4core.color("#9aa0ac");
 
             // Configura la leyenda (barra lateral)
-            chart.legend = new am4charts.Legend();
-            chart.legend.position = "top";
+            if (view_label == true) {
+                chart.legend = new am4charts.Legend();
+                chart.legend.position = "top";
+            }
             // Configura las etiquetas
             pieSeries.ticks.template.disabled = false; // Desactiva las marcas de división
             pieSeries.labels.template.disabled = false; // Habilita las etiquetas
@@ -291,7 +382,7 @@
                 type: 'GET',
                 url: window.location.origin + '/observador/dashboard/general/iniciativas',
                 data: {
-                    region:$('#region').val()
+                    region: $('#region').val()
                 },
                 success: function(resConsultar) {
                     respuesta = JSON.parse(resConsultar);
@@ -309,10 +400,15 @@
                                 nombre: nombre,
                                 cantidad: iniciativasPilares[index]
                             }
+                        } else {
+                            return null;
                         }
-                    })
-
-                    pieChart("chartIniciativas", pilaresOBJ)
+                    }).filter(objeto => objeto !== null);
+                    if (Object.keys(pilaresOBJ).length > 0) {
+                        pieChart("chartIniciativas", pilaresOBJ)
+                    } else {
+                        $("#chartIniciativas").html(`<h4>No hay datos disponibles</h4>`)
+                    }
                 },
                 error: function(error) {
                     console.log(error);
@@ -325,7 +421,7 @@
                 type: 'GET',
                 url: window.location.origin + '/observador/dashboard/general/organizaciones',
                 data: {
-                    region:$('#region').val()
+                    region: $('#region').val()
                 },
                 success: function(resConsultar) {
                     respuesta = JSON.parse(resConsultar);
@@ -343,79 +439,16 @@
                                 nombre: nombre,
                                 cantidad: totalOrganizaciones[index]
                             }
+                        } else {
+                            return null;
                         }
-                    })
-                    pieChart("chartOrganizaciones", organizacioneOBJ)
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
-        }
+                    }).filter(objeto => objeto !== null);
 
-        function inversion() {
-            $.ajax({
-                type: 'GET',
-                url: window.location.origin + '/observador/dashboard/general/inversion',
-                data: {},
-                success: function(resConsultar) {
-                    respuesta = JSON.parse(resConsultar);
-                    resPilares = respuesta.resultado[0];
-                    resInversion = respuesta.resultado[1];
-                    totalInversion = resInversion.reduce((partialSum, a) => partialSum + a, 0);
-
-                    pilares = [];
-                    resPilares.forEach(registro => {
-                        pilares.push(registro.pila_nombre);
-                    });
-
-                    inversion = []
-                    resInversion.forEach(registro => {
-                        inversion.push(Math.round((registro / totalInversion) * 100));
-                    });
-
-                    var inversionOBJ = inversion.map((nombre, index) => {
-                        if (totalInversion[index] > 0) {
-                            return {
-                                nombre: nombre,
-                                cantidad: totalInversion[index]
-                            }
-                        }
-                    })
-
-                    // pieChart("chartOrganizaciones", inversionOBJ)
-                    // let ctx = document.getElementById("chartInversion").getContext('2d');
-                    // let myChart = new Chart(ctx, {
-                    //     type: 'doughnut',
-                    //     data: {
-                    //         datasets: [{
-                    //             data: inversion,
-                    //             backgroundColor: [
-                    //                 '#6777ef',
-                    //                 '#ffa426',
-                    //                 '#63ed7a',
-                    //                 '#fc544b',
-                    //                 '#191d21',
-                    //             ],
-                    //             label: 'Inversión %'
-                    //         }],
-                    //         labels: pilares,
-                    //     },
-                    //     options: {
-                    //         responsive: true,
-                    //         legend: {
-                    //             position: 'right',
-                    //         },
-                    //         tooltips: {
-                    //             callbacks: {
-                    //                 label: function(tooltipItem, data, inversion) {
-                    //                     return data['labels'][tooltipItem['index']] + ': ' + data[
-                    //                         'datasets'][0]['data'][tooltipItem['index']] + '%';
-                    //                 }
-                    //             }
-                    //         }
-                    //     }
-                    // });
+                    if (Object.keys(organizacioneOBJ).length > 0) {
+                        pieChart("chartOrganizaciones", organizacioneOBJ, false)
+                    } else {
+                        $("#chartOrganizaciones").html(`<h4>No hay datos disponibles</h4>`)
+                    }
                 },
                 error: function(error) {
                     console.log(error);

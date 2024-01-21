@@ -279,6 +279,15 @@ Route::middleware('verificar.admin')->group(function () {
     Route::post('admin/unidades/{tuni_codigo}/eliminar-tipounidades', [UnidadesController::class, 'eliminartipoUnidad'])->name('admin.unidades.tipouniborrar');
     // fin rutas para gestionar las unidades
 
+
+    //TODO:Inicio rutas de divisiones
+    Route::get('admin/divisiones/listar',[AdminController::class,'ListarDivisiones'])->name('admin.divisiones.listar');
+    Route::post('admin/divisiones/guardar',[AdminController::class,'GuardarDivision'])->name('admin.divisiones.guardar');
+    Route::put('admin/divisiones/{divi_codigo}/editar',[AdminController::class,'EditarDivision'])->name('admin.divisiones.editar');
+    Route::delete('admin/divisiones/eliminar',[AdminController::class,'EliminarDivison'])->name('admin.divisiones.eliminar');
+    //Fin de rutas de divisiones
+
+
     // inicio rutas para gestionar usuarios
     Route::get('admin/usuarios/listar', [AdminController::class, 'verUsuarios'])->name('admin.listar.usuario');
     Route::get('admin/usuarios/crear', [AutenticationController::class, 'registrar'])->name('admin.crear.usuario');
@@ -453,6 +462,7 @@ Route::middleware('verificar.observador')->group(function () {
     Route::get('observador/dashboard/general', [HomeobservadorController::class, 'GeneralIndex'])->name('observador.dbgeneral.index');
     Route::get('observador/dashboard/general/iniciativas', [HomeobservadorController::class, 'iniciativasGeneral']);
     Route::get('observador/dashboard/general/organizaciones', [HomeobservadorController::class, 'organizacionesGeneral']);
+    Route::get('observador/dashboard/general/reporte',[HomeobservadorController::class,'generarReporte'])->name('observador.index.reporte');
     Route::get('observador/dashboard/general/inversion', [HomeobservadorController::class, 'inversionGeneral']);
     Route::get('observador/dashboard/iniciativas', [HomeobservadorController::class, 'IniciativasIndex'])->name('observador.index.iniciativas');
     Route::get('observador/dashboard/iniciativas/inic-unid', [HomeobservadorController::class, 'iniciativasUnidades']);

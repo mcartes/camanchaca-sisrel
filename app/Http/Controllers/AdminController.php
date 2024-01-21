@@ -7,7 +7,7 @@ use App\Models\Asistentes;
 use App\Models\AsistentesActividades;
 use App\Models\CategoriasClima;
 use App\Models\IniciativasUnidades;
-use App\Models\RolesUsuarios;
+use App\Models\Divisiones;
 use App\Models\Usuarios;
 use App\Models\Regiones;
 use Illuminate\Http\Request;
@@ -608,7 +608,7 @@ class AdminController extends Controller
                 ->join('comunas', 'encuesta_percepcion.comu_codigo', '=', 'comunas.comu_codigo')
                 ->join('regiones', 'comunas.regi_codigo', 'regiones.regi_codigo')
                 ->join('categorias_percepcion', 'encuesta_percepcion.cape_codigo', '=', 'categorias_percepcion.cape_codigo')
-                ->select('encuesta_percepcion.*', 'comunas.comu_nombre', 'categorias_percepcion.cape_nombre','regiones.regi_nombre')
+                ->select('encuesta_percepcion.*', 'comunas.comu_nombre', 'categorias_percepcion.cape_nombre', 'regiones.regi_nombre')
                 ->get(),
         ]);
     }
@@ -1475,4 +1475,91 @@ class AdminController extends Controller
             return redirect()->back()->with('errorEvaluacionPrensa', 'Ocurrió un error al eliminar la evaluación de prensa, intente más tarde.');
         return redirect()->route('admin.evaluacionprensa.listar')->with('exitoEvaluacionPrensa', 'La evaluación de prensa fue eliminada correctamente.');
     }
+
+
+    //TODO: apartado para las diviciones
+
+    public function ListarDivisiones()
+    {
+        $divisiones = Divisiones::select('divi_codigo', 'divi_nombre', 'divi_vigente')
+            ->where('divi_vigente', 'S')
+            ->paginate(10);
+
+        return view('admin.divisiones.divisones', compact('divisiones'));
+    }
+
+    public function GuardarDivision(Request $request)
+    {
+        $validacion = $request->validate([
+            'nombre' => 'required'
+        ], [
+            'nombre.required' => 'El nombre de la división es un parámetro requerido.'
+        ]);
+
+        $division = Divisiones::create([
+            'divi_nombre' => $request->nombre,
+            'divi_creado' => Carbon::now()->format('Y-m-d H:i:s'),
+            'divi_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+            'divi_vigente' => 'S'
+        ]);
+
+        if (!$validacion) {
+            return redirect()->back()->withErrors($validacion)->withInput();
+        }
+
+        if (!$division)
+            return redirect()->back()->with('errorDivision', 'Ocurrió un error al crear la división');
+
+        return redirect()->route('admin.divisiones.listar')->with('exitoDivision', 'La división se guardo correctamente.');
+    }
+
+    public function EditarDivision(Request $request, $divi_codigo)
+    {
+        $validacion = $request->validate(
+            [
+                'divi_nombre' => 'required',
+            ],
+            [
+                'divi_nombre.required' => 'El nombre de la división es requerido'
+            ]
+        );
+        if (!$validacion) {
+            return redirect()->back()->withErrors($validacion)->withInput();
+        }
+
+        $division = Divisiones::where('divi_codigo', $divi_codigo)->update([
+            'divi_nombre' => $request->divi_nombre,
+            'divi_vigente' => $request->divi_vigente,
+            'divi_actualizado' => Carbon::now()->format('Y-m-d H:i:s'),
+        ]);
+
+        if(!$division)
+            return redirect()->back()->with('errorDivision','Ocurrió un error al actualizar la división seleccionada.');
+        return redirect()->route('admin.divisiones.listar')->with('exitoDivision','La división sae actualizo correctamente.');
+    }
+
+    public function EliminarDivison(Request $request)
+    {
+        $divi_codigo = $request->input('divi_codigo');
+        $verificarDivision = Divisiones::where('divi_codigo',$divi_codigo)->first();
+
+        if(!$verificarDivision){
+            return redirect()->back()->with('errorDivision','La división no se encuentra registrada en el sistema');
+        }
+
+        $verificarDivision = Unidades::where('divi_codigo',$divi_codigo)->first();
+
+        if($verificarDivision){
+            return redirect()->back()->with('errorDivision','La división se encuentra asociada a alguna(s) unidad(es)');
+        }
+
+        $eliminarDivision = Divisiones::where('divi_codigo',$divi_codigo)->delete();
+
+        if(!$eliminarDivision){
+            return redirect()->back()->with('errorDivision','Ocurrión un error al eliminar la división del sistema, intente más tarde');
+        }
+
+        return redirect()->route('admin.divisiones.listar')->with('exitoDivision','Se eliminó correctamente la división del sistema.');
+    }
+
 }

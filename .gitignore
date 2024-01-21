@@ -4,6 +4,7 @@
 /public/files/evidencias
 /storage/*.key
 .env.backup
+/vendor
 .env
 .phpunit.result.cache
 docker-compose.override.yml
