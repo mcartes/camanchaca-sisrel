@@ -40,12 +40,11 @@
                         <div class="card-body">
                             <form action="{{ route('admin.unidades.listar') }}" method="GET">
                                 <div class="row">
-                                    <div class="col-xl-2"></div>
                                     <div class="col-xl-3 col-md-3 col-lg-3">
                                         <div class="form-group">
                                             <label>Comuna</label>
-                                            <select class="form-control select2" id="comuna" name="comuna" style="width: 100%"
-                                                onchange="cargarTipoUnidades()">
+                                            <select class="form-control select2" id="comuna" name="comuna"
+                                                style="width: 100%" onchange="cargarTipoUnidades()">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @forelse ($comunas as $comuna)
                                                     <option value="{{ $comuna->comu_codigo }}"
@@ -57,27 +56,47 @@
                                             </select>
                                         </div>
                                     </div>
+
                                     <div class="col-xl-3 col-md-3 col-lg-3">
                                         <div class="form-group">
-                                            <label>Tipo de unidad</label>
-                                            <select name="tipunidad" id="tipunidad" class="form-control select2" style="width: 100%">
+                                            <label for="tipo_unidad">Tipo de unidad</label>
+                                            <select name="tipo_unidad" id="tipo_unidad" class="form-control select2"
+                                                style="width: 100%">
                                                 <option value="" selected disabled>Seleccione...</option>
-                                                @forelse ($tipoUnidades as $tuni)
-                                                    <option value="{{ $tuni->tuni_codigo }}"
-                                                        {{ Request::get('tipunidad') == $tuni->tuni_codigo ? 'selected' : '' }}>
-                                                        {{ $tuni->tuni_nombre }}</option>
+                                                @forelse ($tipoUnidades as $tipo_unidad)
+                                                    <option value="{{ $tipo_unidad->tuni_codigo }}"
+                                                        {{ Request::get('tipo_unidad') == $tipo_unidad->tuni_codigo ? 'selected' : '' }}>
+                                                        {{ $tipo_unidad->tuni_nombre }}</option>
                                                 @empty
                                                     <option value="-1">No existen registros</option>
                                                 @endforelse
                                             </select>
                                         </div>
                                     </div>
+
+                                    <div class="col-xl-3 col-md-3 col-lg-3">
+                                        <div class="form-group">
+                                            <label for="division">División</label>
+                                            <select name="division" id="division" class="form-control select2"
+                                                style="width: 100%">
+                                                <option value="" selected>Seleccione...</option>
+                                                @forelse ($divisiones as $division)
+                                                    <option value="{{ $division->divi_codigo }}"
+                                                        {{ Request::get('division') == $division->divi_codigo ? 'selected' : '' }}>
+                                                        {{ $division->divi_nombre }}</option>
+                                                @empty
+                                                    <option value="-1">No existen registros</option>
+                                                @endforelse
+                                            </select>
+                                        </div>
+                                    </div>
+
                                     <div class="col-xl-3 col-md-3 col-lg-3 text-right md-3">
-                                            <button type="submit" class="btn btn-primary mr-1 waves-effect"><i
-                                                    class="fas fa-search"></i> Filtrar</button>
-                                            <a href="{{ route('admin.unidades.listar') }}" type="button"
-                                                class="btn btn-primary mr-1 waves-effect"><i class="fas fa-broom"></i>
-                                                Limpiar</a>
+                                        <button type="submit" class="btn btn-primary mr-1 waves-effect"><i
+                                                class="fas fa-search"></i> Filtrar</button>
+                                        <a href="{{ route('admin.unidades.listar') }}" type="button"
+                                            class="btn btn-primary mr-1 waves-effect"><i class="fas fa-broom"></i>
+                                            Limpiar</a>
                                     </div>
                                 </div>
                             </form>
@@ -87,7 +106,7 @@
                                         <tr>
                                             <th>Nombre unidad</th>
                                             <th>Tipo de unidad</th>
-                                            {{-- <th>Responsable</th> --}}
+                                            <th>División</th>
                                             <th>Comuna</th>
                                             <th>Estado</th>
                                             <th>Modificado por</th>
@@ -99,7 +118,13 @@
                                             <tr>
                                                 <td>{{ $unidad->unid_nombre }}</td>
                                                 <td>{{ $unidad->tuni_nombre }}</td>
-                                                {{-- <td>{{ $unidad->unid_responsable }}</td> --}}
+                                                <td>
+                                                    @if ($unidad->divi_nombre != null)
+                                                        {{ $unidad->divi_nombre }}
+                                                    @else
+                                                        No registrado
+                                                    @endif
+                                                </td>
                                                 <td>{{ $unidad->comu_nombre }}</td>
                                                 <td>
                                                     @if ($unidad->unid_vigente == 'S')
@@ -113,13 +138,14 @@
                                                     <a type="buttton"
                                                         href="{{ route('admin.editar.unidad', $unidad->unid_codigo) }}"
                                                         class="btn btn-icon btn-warning" data-toggle="tooltip"
-                                                        data-placement="top" title="Editar"><i
-                                                            class="fas fa-edit"></i></a>
+                                                        data-placement="top" title="Editar"><i class="fas fa-edit"></i></a>
                                                     <form
                                                         action="{{ route('admin.unidades.borrar', $unidad->unid_codigo) }}"
                                                         method="post" style="display: inline-block">
                                                         @csrf
-                                                        <button type="submit" class="btn btn-icon btn-danger" data-toggle="tooltip" data-placement="top" title="Eliminar"><i class="fas fa-trash"></i></button>
+                                                        <button type="submit" class="btn btn-icon btn-danger"
+                                                            data-toggle="tooltip" data-placement="top" title="Eliminar"><i
+                                                                class="fas fa-trash"></i></button>
                                                     </form>
                                                 </td>
                                             </tr>

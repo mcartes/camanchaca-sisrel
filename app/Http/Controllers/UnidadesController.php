@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\TipoUnidades;
 use App\Models\Unidades;
 use App\Models\Comunas;
+use App\Models\Divisiones;
 use App\Models\EvaluacionOperaciones;
 use App\Models\IniciativasUnidades;
 use App\Models\Usuarios;
@@ -20,38 +21,36 @@ class UnidadesController extends Controller
     //TODO: Sección de unidades
     public function Listarunidades(Request $request)
     {
-        $unidades = null;
-        if(count($request->all()) > 0){
-            if($request->comuna !="" && $request->tipunidad == ""){
-                $unidades = DB::table('unidades')
-                    ->join('comunas', 'unidades.comu_codigo', '=', 'comunas.comu_codigo')
-                    ->join('tipo_unidades', 'unidades.tuni_codigo', '=', 'tipo_unidades.tuni_codigo')
-                    ->select('unidades.*', 'comunas.comu_nombre', 'tipo_unidades.tuni_nombre')
-                    ->where('comunas.comu_codigo', $request->comuna)
-                    ->get();
+        $tipo_undades = TipoUnidades::select('tuni_codigo', 'tuni_nombre')->get();
+        $comunas = Comunas::select('comu_codigo', 'comu_nombre')->get();
+        $divisiones = Divisiones::select('divi_codigo', 'divi_nombre')->get();
+        $unidades = DB::table('unidades')
+            ->join('divisiones', 'divisiones.divi_codigo', 'unidades.divi_codigo')
+            ->join('comunas', 'unidades.comu_codigo', '=', 'comunas.comu_codigo')
+            ->join('tipo_unidades', 'unidades.tuni_codigo', '=', 'tipo_unidades.tuni_codigo')
+            ->select('unidades.*', 'comunas.comu_nombre', 'tipo_unidades.tuni_nombre', 'divisiones.divi_nombre');
 
-            }elseif($request->comuna !="" && $request->tipunidad != ""){
-                $unidades = DB::table('unidades')
-                    ->join('comunas', 'unidades.comu_codigo', '=', 'comunas.comu_codigo')
-                    ->join('tipo_unidades', 'unidades.tuni_codigo', '=', 'tipo_unidades.tuni_codigo')
-                    ->select('unidades.*', 'comunas.comu_nombre', 'tipo_unidades.tuni_nombre')
-                    ->where('comunas.comu_codigo', $request->comuna)
-                    ->where('unidades.tuni_codigo',$request->tipunidad)
-                    ->get();
-                }
-            }else{
-                $unidades = DB::table('unidades')
-                    ->join('comunas', 'unidades.comu_codigo', '=', 'comunas.comu_codigo')
-                    ->join('tipo_unidades', 'unidades.tuni_codigo', '=', 'tipo_unidades.tuni_codigo')
-                    ->select('unidades.*', 'comunas.comu_nombre', 'tipo_unidades.tuni_nombre')
-                    ->get();
-            }
+        //Variables de request para filtrar datos
+        $comuna = $request->input('comuna');
+        $tipo_unidad = $request->input('tipo_unidad');
+        $division = $request->input('division');
+
+        if ($comuna != null && $comuna != '')
+            $unidades = $unidades->where('unidades.comu_codigo',$comuna);
+        if ($tipo_unidad != null && $tipo_unidad != '')
+            $unidades = $unidades->where('unidades.tuni_codigo',$tipo_unidad);
+        if ($division != null && $division != '')
+            $unidades = $unidades->where('unidades.divi_codigo',$division);
+
+
+        $unidades = $unidades->get();
 
         return view(
             'admin.unidades.listar',
             [
-                'tipoUnidades' => TipoUnidades::all(),
-                'comunas' => Comunas::all(),
+                'tipoUnidades' => $tipo_undades,
+                'comunas' => $comunas,
+                'divisiones' => $divisiones,
                 'unidades' => $unidades
             ]
         );
@@ -123,8 +122,8 @@ class UnidadesController extends Controller
     public function editarunidad($unidades)
     {
         return view('admin.unidades.editar', [
-            'unid' => Unidades::where(['unid_codigo' => $unidades])->select('unid_codigo','tuni_codigo','divi_codigo','comu_codigo', 'unid_nombre', 'unid_descripcion','unid_responsable','unid_nombre_cargo', 'unid_vigente', 'unid_geoubicacion->lat as lat', 'unid_geoubicacion->lng as lng')
-            ->first(),
+            'unid' => Unidades::where(['unid_codigo' => $unidades])->select('unid_codigo', 'tuni_codigo', 'divi_codigo', 'comu_codigo', 'unid_nombre', 'unid_descripcion', 'unid_responsable', 'unid_nombre_cargo', 'unid_vigente', 'unid_geoubicacion->lat as lat', 'unid_geoubicacion->lng as lng')
+                ->first(),
             'tuni' => TipoUnidades::all(),
             'comu' => Comunas::all(),
             'divi' => DB::table('divisiones')->get()
@@ -189,7 +188,7 @@ class UnidadesController extends Controller
     public function ObtenerTiposUnidades(Request $request)
     {
         if (isset($request->comuna)) {
-            $tipoUnidades = TipoUnidades::select('tipo_unidades.tuni_codigo', 'tuni_nombre','comunas.comu_codigo')
+            $tipoUnidades = TipoUnidades::select('tipo_unidades.tuni_codigo', 'tuni_nombre', 'comunas.comu_codigo')
                 ->join('unidades', 'unidades.tuni_codigo', '=', 'tipo_unidades.tuni_codigo')
                 ->join('comunas', 'comunas.comu_codigo', '=', 'unidades.comu_codigo')
                 ->where('comunas.comu_codigo', $request->comuna)
@@ -204,17 +203,21 @@ class UnidadesController extends Controller
     public function eliminarUnidad($codigo)
     {
         $unidadUsuarios = Usuarios::where('unid_codigo', $codigo)->get();
-        if (sizeof($unidadUsuarios) > 0) return redirect()->back()->with('errorUnidad', 'La unidad no se puede eliminar porque tiene usuarios asociados.');
+        if (sizeof($unidadUsuarios) > 0)
+            return redirect()->back()->with('errorUnidad', 'La unidad no se puede eliminar porque tiene usuarios asociados.');
 
         $unidadOperaciones = EvaluacionOperaciones::where('unid_codigo', $codigo)->get();
-        if (sizeof($unidadOperaciones) > 0) return redirect()->back()->with('errorUnidad', 'La unidad no se puede eliminar porque tiene evaluaciones de operación asociadas.');
+        if (sizeof($unidadOperaciones) > 0)
+            return redirect()->back()->with('errorUnidad', 'La unidad no se puede eliminar porque tiene evaluaciones de operación asociadas.');
 
         $unidadIniciativas = IniciativasUnidades::where('unid_codigo', $codigo)->get();
-        if (sizeof($unidadIniciativas) > 0) return redirect()->back()->with('errorUnidad', 'La unidad no se puede eliminar porque tiene iniciativas asociadas.');
+        if (sizeof($unidadIniciativas) > 0)
+            return redirect()->back()->with('errorUnidad', 'La unidad no se puede eliminar porque tiene iniciativas asociadas.');
 
-        $unidEliminar = Unidades::where('unid_codigo',$codigo)->delete();
-        if(!$unidEliminar) return redirect()->back()->with('errorUnidad', 'Ocurrió un error al eliminar la unidad.');
+        $unidEliminar = Unidades::where('unid_codigo', $codigo)->delete();
+        if (!$unidEliminar)
+            return redirect()->back()->with('errorUnidad', 'Ocurrió un error al eliminar la unidad.');
         return redirect()->route('admin.unidades.listar')->with('exitoUnidad', 'La unidad fue eliminada correctamente.');
     }
-//TODO: Fin sección de unidades
+    //TODO: Fin sección de unidades
 }
