@@ -5,8 +5,8 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="row">
-                        <div class="col-xl3"></div>
-                        <div class="col-xl6">
+                        <div class="col-xl-3"></div>
+                        <div class="col-xl-6">
                             @if (Session::has('errorDonacion'))
                                 <div class="alert alert-danger alert-dismissible show fade mb-4 text-center">
                                     <div class="alert-body">
@@ -20,7 +20,7 @@
                     </div>
                     <div class="card">
                         <div class="card-header">
-                            <h4>Agregar donación</h4>
+                            <h4>Modificar donación</h4>
                             <div class="card-header-action">
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#modalCrearOrga"><i class="fas fa-plus"></i> Nueva Organización</button>
