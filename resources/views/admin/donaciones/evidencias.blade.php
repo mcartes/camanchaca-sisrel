@@ -38,12 +38,15 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <h4>Listado de evidencias donación N° {{$donacion->dona_codigo}}</h4>
+                            <h4>Listado de evidencias donación N° {{ $donacion->dona_codigo }}</h4>
 
                             <div class="card-header-action">
                                 {{-- <div class="dropdown d-inline">
 
                             </div> --}}
+                                <a href="{{ route('admin.donaciones.listar') }}" type="button" class="btn btn-success"
+                                    title="Ir a lista"><i class="fas fa-backward"></i> Ir a
+                                    donaciones</a>
                                 <a href="javascript:void(0)" class="btn btn-primary" onclick="agregar()"><i
                                         class="fas fa-plus"></i> Nueva evidencia</a>
                             </div>
@@ -118,8 +121,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form action="{{ route('admin.donaciones.evidencia.guardar', $donacion->dona_codigo) }}"
-                        method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.donaciones.evidencia.guardar', $donacion->dona_codigo) }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
 
                         <div class="form-group">

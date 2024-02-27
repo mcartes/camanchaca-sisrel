@@ -22,6 +22,9 @@
                         <div class="card-header">
                             <h4>Modificar donación</h4>
                             <div class="card-header-action">
+                                <a href="{{ route('admin.donaciones.listar') }}" type="button" class="btn btn-success"
+                                    title="Ir a lista"><i class="fas fa-backward"></i> Ir a
+                                    donaciones</a>
                                 <button type="button" class="btn btn-primary" data-toggle="modal"
                                     data-target="#modalCrearOrga"><i class="fas fa-plus"></i> Nueva Organización</button>
                             </div>
@@ -54,7 +57,8 @@
                                     <div class="form-group ">
                                         <label for="comu">Comuna</label>
                                         <div class="input-group">
-                                            <select class="form-control select2" name="comu" id="comu" style="width: 100%" onchange="cargarComunaEdit()">
+                                            <select class="form-control select2" name="comu" id="comu"
+                                                style="width: 100%" onchange="cargarComunaEdit()">
                                                 <option value="" selected disabled>Seleccione...</option>
                                                 @foreach ($comunas as $comuna)
                                                     <option value="{{ $comuna->comu_codigo }}"
