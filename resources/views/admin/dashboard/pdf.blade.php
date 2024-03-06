@@ -107,7 +107,7 @@
 
         <div style="display: flex; justify-content: space-between; padding-top: 5%; text-align:center;">
             <div>
-                <h2 class="colorMod">Compañía Pesquera Camanchaca S.A</h2>
+                <h2 class="colorMod">Camanchaca S.A</h2>
                 <h3 class="colorMod">Reporte de actividades</h3>
             </div>
             <div>
